@@ -1,6 +1,6 @@
-# Change Log
+# Changelog
 
 
-## 1.0.0-beta - xx-May-2014
+## 0.9.0 - 15-May-2014
 
-- Initial beta release.
+- Initial release.
