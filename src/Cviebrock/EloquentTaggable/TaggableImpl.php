@@ -126,7 +126,7 @@ trait TaggableImpl {
 		return $query->whereHas('tags', function($q) use ($normalized)
 		{
 			$q->whereIn('normalized', $normalized);
-		});
+		}, '=', count($normalized));
 	}
 
 	public function scopeWithAnyTags($query, $tags=array()) {
