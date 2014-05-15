@@ -1,0 +1,36 @@
+{
+  "name": "cviebrock/eloquent-taggable",
+  "description": "Easy ability to tag your Eloquent models in Laravel 4.",
+  "keywords": [
+    "laravel",
+    "eloquent",
+    "tag",
+    "tagging",
+    "taggable"
+  ],
+  "homepage": "https://github.com/cviebrock/eloquent-taggable",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Colin Viebrock",
+      "email": "colin@viebrock.ca"
+    }
+  ],
+  "require": {
+    "php": ">=5.4.0",
+    "illuminate/config": "4.*",
+    "illuminate/database": "4.*",
+    "illuminate/support": "4.*"
+  },
+  "require-dev": {
+    "phpunit/phpunit": "4.0.*",
+    "orchestra/testbench": "2.*",
+    "laravelbook/ardent": "dev-master"
+  },
+  "autoload": {
+    "psr-0": {
+      "Cviebrock\\EloquentTaggable": "src/"
+    }
+  },
+  "minimum-stability": "stable"
+}
