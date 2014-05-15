@@ -14,44 +14,34 @@ Easily add the ability to tag your Eloquent models in Laravel 4.
 * [Copyright and License](#copyright)
 
 
+
 <a name="installation"></a>
 ## Installation and Requirements
 
-First, you'll need to add the package to the `require` attribute of your `composer.json` file:
+First, install the package via Composer:
 
-```json
-{
-    "require": {
-        "cviebrock/eloquent-taggable": "1.*"
-    },
-}
+```sh
+composer require cviebrock/eloquent-taggable 0.*
 ```
 
 > **Note:** Eloquent-Taggable uses traits, so you will need to be running PHP 5.4 or higher.
 
-Aftwards, run `composer update` from your command line.
-
-Then, run the migration to create the required tables:
-
-```sh
-php artisan migrate --package=cviebrock/eloquent-taggable
-```
-
 Then, update `app/config/app.php` by adding an entry for the service provider.
 
 ```php
-	'providers' => array(
+    'providers' => array(
 
-		// ...
+        // ...
 
-		'Cviebrock\EloquentTaggable\TaggableServiceProvider',
+        'Cviebrock\EloquentTaggable\TaggableServiceProvider',
 
-	);
+    );
 ```
 
-Finally, from the command line again, publish the default configuration file:
+Finally, use artisan to run the migration to create the required tables and publish the default configuration file:
 
 ```sh
+php artisan migrate --package=cviebrock/eloquent-taggable
 php artisan config:publish cviebrock/eloquent-taggable
 ```
 
@@ -170,6 +160,7 @@ Model::withAnyTags('apple,banana,cherry');
 Model::withAnyTags();
 // returns models with any tags at all
 ```
+
 
 
 <a name="config"></a>
