@@ -100,7 +100,7 @@ $model->tag('Durian');
 // $model now has four tags
 ```
 
-You can remove tags individually or entirely with the `untag()` method:
+You can remove tags individually with `untag()` or entirely with `detag()`:
 
 ```php
 $model->tag('Apple,Banana,Cherry');
@@ -108,11 +108,11 @@ $model->tag('Apple,Banana,Cherry');
 $model->untag('Banana');
 // $model is now just tagged with "Apple" and "Cherry"
 
-$model->untag();
+$model->detag();
 // $model has no tags
 ```
 
-You can also completely retag a model:
+You can also completely retag a model (a short form for detagging then tagging):
 
 ```php
 $model->tag('Apple,Banana,Cherry');
@@ -155,19 +155,19 @@ $model->tag('apple');
 $model->tag('APPLE');
 
 var_dump($model->tagList);
-// string 'apple' (length=5)
+// string 'Apple' (length=5)
 ```
 
 Finally, you can easily find models with tags through some query scopes:
 
 ```php
 Model::withAllTags('apple,banana,cherry');
-// returns models with all 3 tags
+// returns models that are tagged with all 3 of those tags
 
-Model::withAnyTag('apple,banana,cherry');
-// returns models with any one or more of those 3 tags
+Model::withAnyTags('apple,banana,cherry');
+// returns models with any one of those 3 tags
 
-Model::withAnyTag(); 
+Model::withAnyTags();
 // returns models with any tags at all
 ```
 
@@ -182,7 +182,6 @@ Configuration is handled through the settings in `/app/config/packages/cviebrock
 return array(
     'delimiters' => ',;',
     'normalizer' => 'mb_strtolower',
-    'allow_duplicates' => false,
 );
 ```
 
@@ -231,9 +230,9 @@ Normalization happens by passing each tag name through a normalizer function.  B
     'normalizer' => array('Str','slug'),
 ```
 
-You can access the normalized values of the tags through `tagListNormalized()` and `tagArrayNormalized()`, which work identically to `tagList()` and `tagArray()` (described above) except that they return the normalized values instead.
+You can access the normalized values of the tags through `$model->tagListNormalized` and `$model->tagArrayNormalized`, which work identically to `$model->tagList` and `$model->tagArray` (described above) except that they return the normalized values instead.
 
-You can, of course, access the normalized name directly from a tag:
+And you can, of course, access the normalized name directly from a tag:
 
 ```php
 echo $tag->normalized;
