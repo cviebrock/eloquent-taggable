@@ -14,14 +14,17 @@ Easily add the ability to tag your Eloquent models in Laravel 4.
 * [Copyright and License](#copyright)
 
 
+> Note that this version is designed for Laravel 4. If you are looking for a Laravel 5 version, checkout the `master` branch.
+
 
 <a name="installation"></a>
 ## Installation and Requirements
 
+
 First, install the package via Composer:
 
 ```sh
-composer require cviebrock/eloquent-taggable 0.*
+composer require cviebrock/eloquent-taggable 1.0.*
 ```
 
 > **Note:** Eloquent-Taggable uses traits, so you will need to be running PHP 5.4 or higher.
@@ -250,9 +253,9 @@ Please use Github for bugs, comments, suggestions.
 	- Add your test methods to `eloquent-taggable/tests/TaggableTest.php`.
 	- Run `vendor/bin/phpunit` to the new (and all previous) tests and make sure everything passes.
 3. Commit your changes (and your tests) and push to your branch.
-4. Create a new pull request against the eloquent-sluggable `develop` branch.
+4. Create a new pull request against the eloquent-sluggable `1.x` branch.
 
-> **Note:** You must create your pull request against the `develop` branch.
+> **Note:** You must create your pull request against the `1.x` branch for the Laravel-4-compatible package.
 
 
 
