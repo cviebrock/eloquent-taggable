@@ -1,6 +1,5 @@
 <?php namespace Cviebrock\EloquentTaggable;
 
-
 interface Taggable {
 
 	public function tags();
@@ -15,6 +14,9 @@ interface Taggable {
 
 	public function scopeWithAllTags($query, $tags);
 
-	public function scopeWithAnyTags($query, $tags=array());
+	public function scopeWithAnyTags($query, $tags = array());
 
+	public static function tagArray();
+
+	public static function tagList();
 }

@@ -9,10 +9,12 @@ class Post extends Model implements Taggable {
 
 	use TaggableImpl;
 
-  protected $table = 'posts';
+	protected $table = 'posts';
 
-  public $timestamps = false;
+	public $timestamps = false;
 
-	protected $fillable = array('title');
+	protected $fillable = [
+		'title'
+	];
 
 }

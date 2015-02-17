@@ -1,3 +1,4 @@
+/src/storage/framework/
 /vendor
 composer.phar
 composer.lock

@@ -1,6 +1,6 @@
 # Eloquent-Taggable
 
-Easily add the ability to tag your Eloquent models in Laravel 4.
+Easily add the ability to tag your Eloquent models in Laravel 5.
 
 [![Latest Stable Version](https://poser.pugx.org/cviebrock/eloquent-taggable/v/stable.png)](https://packagist.org/packages/cviebrock/eloquent-taggable)
 [![Total Downloads](https://poser.pugx.org/cviebrock/eloquent-taggable/downloads.png)](https://packagist.org/packages/cviebrock/eloquent-taggable)
@@ -14,7 +14,7 @@ Easily add the ability to tag your Eloquent models in Laravel 4.
 * [Copyright and License](#copyright)
 
 
-> Note that this version is designed for Laravel 4. If you are looking for a Laravel 5 version, checkout the `master` branch.
+> Note that this version is designed for Laravel 5. If you are looking for a Laravel 4 version, checkout the `1.x` branch.
 
 
 <a name="installation"></a>
@@ -24,7 +24,7 @@ Easily add the ability to tag your Eloquent models in Laravel 4.
 First, install the package via Composer:
 
 ```sh
-composer require cviebrock/eloquent-taggable 1.0.*
+composer require cviebrock/eloquent-taggable 2.0.*
 ```
 
 > **Note:** Eloquent-Taggable uses traits, so you will need to be running PHP 5.4 or higher.
@@ -36,7 +36,7 @@ Then, update `app/config/app.php` by adding an entry for the service provider.
 
         // ...
 
-        'Cviebrock\EloquentTaggable\TaggableServiceProvider',
+        'Cviebrock\EloquentTaggable\ServiceProvider',
 
     );
 ```
@@ -169,7 +169,7 @@ Model::withAnyTags();
 <a name="config"></a>
 ## Configuration
 
-Configuration is handled through the settings in `/app/config/packages/cviebrock/eloquent-taggable/config.php`.  The default values are:
+Configuration is handled through the settings in `/app/config/taggable.php`.  The default values are:
 
 ```php
 
@@ -253,9 +253,9 @@ Please use Github for bugs, comments, suggestions.
 	- Add your test methods to `eloquent-taggable/tests/TaggableTest.php`.
 	- Run `vendor/bin/phpunit` to the new (and all previous) tests and make sure everything passes.
 3. Commit your changes (and your tests) and push to your branch.
-4. Create a new pull request against the eloquent-sluggable `1.x` branch.
+4. Create a new pull request against the eloquent-sluggable `master` branch.
 
-> **Note:** You must create your pull request against the `1.x` branch for the Laravel-4-compatible package.
+> **Note:** You must create your pull request against the `master` branch for the Laravel-5-compatible package.
 
 
 
