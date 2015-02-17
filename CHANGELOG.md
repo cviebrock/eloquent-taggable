@@ -1,6 +1,11 @@
 # Changelog
 
 
+## 1.0.0 - 17-Feb-2015
+
+- Version 1.0.0 release for Laravel 4 (no significant changes from previous version)
+
+
 ## 0.9.1 - 16-May-2014
 
 - Minor bug fixes.
