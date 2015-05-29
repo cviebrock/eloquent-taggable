@@ -1,9 +1,9 @@
 <?php
 
-return array(
+return [
 
 	'delimiters' => ',',
 
 	'normalizer' => 'mb_strtolower',
 
-);
+];

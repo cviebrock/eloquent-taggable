@@ -57,7 +57,7 @@ class TaggableTableCommand extends Command {
 
 		$this->files->put($fullPath, $this->files->get(__DIR__.'/stubs/database.stub'));
 
-		$this->info('Migration created successfully!');
+		$this->info('Migration created successfully!  Don\'t forget to run "artisan migrate".');
 
 		$this->composer->dumpAutoloads();
 	}
