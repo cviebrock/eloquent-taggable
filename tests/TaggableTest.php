@@ -23,7 +23,7 @@ class TaggableTest extends TestCase {
 		// Call migrations for the package
 		$artisan->call('migrate', [
 			'--database' => 'testbench',
-			'--realpath' => realpath(__DIR__ . '/../stubs')
+			'--realpath' => realpath(__DIR__ . '/../src/Console/stubs')
 		]);
 
 	}
