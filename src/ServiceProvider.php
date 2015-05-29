@@ -1,8 +1,7 @@
 <?php namespace Cviebrock\EloquentTaggable;
 
-
-use Illuminate\Database\Migrations\MigrationCreator;
 use Illuminate\Support\ServiceProvider as LaravelServiceProvider;
+
 
 class ServiceProvider extends LaravelServiceProvider {
 
@@ -11,16 +10,28 @@ class ServiceProvider extends LaravelServiceProvider {
 	 *
 	 * @var bool
 	 */
-	protected $defer = false;
+	protected $defer = true;
 
 	/**
 	 * Bootstrap the application events.
 	 *
 	 * @return void
 	 */
-	public function boot()
-	{
-		$this->publishConfigs();
+	public function boot() {
+
+		$app = $this->app;
+
+		if (version_compare($app::VERSION, '5.0') < 0) {
+			// Laravel 4
+			$this->package('cviebrock/eloquent-taggable', 'taggable', realpath(__DIR__));
+		} else {
+			// Laravel 5
+			$configPath = realpath(__DIR__ . '/config/config.php');
+			$this->publishes([
+				$configPath => config_path('taggable.php')
+			]);
+			$this->mergeConfigFrom($configPath, 'taggable');
+		}
 	}
 
 	/**
@@ -28,32 +39,12 @@ class ServiceProvider extends LaravelServiceProvider {
 	 *
 	 * @return void
 	 */
-	public function register()
-	{
-		$this->mergeConfigFrom(
-			__DIR__ . '/../config/taggable.php', 'taggable'
-		);
-	}
+	public function register() {
 
-	/**
-	 * Publish the configuration file.
-	 */
-	private function publishConfigs()
-	{
-		$configPath = __DIR__ . '/../config/taggable.php';
-		$this->publishes([
-			$configPath => config_path('taggable.php')
-		], 'config');
-	}
-
-
-	public function registerCommands()
-	{
-		$this->app['taggable.migrate'] = $this->app->share(function($app)
-		{
-			return new MigrationCommand;
+		$this->app->singleton('taggable.command.table', function ($app) {
+			return new Console\TaggableTableCommand($app['files'], $app['composer']);
 		});
-		$this->commands('taggable.migrate');
+		$this->commands('taggable.command.table');
 	}
 
 	/**
@@ -61,9 +52,7 @@ class ServiceProvider extends LaravelServiceProvider {
 	 *
 	 * @return array
 	 */
-	public function provides()
-	{
-		return [];
+	public function provides() {
+		return ['taggable.command.table'];
 	}
-
 }

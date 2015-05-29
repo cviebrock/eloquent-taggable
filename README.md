@@ -1,6 +1,6 @@
 # Eloquent-Taggable
 
-Easily add the ability to tag your Eloquent models in Laravel 5.
+Easily add the ability to tag your Eloquent models in Laravel.
 
 [![Latest Stable Version](https://poser.pugx.org/cviebrock/eloquent-taggable/v/stable.png)](https://packagist.org/packages/cviebrock/eloquent-taggable)
 [![Total Downloads](https://poser.pugx.org/cviebrock/eloquent-taggable/downloads.png)](https://packagist.org/packages/cviebrock/eloquent-taggable)
@@ -14,38 +14,42 @@ Easily add the ability to tag your Eloquent models in Laravel 5.
 * [Copyright and License](#copyright)
 
 
-> Note that this version is designed for Laravel 5. If you are looking for a Laravel 4 version, checkout the `1.x` branch.
-
-
 <a name="installation"></a>
 ## Installation and Requirements
 
 
-First, install the package via Composer:
+1. Install the `cviebrock/eloquent-taggable` package via composer:
 
-```sh
-composer require cviebrock/eloquent-taggable 2.0.*
-```
+    ```shell
+    $ composer require cviebrock/eloquent-taggable
+    ```
+    
+2. Publish the configuration file.  For Laravel 4:
 
-> **Note:** Eloquent-Taggable uses traits, so you will need to be running PHP 5.4 or higher.
+    ```shell
+    php artisan config:publish cviebrock/eloquent-taggable
+    ```
 
-Then, update `app/config/app.php` by adding an entry for the service provider.
+    Or for Laravel 5:
 
-```php
+    ```shell
+    php artisan vendor:publish cviebrock/eloquent-taggable
+    ```
+
+3. Add the service provider (`app/config/app.php` for Laravel 4, `config/app.php` for Laravel 5):
+
+    ```php
+    # Add the service provider to the `providers` array
     'providers' => array(
-
-        // ...
-
+        ...
         'Cviebrock\EloquentTaggable\ServiceProvider',
+    )
+    ```
 
-    );
-```
-
-Finally, use artisan to run the migration to create the required tables and publish the default configuration file:
+4. Finally, use artisan to run the migration to create the required tables:
 
 ```sh
 php artisan migrate --package=cviebrock/eloquent-taggable
-php artisan config:publish cviebrock/eloquent-taggable
 ```
 
 

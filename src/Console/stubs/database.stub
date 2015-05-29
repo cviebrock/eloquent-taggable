@@ -1,9 +1,9 @@
 <?php
 
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateTaggableTables extends Migration {
+class CreateSessionTable extends Migration {
+
 
 	/**
 	 * Run the migrations.
@@ -14,7 +14,7 @@ class CreateTaggableTables extends Migration {
 	{
 		Schema::create('taggable_tags', function(Blueprint $table)
 		{
-			$table->increments('id');
+			$table->increments('tag_id');
 			$table->string('name');
 			$table->string('normalized');
 			$table->timestamps();
