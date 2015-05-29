@@ -1,4 +1,4 @@
-<?php namespace Cviebrock\EloquentTaggable;
+<?php namespace Cviebrock\EloquentTaggable\Contracts;
 
 interface Taggable {
 

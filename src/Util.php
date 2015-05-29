@@ -1,5 +1,4 @@
-<?php
-namespace Cviebrock\EloquentTaggable;
+<?php namespace Cviebrock\EloquentTaggable;
 
 class Util {
 
@@ -24,7 +23,7 @@ class Util {
 	}
 
 	public static function makeTagArray(Taggable $model, $field) {
-		return $model->tags->lists($field, 'id');
+		return $model->tags->lists($field, 'tag_id');
 	}
 
 	public static function normalizeName($name) {
@@ -37,7 +36,7 @@ class Util {
 
 		return DB::table('taggable_taggables')->distinct()
 			->where('taggable_type', '=', $className)
-			->join('taggable_tags', 'taggable_taggables.taggable_id', '=', 'taggable_tags.id')
+			->join('taggable_tags', 'taggable_taggables.taggable_id', '=', 'taggable_tags.tag_id')
 			->orderBy('taggable_tags.normalized')
 			->lists('taggable_tags.normalized');
 	}

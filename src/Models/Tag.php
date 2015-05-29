@@ -1,4 +1,4 @@
-<?php namespace Cviebrock\EloquentTaggable;
+<?php namespace Cviebrock\EloquentTaggable\Models;
 
 use Illuminate\Database\Eloquent\Model as Eloquent;
 
@@ -6,6 +6,8 @@ use Illuminate\Database\Eloquent\Model as Eloquent;
 class Tag extends Eloquent {
 
 	protected $table = 'taggable_tags';
+
+	protected $primaryKey = 'tag_id';
 
 	protected $fillable = [
 		'name',
