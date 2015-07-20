@@ -1,50 +1,57 @@
-<?php namespace Cviebrock\EloquentTaggable;
+<?php
 
-class Util {
+namespace Cviebrock\EloquentTaggable;
 
-	public static function buildTagArray($tags) {
-		if (is_array($tags)) {
-			return $tags;
-		}
+class Util
+{
+    public static function buildTagArray($tags)
+    {
+        if (is_array($tags)) {
+            return $tags;
+        }
 
-		if (is_string($tags)) {
-			$delimiters = config('taggable.delimiters', ',');
+        if (is_string($tags)) {
+            $delimiters = config('taggable.delimiters', ',');
 
-			return preg_split('#[' . preg_quote($delimiters, '#') . ']#', $tags, null, PREG_SPLIT_NO_EMPTY);
-		}
+            return preg_split('#['.preg_quote($delimiters, '#').']#', $tags, null, PREG_SPLIT_NO_EMPTY);
+        }
 
-		return (array) $tags;
-	}
+        return (array) $tags;
+    }
 
-	public static function makeTagList(Taggable $model, $field) {
-		$tags = static::makeTagArray($model, $field);
+    public static function makeTagList(Taggable $model, $field)
+    {
+        $tags = static::makeTagArray($model, $field);
 
-		return Util::joinArray($tags);
-	}
+        return self::joinArray($tags);
+    }
 
-	public static function makeTagArray(Taggable $model, $field) {
-		return $model->tags->lists($field, 'tag_id');
-	}
+    public static function makeTagArray(Taggable $model, $field)
+    {
+        return $model->tags->lists($field, 'tag_id');
+    }
 
-	public static function normalizeName($name) {
-		$normalizer = config('taggable.normalizer');
+    public static function normalizeName($name)
+    {
+        $normalizer = config('taggable.normalizer');
 
-		return call_user_func($normalizer, $name);
-	}
+        return call_user_func($normalizer, $name);
+    }
 
-	public static function getAllTags($className) {
+    public static function getAllTags($className)
+    {
+        return DB::table('taggable_taggables')->distinct()
+            ->where('taggable_type', '=', $className)
+            ->join('taggable_tags', 'taggable_taggables.taggable_id', '=', 'taggable_tags.tag_id')
+            ->orderBy('taggable_tags.normalized')
+            ->lists('taggable_tags.normalized');
+    }
 
-		return DB::table('taggable_taggables')->distinct()
-			->where('taggable_type', '=', $className)
-			->join('taggable_tags', 'taggable_taggables.taggable_id', '=', 'taggable_tags.tag_id')
-			->orderBy('taggable_tags.normalized')
-			->lists('taggable_tags.normalized');
-	}
+    public static function joinArray(array $array)
+    {
+        $delimiters = config('taggable.delimiters', ',');
+        $glue = substr($delimiters, 0, 1);
 
-	public static function joinArray(array $array) {
-		$delimiters = config('taggable.delimiters', ',');
-		$glue = substr($delimiters, 0, 1);
-
-		return implode($glue, $array);
-	}
+        return implode($glue, $array);
+    }
 }

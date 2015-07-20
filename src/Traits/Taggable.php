@@ -1,104 +1,122 @@
-<?php namespace Cviebrock\EloquentTaggable\Traits;
+<?php
 
+namespace Cviebrock\EloquentTaggable\Traits;
+
+use Cviebrock\EloquentTaggable\Models\Tag;
 use Cviebrock\EloquentTaggable\Util;
 
+trait Taggable
+{
+    public function tags()
+    {
+        return $this->morphToMany('Cviebrock\EloquentTaggable\Models\Tag', 'taggable', 'taggable_taggables')
+            ->withTimestamps();
+    }
 
-trait Taggable {
+    public function tag($tags)
+    {
+        $tags = Util::buildTagArray($tags);
+        foreach ($tags as $tag) {
+            $this->addOneTag($tag);
+        }
 
-	public function tags() {
-		return $this->morphToMany('Cviebrock\EloquentTaggable\Models\Tag', 'taggable', 'taggable_taggables')
-			->withTimestamps();
-	}
+        return $this;
+    }
 
-	public function tag($tags) {
-		$tags = Util::buildTagArray($tags);
-		foreach ($tags as $tag) {
-			$this->addOneTag($tag);
-		}
+    public function untag($tags)
+    {
+        $tags = Util::buildTagArray($tags);
+        foreach ($tags as $tag) {
+            $this->removeOneTag($tag);
+        }
 
-		return $this;
-	}
+        return $this;
+    }
 
-	public function untag($tags) {
-		$tags = Util::buildTagArray($tags);
-		foreach ($tags as $tag) {
-			$this->removeOneTag($tag);
-		}
+    public function retag($tags)
+    {
+        return $this->detag()->tag($tags);
+    }
 
-		return $this;
-	}
+    public function detag()
+    {
+        $this->removeAllTags();
 
-	public function retag($tags) {
-		return $this->detag()->tag($tags);
-	}
+        return $this;
+    }
 
-	public function detag() {
-		$this->removeAllTags();
+    protected function addOneTag($string)
+    {
+        $tag = Tag::findOrCreate($string);
+        if (!$this->tags->contains($tag->getKey())) {
+            $this->tags()->attach($tag);
+        }
+    }
 
-		return $this;
-	}
+    protected function removeOneTag($string)
+    {
+        if ($tag = Tag::findByName($string)) {
+            $this->tags()->detach($tag);
+        }
+    }
 
-	protected function addOneTag($string) {
-		$tag = Tag::findOrCreate($string);
-		if (!$this->tags->contains($tag->getKey())) {
-			$this->tags()->attach($tag);
-		}
-	}
+    protected function removeAllTags()
+    {
+        $this->tags()->sync([]);
+    }
 
-	protected function removeOneTag($string) {
-		if ($tag = Tag::findByName($string)) {
-			$this->tags()->detach($tag);
-		}
-	}
+    public function getTagListAttribute()
+    {
+        return Util::makeTagList($this, 'name');
+    }
 
-	protected function removeAllTags() {
-		$this->tags()->sync([]);
-	}
+    public function getTagListNormalizedAttribute()
+    {
+        return Util::makeTagList($this, 'normalized');
+    }
 
-	public function getTagListAttribute() {
-		return Util::makeTagList($this, 'name');
-	}
+    public function getTagArrayAttribute()
+    {
+        return Util::makeTagArray($this, 'name');
+    }
 
-	public function getTagListNormalizedAttribute() {
-		return Util::makeTagList($this, 'normalized');
-	}
+    public function getTagArrayNormalizedAttribute()
+    {
+        return Util::makeTagArray($this, 'normalized');
+    }
 
-	public function getTagArrayAttribute() {
-		return Util::makeTagArray($this, 'name');
-	}
+    public function scopeWithAllTags($query, $tags)
+    {
+        $tags = Util::buildTagArray($tags);
+        $normalized = array_map(['\Cviebrock\EloquentTaggable\Util', 'normalizeName'], $tags);
 
-	public function getTagArrayNormalizedAttribute() {
-		return Util::makeTagArray($this, 'normalized');
-	}
+        return $query->whereHas('tags', function ($q) use ($normalized) {
+            $q->whereIn('normalized', $normalized);
+        }, '=', count($normalized));
+    }
 
-	public function scopeWithAllTags($query, $tags) {
-		$tags = Util::buildTagArray($tags);
-		$normalized = array_map(['\Cviebrock\EloquentTaggable\Util', 'normalizeName'], $tags);
+    public function scopeWithAnyTags($query, $tags = [])
+    {
+        $tags = Util::buildTagArray($tags);
 
-		return $query->whereHas('tags', function ($q) use ($normalized) {
-			$q->whereIn('normalized', $normalized);
-		}, '=', count($normalized));
-	}
+        if (empty($tags)) {
+            return $query->has('tags');
+        }
 
-	public function scopeWithAnyTags($query, $tags = []) {
-		$tags = Util::buildTagArray($tags);
+        $normalized = array_map(['\Cviebrock\EloquentTaggable\Util', 'normalizeName'], $tags);
 
-		if (empty($tags)) {
-			return $query->has('tags');
-		}
+        return $query->whereHas('tags', function ($q) use ($normalized) {
+            $q->whereIn('normalized', $normalized);
+        });
+    }
 
-		$normalized = array_map(['\Cviebrock\EloquentTaggable\Util', 'normalizeName'], $tags);
+    public static function tagArray()
+    {
+        return Util::getAllTags(get_called_class());
+    }
 
-		return $query->whereHas('tags', function ($q) use ($normalized) {
-			$q->whereIn('normalized', $normalized);
-		});
-	}
-
-	public static function tagArray() {
-		return Util::getAllTags(get_called_class());
-	}
-
-	public static function tagList() {
-		return Util::joinArray(Util::getAllTags(get_called_class()));
-	}
+    public static function tagList()
+    {
+        return Util::joinArray(Util::getAllTags(get_called_class()));
+    }
 }

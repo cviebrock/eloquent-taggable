@@ -1,22 +1,24 @@
-<?php namespace Cviebrock\EloquentTaggable\Contracts;
+<?php
 
-interface Taggable {
+namespace Cviebrock\EloquentTaggable\Contracts;
 
-	public function tags();
+interface Taggable
+{
+    public function tags();
 
-	public function tag($tags);
+    public function tag($tags);
 
-	public function untag($tags);
+    public function untag($tags);
 
-	public function retag($tags);
+    public function retag($tags);
 
-	public function detag();
+    public function detag();
 
-	public function scopeWithAllTags($query, $tags);
+    public function scopeWithAllTags($query, $tags);
 
-	public function scopeWithAnyTags($query, $tags = array());
+    public function scopeWithAnyTags($query, $tags = array());
 
-	public static function tagArray();
+    public static function tagArray();
 
-	public static function tagList();
+    public static function tagList();
 }
