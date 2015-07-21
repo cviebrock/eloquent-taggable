@@ -33,9 +33,9 @@ Easily add the ability to tag your Eloquent models in Laravel.
         'Cviebrock\EloquentTaggable\ServiceProvider',
     )
     ```
-   
+
 3. Publish the configuration file.
-  
+
     For Laravel 4:
 
     ```shell
@@ -47,7 +47,7 @@ Easily add the ability to tag your Eloquent models in Laravel.
     ```shell
     php artisan vendor:publish
     ```
-    
+
 4. Finally, use artisan to run the migration to create the required tables.
 
     For Laravel 4:
@@ -70,14 +70,12 @@ Easily add the ability to tag your Eloquent models in Laravel.
 Your models should implement Taggable's interface and use it's trait:
 
 ```php
-use Cviebrock\EloquentTaggable\Taggable;
-use Cviebrock\EloquentTaggable\TaggableImpl;
+use Cviebrock\EloquentTaggable\Contracts\Taggable;
+use Cviebrock\EloquentTaggable\Traits\Taggable as TaggableImpl;
 
 class MyModel extends Eloquent implements Taggable
 {
-
-	use TaggableImpl;
-
+    use TaggableImpl;
 }
 ```
 
@@ -95,7 +93,7 @@ Tag your models with the `tag()` method:
 $model->tag('Apple,Banana,Cherry');
 
 // Or an array:
-$model->tag(['Apple', 'Banana', 'Cherry']);  
+$model->tag(['Apple', 'Banana', 'Cherry']);
 ```
 
 The `tag()` method is additive, so you can tag the model again and those tags will be added to the previous ones:
