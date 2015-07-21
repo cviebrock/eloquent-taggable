@@ -1,7 +1,7 @@
 <?php namespace Cviebrock\EloquentTaggable\Traits;
 
 use Cviebrock\EloquentTaggable\Util;
-
+use Cviebrock\EloquentTaggable\Models\Tag;
 
 trait Taggable {
 

@@ -1,6 +1,7 @@
 <?php namespace Cviebrock\EloquentTaggable\Models;
 
 use Illuminate\Database\Eloquent\Model as Eloquent;
+use Cviebrock\EloquentTaggable\Util;
 
 
 class Tag extends Eloquent {

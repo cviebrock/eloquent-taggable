@@ -1,8 +1,8 @@
 <?php
 
 use Illuminate\Database\Eloquent\Model;
-use Cviebrock\EloquentTaggable\Taggable;
-use Cviebrock\EloquentTaggable\TaggableImpl;
+use Cviebrock\EloquentTaggable\Contracts\Taggable;
+use Cviebrock\EloquentTaggable\Traits\Taggable as TaggableImpl;
 
 
 class Post extends Model implements Taggable {
