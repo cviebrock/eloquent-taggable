@@ -11,7 +11,7 @@ trait Taggable {
 
 	/**
 	 * @return mixed
-     */
+	 */
 	public function tags() {
 		return $this->morphToMany('Cviebrock\EloquentTaggable\Models\Tag', 'taggable', 'taggable_taggables')
 			->withTimestamps();
@@ -20,7 +20,7 @@ trait Taggable {
 	/**
 	 * @param $tags
 	 * @return $this
-     */
+	 */
 	public function tag($tags) {
 		$tags = Util::buildTagArray($tags);
 		foreach ($tags as $tag) {
@@ -33,7 +33,7 @@ trait Taggable {
 	/**
 	 * @param $tags
 	 * @return $this
-     */
+	 */
 	public function untag($tags) {
 		$tags = Util::buildTagArray($tags);
 		foreach ($tags as $tag) {
@@ -46,14 +46,14 @@ trait Taggable {
 	/**
 	 * @param $tags
 	 * @return $this
-     */
+	 */
 	public function retag($tags) {
 		return $this->detag()->tag($tags);
 	}
 
 	/**
 	 * @return $this
-     */
+	 */
 	public function detag() {
 		$this->removeAllTags();
 
@@ -62,7 +62,7 @@ trait Taggable {
 
 	/**
 	 * @param $string
-     */
+	 */
 	protected function addOneTag($string) {
 		$tag = Tag::findOrCreate($string);
 		if (!$this->tags->contains($tag->getKey())) {
@@ -72,7 +72,7 @@ trait Taggable {
 
 	/**
 	 * @param $string
-     */
+	 */
 	protected function removeOneTag($string) {
 		if ($tag = Tag::findByName($string)) {
 			$this->tags()->detach($tag);
@@ -81,35 +81,35 @@ trait Taggable {
 
 	/**
 	 *
-     */
+	 */
 	protected function removeAllTags() {
 		$this->tags()->sync([]);
 	}
 
 	/**
 	 * @return string
-     */
+	 */
 	public function getTagListAttribute() {
 		return Util::makeTagList($this, 'name');
 	}
 
 	/**
 	 * @return string
-     */
+	 */
 	public function getTagListNormalizedAttribute() {
 		return Util::makeTagList($this, 'normalized');
 	}
 
 	/**
 	 * @return mixed
-     */
+	 */
 	public function getTagArrayAttribute() {
 		return Util::makeTagArray($this, 'name');
 	}
 
 	/**
 	 * @return mixed
-     */
+	 */
 	public function getTagArrayNormalizedAttribute() {
 		return Util::makeTagArray($this, 'normalized');
 	}
@@ -118,7 +118,7 @@ trait Taggable {
 	 * @param $query
 	 * @param $tags
 	 * @return mixed
-     */
+	 */
 	public function scopeWithAllTags($query, $tags) {
 		$tags = Util::buildTagArray($tags);
 		$normalized = array_map(['\Cviebrock\EloquentTaggable\Util', 'normalizeName'], $tags);
@@ -132,7 +132,7 @@ trait Taggable {
 	 * @param $query
 	 * @param array $tags
 	 * @return mixed
-     */
+	 */
 	public function scopeWithAnyTags($query, $tags = []) {
 		$tags = Util::buildTagArray($tags);
 
@@ -149,14 +149,14 @@ trait Taggable {
 
 	/**
 	 * @return mixed
-     */
+	 */
 	public static function tagArray() {
 		return Util::getAllTags(get_called_class());
 	}
 
 	/**
 	 * @return string
-     */
+	 */
 	public static function tagList() {
 		return Util::joinArray(Util::getAllTags(get_called_class()));
 	}

@@ -9,7 +9,7 @@ class Util {
 	/**
 	 * @param $tags
 	 * @return array
-     */
+	 */
 	public static function buildTagArray($tags) {
 		if (is_array($tags)) {
 			return $tags;
@@ -28,7 +28,7 @@ class Util {
 	 * @param Taggable $model
 	 * @param $field
 	 * @return string
-     */
+	 */
 	public static function makeTagList(Taggable $model, $field) {
 		$tags = static::makeTagArray($model, $field);
 
@@ -39,7 +39,7 @@ class Util {
 	 * @param Taggable $model
 	 * @param $field
 	 * @return mixed
-     */
+	 */
 	public static function makeTagArray(Taggable $model, $field) {
 		return $model->tags->lists($field, 'tag_id');
 	}
@@ -47,7 +47,7 @@ class Util {
 	/**
 	 * @param $name
 	 * @return mixed
-     */
+	 */
 	public static function normalizeName($name) {
 		$normalizer = config('taggable.normalizer');
 
@@ -57,7 +57,7 @@ class Util {
 	/**
 	 * @param $className
 	 * @return mixed
-     */
+	 */
 	public static function getAllTags($className) {
 
 		return DB::table('taggable_taggables')->distinct()
@@ -70,7 +70,7 @@ class Util {
 	/**
 	 * @param array $array
 	 * @return string
-     */
+	 */
 	public static function joinArray(array $array) {
 		$delimiters = config('taggable.delimiters', ',');
 		$glue = substr($delimiters, 0, 1);
