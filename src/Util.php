@@ -11,6 +11,9 @@ use Illuminate\Support\Facades\DB;
 class Util
 {
 	/**
+	 * Build an array of Tags from a string in which the tags are delimited
+	 * by the character defined in config('taggable.delimiters').
+	 *
 	 * @param $tags
 	 *
 	 * @return array

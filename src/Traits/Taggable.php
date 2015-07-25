@@ -11,12 +11,14 @@ use Cviebrock\EloquentTaggable\Models\Tag;
 trait Taggable
 {
 	/**
+	 * Get a Collection of all Tags a Model has.
+	 *
 	 * @return mixed
 	 */
 	public function tags()
 	{
 		return $this->morphToMany('Cviebrock\EloquentTaggable\Models\Tag', 'taggable', 'taggable_taggables')
-			->withTimestamps();
+					->withTimestamps();
 	}
 
 	/**

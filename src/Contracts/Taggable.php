@@ -8,6 +8,8 @@ namespace Cviebrock\EloquentTaggable\Contracts;
 interface Taggable
 {
 	/**
+	 * Get a Collection of all Tags a Model has.
+	 *
 	 * @return mixed
 	 */
 	public function tags();
