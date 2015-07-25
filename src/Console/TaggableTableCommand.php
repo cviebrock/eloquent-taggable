@@ -1,11 +1,13 @@
-<?php namespace Cviebrock\EloquentTaggable\Console;
+<?php
+
+namespace Cviebrock\EloquentTaggable\Console;
 
 use Illuminate\Console\Command;
 use Illuminate\Foundation\Composer;
 use Illuminate\Filesystem\Filesystem;
 
-class TaggableTableCommand extends Command {
-
+class TaggableTableCommand extends Command
+{
 	/**
 	 * The console command name.
 	 *
@@ -35,8 +37,8 @@ class TaggableTableCommand extends Command {
 	/**
 	 * Create a new taggable table command instance.
 	 *
-	 * @param  \Illuminate\Filesystem\Filesystem $files
-	 * @param  \Illuminate\Foundation\Composer $composer
+	 * @param \Illuminate\Filesystem\Filesystem $files
+	 * @param \Illuminate\Foundation\Composer   $composer
 	 */
 	public function __construct(Filesystem $files, Composer $composer)
 	{
@@ -48,8 +50,6 @@ class TaggableTableCommand extends Command {
 
 	/**
 	 * Execute the console command.
-	 *
-	 * @return void
 	 */
 	public function fire()
 	{
@@ -75,6 +75,4 @@ class TaggableTableCommand extends Command {
 
 		return $this->laravel['migration.creator']->create($name, $path);
 	}
-
 }
-
