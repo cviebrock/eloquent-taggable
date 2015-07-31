@@ -1,10 +1,11 @@
-<?php namespace Cviebrock\EloquentTaggable;
+<?php
+
+namespace Cviebrock\EloquentTaggable;
 
 use Illuminate\Support\ServiceProvider as LaravelServiceProvider;
 
-
-class ServiceProvider extends LaravelServiceProvider {
-
+class ServiceProvider extends LaravelServiceProvider
+{
 	/**
 	 * Indicates if loading of the provider is deferred.
 	 *
@@ -14,11 +15,9 @@ class ServiceProvider extends LaravelServiceProvider {
 
 	/**
 	 * Bootstrap the application events.
-	 *
-	 * @return void
 	 */
-	public function boot() {
-
+	public function boot()
+	{
 		$app = $this->app;
 
 		if (version_compare($app::VERSION, '5.0') < 0) {
@@ -26,9 +25,9 @@ class ServiceProvider extends LaravelServiceProvider {
 			$this->package('cviebrock/eloquent-taggable', 'taggable', realpath(__DIR__));
 		} else {
 			// Laravel 5
-			$configPath = realpath(__DIR__ . '/config/config.php');
+			$configPath = realpath(__DIR__.'/config/config.php');
 			$this->publishes([
-				$configPath => config_path('taggable.php')
+				$configPath => config_path('taggable.php'),
 			]);
 			$this->mergeConfigFrom($configPath, 'taggable');
 		}
@@ -36,11 +35,9 @@ class ServiceProvider extends LaravelServiceProvider {
 
 	/**
 	 * Register the service provider.
-	 *
-	 * @return void
 	 */
-	public function register() {
-
+	public function register()
+	{
 		$this->app->singleton('taggable.command.table', function ($app) {
 			return new Console\TaggableTableCommand($app['files'], $app['composer']);
 		});
@@ -52,7 +49,8 @@ class ServiceProvider extends LaravelServiceProvider {
 	 *
 	 * @return array
 	 */
-	public function provides() {
+	public function provides()
+	{
 		return ['taggable.command.table'];
 	}
 }
