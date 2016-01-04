@@ -17,7 +17,7 @@ trait Taggable
 	 */
 	public function tags()
 	{
-		return $this->morphToMany('Cviebrock\EloquentTaggable\Models\Tag', 'taggable', 'taggable_taggables')
+		return $this->morphToMany(\Cviebrock\EloquentTaggable\Models\Tag::class, 'taggable', 'taggable_taggables')
 					->withTimestamps();
 	}
 

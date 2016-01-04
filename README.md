@@ -23,6 +23,8 @@ Easily add the ability to tag your Eloquent models in Laravel.
     ```shell
     $ composer require cviebrock/eloquent-taggable
     ```
+    
+If you are using Laravel 4, then you will need to restrict the package to the `1.*` releases.
 
 2. Add the service provider (`app/config/app.php` for Laravel 4, `config/app.php` for Laravel 5):
 
@@ -60,6 +62,7 @@ Easily add the ability to tag your Eloquent models in Laravel.
 
     ```sh
     php artisan taggable:table
+    composer dump-autoload
     php artisan migrate
     ```
 

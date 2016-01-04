@@ -1,78 +1,63 @@
-<?php
+<?php namespace Cviebrock\EloquentTaggable\Console;
 
-namespace Cviebrock\EloquentTaggable\Console;
+use Illuminate\Database\Console\Migrations\BaseCommand;
 
-use Illuminate\Console\Command;
-use Illuminate\Foundation\Composer;
-use Illuminate\Filesystem\Filesystem;
-
-class TaggableTableCommand extends Command
+class TaggableTableCommand extends BaseCommand
 {
-	/**
-	 * The console command name.
-	 *
-	 * @var string
-	 */
-	protected $name = 'taggable:table';
+    /**
+     * The console command name.
+     *
+     * @var string
+     */
+    protected $name = 'taggable:table';
 
-	/**
-	 * The console command description.
-	 *
-	 * @var string
-	 */
-	protected $description = 'Create a migration for the taggable database table';
+    /**
+     * The console command description.
+     *
+     * @var string
+     */
+    protected $description = 'Create a migration for the taggable database tables';
 
-	/**
-	 * The filesystem instance.
-	 *
-	 * @var \Illuminate\Filesystem\Filesystem
-	 */
-	protected $files;
+    /**
+     * @var TaggableMigrationCreator
+     */
+    protected $creator;
 
-	/**
-	 * @var \Illuminate\Foundation\Composer
-	 */
-	protected $composer;
+    /**
+     * Create a new taggable table command instance.
+     *
+     * @param TaggableMigrationCreator $creator
+     */
+    public function __construct(TaggableMigrationCreator $creator)
+    {
+        parent::__construct();
 
-	/**
-	 * Create a new taggable table command instance.
-	 *
-	 * @param \Illuminate\Filesystem\Filesystem $files
-	 * @param \Illuminate\Foundation\Composer   $composer
-	 */
-	public function __construct(Filesystem $files, Composer $composer)
-	{
-		parent::__construct();
+        $this->creator = $creator;
+    }
 
-		$this->files = $files;
-		$this->composer = $composer;
-	}
+    /**
+     * Execute the console command.
+     */
+    public function fire()
+    {
+        $this->writeMigration('create_taggable_tables');
 
-	/**
-	 * Execute the console command.
-	 */
-	public function fire()
-	{
-		$fullPath = $this->createBaseMigration();
+        $this->line('<info>Don\'t forget to run</info> composer dump-autoload <info>to register the migration.</info>');
+    }
 
-		$this->files->put($fullPath, $this->files->get(__DIR__.'/stubs/database.stub'));
+    /**
+     * Write the migration file to disk.
+     *
+     * @param  string $name
+     * @return string
+     */
+    protected function writeMigration($name)
+    {
+        $path = $this->getMigrationPath();
 
-		$this->info('Migration created successfully!  Don\'t forget to run "artisan migrate".');
+        $file = pathinfo($this->creator->create($name, $path),
+            PATHINFO_FILENAME);
 
-		$this->composer->dumpAutoloads();
-	}
-
-	/**
-	 * Create a base migration file for the session.
-	 *
-	 * @return string
-	 */
-	protected function createBaseMigration()
-	{
-		$name = 'create_taggable_table';
-
-		$path = $this->laravel->databasePath().'/migrations';
-
-		return $this->laravel['migration.creator']->create($name, $path);
-	}
+        $this->line("<info>Created Migration:</info> $file");
+    }
 }
