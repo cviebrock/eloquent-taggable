@@ -190,6 +190,7 @@ Configuration is handled through the settings in `/app/config/taggable.php`.  Th
 
 return array(
     'delimiters' => ',;',
+    'list_glue' => ',',
     'normalizer' => 'mb_strtolower',
 );
 ```
@@ -205,12 +206,14 @@ $model->tag('Apple/Banana;Cherry,Durian');
 // $model will have four tags
 ```
 
-When using multiple delimiters, the first one will be used to build strings for the `tagList` attribute.  So, in the above case:
+### list_glue
+
+When building a string for the `tagList` attribute, this is the "glue" that is used to join tags.  With the default values, in the above case:
 
 ```php
 var_dump($model->tagList);
 
-// string 'Apple;Banana;Cherry;Durian' (length=26)
+// string 'Apple,Banana,Cherry,Durian' (length=26)
 ```
 
 ### normalizer

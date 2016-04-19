@@ -1,15 +1,17 @@
 <?php namespace Cviebrock\EloquentTaggable;
 
-use Cviebrock\EloquentTaggable\Console\TaggableMigrationCreator;
-use Cviebrock\EloquentTaggable\Console\TaggableTableCommand;
+use Cviebrock\EloquentTaggable\Services\TagService;
 use Illuminate\Support\ServiceProvider as LaravelServiceProvider;
+
 
 /**
  * Class ServiceProvider
+ *
  * @package Cviebrock\EloquentTaggable
  */
 class ServiceProvider extends LaravelServiceProvider
 {
+
     /**
      * Indicates if loading of the provider is deferred.
      *
@@ -22,7 +24,20 @@ class ServiceProvider extends LaravelServiceProvider
      */
     public function boot()
     {
-        $this->handleConfigs();
+        $this->publishes([
+            __DIR__ . '/../resources/config/taggable.php' => config_path('taggable.php'),
+        ], 'config');
+
+        if (!class_exists('CreateTaggableTable')) {
+            // Publish the migration
+            $timestamp = date('Y_m_d_His', time());
+            $src = __DIR__ . '/../resources/migrations/0000_00_00_000000_create_taggable_table.php';
+            $dst = database_path('migrations/' . $timestamp . '_create_taggable_table.php');
+
+            $this->publishes([
+                $src => $dst,
+            ], 'migrations');
+        }
     }
 
     /**
@@ -32,55 +47,13 @@ class ServiceProvider extends LaravelServiceProvider
      */
     public function register()
     {
-        $this->registerCreator();
-        $this->registerCommands();
-    }
+        $this->mergeConfigFrom(__DIR__ . '/../resources/config/taggable.php', 'taggable');
 
-    /**
-     * Register the configuration.
-     *
-     * @return void
-     */
-    protected function handleConfigs()
-    {
-        $configPath = realpath(__DIR__ . '/../config/taggable.php');
-        $this->publishes([$configPath => config_path('taggable.php')]);
-        $this->mergeConfigFrom($configPath, 'taggable');
-    }
-
-    /**
-     * Register the migration creator.
-     *
-     * @return void
-     */
-    protected function registerCreator()
-    {
-        $this->app->singleton('taggable.creator', function ($app) {
-            return new TaggableMigrationCreator($app['files']);
+        $this->app->singleton(TagService::class, function ($app) {
+            return new TagService(
+                $app['db']->connection(),
+                $app['config']->get('taggable')
+            );
         });
-    }
-
-    /**
-     * Register the artisan commands.
-     *
-     * @return void
-     */
-    protected function registerCommands()
-    {
-        $this->app->singleton('taggable.command.table', function ($app) {
-            return new TaggableTableCommand($app['taggable.creator']);
-        });
-
-        $this->commands('taggable.command.table');
-    }
-
-    /**
-     * Get the services provided by the provider.
-     *
-     * @return array
-     */
-    public function provides()
-    {
-        return ['taggable.command.table'];
     }
 }

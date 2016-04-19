@@ -1,88 +1,59 @@
-<?php
+<?php namespace Cviebrock\EloquentTaggable\Models;
 
-namespace Cviebrock\EloquentTaggable\Models;
-
-use Illuminate\Database\Eloquent\Model as Eloquent;
+use Cviebrock\EloquentTaggable\Services\TagService;
 use Cviebrock\EloquentTaggable\Util;
+use Illuminate\Database\Eloquent\Model as Eloquent;
+
 
 /**
  * Class Tag.
  */
 class Tag extends Eloquent
 {
-	/**
-	 * @var string
-	 */
-	protected $table = 'taggable_tags';
 
-	/**
-	 * @var string
-	 */
-	protected $primaryKey = 'tag_id';
+    /**
+     * @var string
+     */
+    protected $table = 'taggable_tags';
 
-	/**
-	 * @var array
-	 */
-	protected $fillable = [
-		'name',
-		'normalized',
-	];
+    /**
+     * @var string
+     */
+    protected $primaryKey = 'tag_id';
 
-	/**
-	 * @return \Illuminate\Database\Eloquent\Relations\MorphTo
-	 */
-	public function taggable()
-	{
-		return $this->morphTo();
-	}
+    /**
+     * @var array
+     */
+    protected $fillable = [
+        'name',
+        'normalized',
+    ];
 
-	/**
-	 * Set the name attribute on the model.
-	 *
-	 * @param $value
-	 */
-	public function setNameAttribute($value)
-	{
-		$value = trim($value);
-		$this->attributes['name'] = $value;
-		$this->attributes['normalized'] = Util::normalizeName($value);
-	}
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\MorphTo
+     */
+    public function taggable()
+    {
+        return $this->morphTo();
+    }
 
-	/**
-	 * Find a tag by its name or create a new one.
-	 *
-	 * @param $name
-	 *
-	 * @return static
-	 */
-	public static function findOrCreate($name)
-	{
-		if (!$tag = static::findByName($name)) {
-			$tag = static::create(compact('name'));
-		}
+    /**
+     * Set the name attribute on the model.
+     *
+     * @param $value
+     */
+    public function setNameAttribute($value)
+    {
+        $value = trim($value);
+        $this->attributes['name'] = $value;
+        $this->attributes['normalized'] = app(TagService::class)->normalize($value);
+    }
 
-		return $tag;
-	}
-
-	/**
-	 * Find a tag by its name.
-	 *
-	 * @param $name
-	 *
-	 * @return mixed
-	 */
-	public static function findByName($name)
-	{
-		$normalized = Util::normalizeName($name);
-
-		return static::where('normalized', $normalized)->first();
-	}
-
-	/**
-	 * @return mixed
-	 */
-	public function __toString()
-	{
-		return $this->getAttribute('name');
-	}
+    /**
+     * @return mixed
+     */
+    public function __toString()
+    {
+        return $this->getAttribute('name');
+    }
 }

@@ -3,7 +3,7 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 
-class DummyClass extends Migration
+class CreateTaggableTable extends Migration
 {
 	/**
 	 * Run the migrations.
@@ -21,7 +21,7 @@ class DummyClass extends Migration
 		Schema::create('taggable_taggables', function (Blueprint $table) {
 			$table->integer('tag_id');
 			$table->unsignedInteger('taggable_id')->index();
-			$table->string('taggable_type');
+			$table->string('taggable_type')->index();
 			$table->timestamps();
 		});
 	}
