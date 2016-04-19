@@ -1,10 +1,7 @@
-<?php
-
-namespace Cviebrock\EloquentTaggable\Services;
+<?php namespace Cviebrock\EloquentTaggable\Services;
 
 use Cviebrock\EloquentTaggable\Models\Tag;
-use Cviebrock\EloquentTaggable\Taggable;
-use Illuminate\Database\Connection;
+use DB;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 
@@ -16,11 +13,6 @@ class TagService
 {
 
     /**
-     * @var \Illuminate\Database\Connection
-     */
-    protected $db;
-
-    /**
      * @var array
      */
     protected $config;
@@ -28,12 +20,10 @@ class TagService
     /**
      * TagService constructor.
      *
-     * @param \Illuminate\Database\Connection $db
      * @param array $config
      */
-    public function __construct(Connection $db, array $config)
+    public function __construct(array $config)
     {
-        $this->db = $db;
         $this->config = $config;
     }
 
@@ -91,12 +81,12 @@ class TagService
     /**
      * Build a delimited string from a model's tags.
      *
-     * @param Taggable $model
+     * @param Model $model
      * @param string $field
      *
      * @return string
      */
-    public function makeTagList(Taggable $model, $field = 'name')
+    public function makeTagList(Model $model, $field = 'name')
     {
         $tags = $this->makeTagArray($model, $field);
 
@@ -153,7 +143,7 @@ class TagService
             $class = get_class($class);
         }
 
-        return $this->db->table('taggable_taggables')->distinct()
+        return DB::table('taggable_taggables')->distinct()
             ->where('taggable_type', '=', $class)
             ->join('taggable_tags', 'taggable_taggables.taggable_id', '=', 'taggable_tags.tag_id')
             ->orderBy('taggable_tags.normalized')

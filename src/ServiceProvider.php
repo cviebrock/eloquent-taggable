@@ -51,7 +51,6 @@ class ServiceProvider extends LaravelServiceProvider
 
         $this->app->singleton(TagService::class, function ($app) {
             return new TagService(
-                $app['db']->connection(),
                 $app['config']->get('taggable')
             );
         });
