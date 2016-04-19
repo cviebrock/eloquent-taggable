@@ -10,6 +10,6 @@ class TaggableTest extends TestCase
     {
         $this->testModel->tag('Apple,Banana,Cherry');
 
-        dd($this->testModel->tags->toArray());
+        $this->assertEquals(3, count($this->testModel->tags));
     }
 }

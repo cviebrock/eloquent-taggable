@@ -49,11 +49,11 @@ trait Taggable
     {
         $tags = $this->tagService->buildTagArray($tags);
 
-        foreach ($tags as $string) {
-            $this->addOneTag($string);
+        foreach ($tags as $tagName) {
+            $this->addOneTag($tagName);
         }
 
-        return $this;
+        return $this->load('tags');
     }
 
     /**
@@ -67,11 +67,11 @@ trait Taggable
     {
         $tags = $this->tagService->buildTagArray($tags);
 
-        foreach ($tags as $tag) {
-            $this->removeOneTag($model, $tag);
+        foreach ($tags as $tagName) {
+            $this->removeOneTag($tagName);
         }
 
-        return $this;
+        return $this->load('tags');
     }
 
     /**
@@ -95,7 +95,7 @@ trait Taggable
     {
         $this->tags()->sync([]);
 
-        return $this;
+        return $this->load('tags');
     }
 
     /**
@@ -103,12 +103,12 @@ trait Taggable
      *
      * @param string $tagName
      */
-    private function addOneTag($tagName)
+    protected function addOneTag($tagName)
     {
         $tag = $this->tagService->findOrCreate($tagName);
 
         if (!$this->tags->contains($tag->getKey())) {
-            $this->tags()->attach($tag);
+            $this->tags()->attach($tag->getKey());
         }
     }
 
