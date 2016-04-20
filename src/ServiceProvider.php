@@ -31,7 +31,7 @@ class ServiceProvider extends LaravelServiceProvider
         if (!class_exists('CreateTaggableTable')) {
             // Publish the migration
             $timestamp = date('Y_m_d_His', time());
-            $src = __DIR__ . '/../resources/migrations/0000_00_00_000000_create_taggable_table.php';
+            $src = __DIR__ . '/../resources/database/migrations/0000_00_00_000000_create_taggable_table.php';
             $dst = database_path('migrations/' . $timestamp . '_create_taggable_table.php');
 
             $this->publishes([
