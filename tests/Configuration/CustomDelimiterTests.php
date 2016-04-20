@@ -1,14 +1,14 @@
-<?php namespace Cviebrock\EloquentTaggable\Test\Configuration;
+<?php
+
+namespace Cviebrock\EloquentTaggable\Test\Configuration;
 
 use Cviebrock\EloquentTaggable\Test\TestCase;
 
-
 /**
- * Class CustomDelimiterTests
+ * Class CustomDelimiterTests.
  */
 class CustomDelimiterTests extends TestCase
 {
-
     protected function getEnvironmentSetUp($app)
     {
         parent::getEnvironmentSetUp($app);

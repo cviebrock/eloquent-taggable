@@ -1,16 +1,14 @@
-<?php namespace Cviebrock\EloquentTaggable\Test;
+<?php
+
+namespace Cviebrock\EloquentTaggable\Test;
 
 use Orchestra\Testbench\TestCase as Orchestra;
 
-
 /**
- * Class TestCase
- *
- * @package Tests
+ * Class TestCase.
  */
 abstract class TestCase extends Orchestra
 {
-
     /**
      * @var TestModel
      */
@@ -43,13 +41,13 @@ abstract class TestCase extends Orchestra
         // Create the taggable tables
         $this->artisan('migrate', [
             '--database' => 'testbench',
-            '--realpath' => realpath(__DIR__ . '/../resources/database/migrations'),
+            '--realpath' => realpath(__DIR__.'/../resources/database/migrations'),
         ]);
 
         // Create our test tables
         $this->artisan('migrate', [
             '--database' => 'testbench',
-            '--realpath' => realpath(__DIR__ . '/database/migrations'),
+            '--realpath' => realpath(__DIR__.'/database/migrations'),
         ]);
 
         $this->beforeApplicationDestroyed(function () {
@@ -85,7 +83,7 @@ abstract class TestCase extends Orchestra
     protected function getPackageProviders($app)
     {
         return [
-            \Cviebrock\EloquentTaggable\ServiceProvider::class
+            \Cviebrock\EloquentTaggable\ServiceProvider::class,
         ];
     }
 
@@ -103,7 +101,7 @@ abstract class TestCase extends Orchestra
     }
 
     /**
-     * Helper to generate a test model
+     * Helper to generate a test model.
      *
      * @param array $data
      * @return \Cviebrock\EloquentTaggable\Test\TestModel

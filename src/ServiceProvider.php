@@ -1,17 +1,15 @@
-<?php namespace Cviebrock\EloquentTaggable;
+<?php
+
+namespace Cviebrock\EloquentTaggable;
 
 use Cviebrock\EloquentTaggable\Services\TagService;
 use Illuminate\Support\ServiceProvider as LaravelServiceProvider;
 
-
 /**
- * Class ServiceProvider
- *
- * @package Cviebrock\EloquentTaggable
+ * Class ServiceProvider.
  */
 class ServiceProvider extends LaravelServiceProvider
 {
-
     /**
      * Indicates if loading of the provider is deferred.
      *
@@ -25,14 +23,14 @@ class ServiceProvider extends LaravelServiceProvider
     public function boot()
     {
         $this->publishes([
-            __DIR__ . '/../resources/config/taggable.php' => config_path('taggable.php'),
+            __DIR__.'/../resources/config/taggable.php' => config_path('taggable.php'),
         ], 'config');
 
-        if (!class_exists('CreateTaggableTable')) {
+        if (! class_exists('CreateTaggableTable')) {
             // Publish the migration
             $timestamp = date('Y_m_d_His', time());
-            $src = __DIR__ . '/../resources/migrations/0000_00_00_000000_create_taggable_table.php';
-            $dst = database_path('migrations/' . $timestamp . '_create_taggable_table.php');
+            $src = __DIR__.'/../resources/migrations/0000_00_00_000000_create_taggable_table.php';
+            $dst = database_path('migrations/'.$timestamp.'_create_taggable_table.php');
 
             $this->publishes([
                 $src => $dst,
@@ -47,7 +45,7 @@ class ServiceProvider extends LaravelServiceProvider
      */
     public function register()
     {
-        $this->mergeConfigFrom(__DIR__ . '/../resources/config/taggable.php', 'taggable');
+        $this->mergeConfigFrom(__DIR__.'/../resources/config/taggable.php', 'taggable');
 
         $this->app->singleton(TagService::class);
     }

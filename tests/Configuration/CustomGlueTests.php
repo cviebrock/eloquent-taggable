@@ -1,14 +1,14 @@
-<?php namespace Cviebrock\EloquentTaggable\Test\Configuration;
+<?php
+
+namespace Cviebrock\EloquentTaggable\Test\Configuration;
 
 use Cviebrock\EloquentTaggable\Test\TestCase;
 
-
 /**
- * Class CustomGlueTests
+ * Class CustomGlueTests.
  */
 class CustomGlueTests extends TestCase
 {
-
     protected function getEnvironmentSetUp($app)
     {
         parent::getEnvironmentSetUp($app);
@@ -17,7 +17,7 @@ class CustomGlueTests extends TestCase
     }
 
     /**
-     * Test tag list with custom glue
+     * Test tag list with custom glue.
      *
      * @test
      */
@@ -28,7 +28,7 @@ class CustomGlueTests extends TestCase
     }
 
     /**
-     * Test normalized tag list with custom glue
+     * Test normalized tag list with custom glue.
      *
      * @test
      */

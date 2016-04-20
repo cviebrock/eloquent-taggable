@@ -1,13 +1,14 @@
-<?php namespace Cviebrock\EloquentTaggable\Test;
+<?php
+
+namespace Cviebrock\EloquentTaggable\Test;
 
 /**
- * Class TaggingTests
+ * Class TaggingTests.
  */
 class TaggingTests extends TestCase
 {
-
     /**
-     * Test basic tagging
+     * Test basic tagging.
      *
      * @test
      */
@@ -20,7 +21,7 @@ class TaggingTests extends TestCase
     }
 
     /**
-     * Test adding tags from an array
+     * Test adding tags from an array.
      *
      * @test
      */
@@ -33,7 +34,7 @@ class TaggingTests extends TestCase
     }
 
     /**
-     * Test tagging with an alternate delimiter
+     * Test tagging with an alternate delimiter.
      *
      * @test
      */
@@ -45,9 +46,8 @@ class TaggingTests extends TestCase
         $this->assertArrayValuesAreEqual(['Apple', 'Banana', 'Cherry'], $this->testModel->tagArray);
     }
 
-
     /**
-     * Test adding additional tags
+     * Test adding additional tags.
      *
      * @test
      */
@@ -61,7 +61,7 @@ class TaggingTests extends TestCase
     }
 
     /**
-     * Test removing tags
+     * Test removing tags.
      *
      * @test
      */
@@ -75,7 +75,7 @@ class TaggingTests extends TestCase
     }
 
     /**
-     * Test removing all tags
+     * Test removing all tags.
      *
      * @test
      */
@@ -91,7 +91,7 @@ class TaggingTests extends TestCase
     }
 
     /**
-     * Test retagging tags
+     * Test retagging tags.
      *
      * @tags
      */

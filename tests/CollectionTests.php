@@ -1,14 +1,14 @@
-<?php namespace Cviebrock\EloquentTaggable\Test;
+<?php
+
+namespace Cviebrock\EloquentTaggable\Test;
 
 use Illuminate\Database\Eloquent\Collection;
 
-
 /**
- * Class CollectionTests
+ * Class CollectionTests.
  */
 class CollectionTests extends TestCase
 {
-
     /**
      * Test adding tags.
      *
@@ -23,7 +23,7 @@ class CollectionTests extends TestCase
     }
 
     /**
-     * Test getting the tag list
+     * Test getting the tag list.
      *
      * @test
      */
@@ -34,7 +34,7 @@ class CollectionTests extends TestCase
     }
 
     /**
-     * Test getting the normalized tag list
+     * Test getting the normalized tag list.
      *
      * @test
      */
@@ -45,7 +45,7 @@ class CollectionTests extends TestCase
     }
 
     /**
-     * Test getting the tag array
+     * Test getting the tag array.
      *
      * @test
      */
@@ -56,7 +56,7 @@ class CollectionTests extends TestCase
     }
 
     /**
-     * Test getting the normalized tag array
+     * Test getting the normalized tag array.
      *
      * @test
      */
@@ -65,5 +65,4 @@ class CollectionTests extends TestCase
         $this->testModel->tag('Apple,Banana,Cherry');
         $this->assertArrayValuesAreEqual(['apple', 'banana', 'cherry'], $this->testModel->tagArrayNormalized);
     }
-
 }

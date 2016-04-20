@@ -1,19 +1,17 @@
-<?php namespace Cviebrock\EloquentTaggable;
+<?php
+
+namespace Cviebrock\EloquentTaggable;
 
 use Cviebrock\EloquentTaggable\Models\Tag;
 use Cviebrock\EloquentTaggable\Services\TagService;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 
-
 /**
- * Class Taggable
- *
- * @package Cviebrock\EloquentTaggable
+ * Class Taggable.
  */
 trait Taggable
 {
-
     /**
      * Get a Collection of all Tags a Model has.
      *
@@ -94,13 +92,13 @@ trait Taggable
     {
         $tag = app(TagService::class)->findOrCreate($tagName);
 
-        if (!$this->tags->contains($tag->getKey())) {
+        if (! $this->tags->contains($tag->getKey())) {
             $this->tags()->attach($tag->getKey());
         }
     }
 
     /**
-     * Remove one tag from the model
+     * Remove one tag from the model.
      *
      * @param string $tagName
      */

@@ -19,7 +19,6 @@ class CreateTestModelsTable extends Migration
             $table->increments('id');
             $table->string('title');
         });
-
     }
 
     /**

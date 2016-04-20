@@ -1,14 +1,14 @@
-<?php namespace Cviebrock\EloquentTaggable\Test;
+<?php
+
+namespace Cviebrock\EloquentTaggable\Test;
 
 use Illuminate\Database\Eloquent\Collection;
 
-
 /**
- * Class ScopeTests
+ * Class ScopeTests.
  */
 class ScopeTests extends TestCase
 {
-
     /**
      * @var TestModel
      */
@@ -44,7 +44,7 @@ class ScopeTests extends TestCase
     }
 
     /**
-     * Test searching by all tags
+     * Test searching by all tags.
      *
      * @test
      */
@@ -64,7 +64,7 @@ class ScopeTests extends TestCase
     }
 
     /**
-     * Test searching by any tags
+     * Test searching by any tags.
      *
      * @test
      */
@@ -92,7 +92,7 @@ class ScopeTests extends TestCase
 
         $this->assertArrayValuesAreEqual(
             [
-                $this->testModel->getKey()
+                $this->testModel->getKey(),
             ],
             $keys
         );
