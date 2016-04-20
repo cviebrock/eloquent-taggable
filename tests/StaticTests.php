@@ -1,11 +1,12 @@
-<?php namespace Cviebrock\EloquentTaggable\Test;
+<?php
+
+namespace Cviebrock\EloquentTaggable\Test;
 
 /**
- * Class StaticTests
+ * Class StaticTests.
  */
 class StaticTests extends TestCase
 {
-
     /**
      * @var TestModel
      */
@@ -36,7 +37,7 @@ class StaticTests extends TestCase
     }
 
     /**
-     * Test finding all the tags for a model
+     * Test finding all the tags for a model.
      *
      * @test
      */
@@ -48,7 +49,7 @@ class StaticTests extends TestCase
     }
 
     /**
-     * Test finding all the tags for a model
+     * Test finding all the tags for a model.
      *
      * @test
      */

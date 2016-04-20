@@ -1,17 +1,15 @@
-<?php namespace Cviebrock\EloquentTaggable\Models;
+<?php
+
+namespace Cviebrock\EloquentTaggable\Models;
 
 use Cviebrock\EloquentTaggable\Services\TagService;
 use Illuminate\Database\Eloquent\Model as Eloquent;
 
-
 /**
- * Class Tag
- *
- * @package Cviebrock\EloquentTaggable\Models
+ * Class Tag.
  */
 class Tag extends Eloquent
 {
-
     /**
      * The table associated with the model.
      *

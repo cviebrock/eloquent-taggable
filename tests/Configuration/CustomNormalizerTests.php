@@ -1,14 +1,14 @@
-<?php namespace Cviebrock\EloquentTaggable\Test\Configuration;
+<?php
+
+namespace Cviebrock\EloquentTaggable\Test\Configuration;
 
 use Cviebrock\EloquentTaggable\Test\TestCase;
 
-
 /**
- * Class CustomNormalizerTests
+ * Class CustomNormalizerTests.
  */
 class CustomNormalizerTests extends TestCase
 {
-
     protected function getEnvironmentSetUp($app)
     {
         parent::getEnvironmentSetUp($app);
@@ -20,7 +20,7 @@ class CustomNormalizerTests extends TestCase
 
     /**
      * Test tag list with custom normalizer
-     * (this shouldn't affect the "regular" tagArray)
+     * (this shouldn't affect the "regular" tagArray).
      *
      * @test
      */
@@ -31,7 +31,7 @@ class CustomNormalizerTests extends TestCase
     }
 
     /**
-     * Test normalized tag list with custom glue
+     * Test normalized tag list with custom glue.
      *
      * @test
      */
