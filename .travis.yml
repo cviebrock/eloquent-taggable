@@ -18,4 +18,7 @@ before_script:
   - travis_retry composer install --prefer-source --no-interaction --dev $PREFER_LOWEST
 
 script:
-  - vendor/bin/phpunit
+  - vendor/bin/phpunit --coverage-text --coverage-clover=coverage.clover
+
+after_script:
+  - php vendor/bin/ocular code-coverage:upload --format=php-clover coverage.clover

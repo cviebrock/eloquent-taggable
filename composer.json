@@ -9,6 +9,10 @@
     "taggable"
   ],
   "homepage": "https://github.com/cviebrock/eloquent-taggable",
+  "support": {
+    "issues": "https://github.com/cviebrock/eloquent-taggable/issues",
+    "source": "https://github.com/cviebrock/eloquent-taggable"
+  },
   "license": "MIT",
   "authors": [
     {
@@ -20,12 +24,14 @@
     "php": ">=5.5",
     "illuminate/config": "~5.1|~5.2",
     "illuminate/database": "~5.1|~5.2",
-    "illuminate/support": "~5.1|~5.2"
+    "illuminate/support": "~5.1|~5.2",
+    "scrutinizer/ocular": "^1.3"
   },
   "require-dev": {
     "phpunit/phpunit": "^4.0",
     "orchestra/testbench": "^3.0",
-    "mockery/mockery": "^0.9.4"
+    "mockery/mockery": "^0.9.4",
+    "fabpot/php-cs-fixer": "^1.11"
   },
   "autoload": {
     "psr-4": {
@@ -36,5 +42,11 @@
     "psr-4": {
       "Cviebrock\\EloquentTaggable\\Test\\": "tests"
     }
+  },
+  "scripts": {
+    "test": [
+      "parallel-lint . --exclude vendor",
+      "phpunit"
+    ]
   }
 }

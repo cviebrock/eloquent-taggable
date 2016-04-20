@@ -3,8 +3,10 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 
+
 class CreateTestModelsTable extends Migration
 {
+
     /**
      * Run the migrations.
      */
@@ -19,7 +21,6 @@ class CreateTestModelsTable extends Migration
             $table->increments('id');
             $table->string('title');
         });
-
     }
 
     /**

@@ -45,7 +45,6 @@ class TaggingTests extends TestCase
         $this->assertArrayValuesAreEqual(['Apple', 'Banana', 'Cherry'], $this->testModel->tagArray);
     }
 
-
     /**
      * Test adding additional tags
      *

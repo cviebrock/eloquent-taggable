@@ -1,8 +1,8 @@
 # Changelog
 
-## 2.0.0 - 04-Jan-2015
+## 2.0.0 - 20-Apr-2016
 
-- Laravel 5 release (finally)
+- Rewrite and Laravel 5 release
 
 
 ## 2.0.0-beta - 04-Mar-2015
