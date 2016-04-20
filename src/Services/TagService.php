@@ -4,35 +4,22 @@ use Cviebrock\EloquentTaggable\Models\Tag;
 use DB;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Config\Repository as Config;
 
 
 /**
- * Class Util.
+ * Class TagService
+ *
+ * @package Cviebrock\EloquentTaggable\Services
  */
 class TagService
 {
 
     /**
-     * @var array
-     */
-    protected $config;
-
-    /**
-     * TagService constructor.
-     *
-     * @param \Illuminate\Config\Repository $config
-     */
-    public function __construct(Config $config)
-    {
-        $this->config = $config->get('taggable');
-    }
-
-    /**
      * Find an existing tag by name.
      *
      * @param string $tagName
-     * @return Tag|null
+     *
+     * @return \Cviebrock\EloquentTaggable\Models\Tag|null
      */
     public function find($tagName)
     {
@@ -45,7 +32,8 @@ class TagService
      * Find an existing tag (or create a new one) by name.
      *
      * @param string $tagName
-     * @return Tag
+     *
+     * @return \Cviebrock\EloquentTaggable\Models\Tag
      */
     public function findOrCreate($tagName)
     {
@@ -72,7 +60,7 @@ class TagService
         }
 
         if (is_string($tags)) {
-            return preg_split('#[' . preg_quote($this->config['delimiters'], '#') . ']#', $tags, null,
+            return preg_split('#[' . preg_quote(config('taggable.delimiters'), '#') . ']#', $tags, null,
                 PREG_SPLIT_NO_EMPTY);
         }
 
@@ -96,7 +84,7 @@ class TagService
     /**
      * Build a delimited string from a model's tags.
      *
-     * @param Model $model
+     * @param \Illuminate\Database\Eloquent\Model $model
      * @param string $field
      *
      * @return string
@@ -112,24 +100,25 @@ class TagService
      * Join a list of strings together using glue.
      *
      * @param array $array
+     *
      * @return string
      */
     public function joinList(array $array)
     {
-        return implode($this->config['glue'], $array);
+        return implode(config('taggable.glue'), $array);
     }
 
     /**
      * Build a simple array of a model's tags.
      *
-     * @param Model $model
-     * @param $field
+     * @param \Illuminate\Database\Eloquent\Model $model
+     * @param string $field
      *
      * @return array
      */
     public function makeTagArray(Model $model, $field = 'name')
     {
-        /** @var Collection $tags */
+        /** @var \Illuminate\Database\Eloquent\Collection $tags */
         $tags = $model->tags;
 
         return $tags->pluck($field)->all();
@@ -144,15 +133,15 @@ class TagService
      */
     public function normalize($string)
     {
-        return call_user_func($this->config['normalizer'], $string);
+        return call_user_func(config('taggable.normalizer'), $string);
     }
 
     /**
      * Get all Tags for the given class.
      *
-     * @param Model|string $class
+     * @param \Illuminate\Database\Eloquent\Model|string $class
      *
-     * @return Collection
+     * @return \Illuminate\Database\Eloquent\Collection
      */
     public function getAllTags($class)
     {
@@ -161,8 +150,8 @@ class TagService
         }
 
         $sql = 'SELECT DISTINCT t.*' .
-          ' FROM taggable_taggables tt LEFT JOIN taggable_tags t ON tt.tag_id=t.tag_id' .
-          ' WHERE tt.taggable_type = ?';
+            ' FROM taggable_taggables tt LEFT JOIN taggable_tags t ON tt.tag_id=t.tag_id' .
+            ' WHERE tt.taggable_type = ?';
 
         return Tag::hydrateRaw($sql, [$class]);
     }

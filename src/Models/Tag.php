@@ -1,27 +1,34 @@
 <?php namespace Cviebrock\EloquentTaggable\Models;
 
 use Cviebrock\EloquentTaggable\Services\TagService;
-use Cviebrock\EloquentTaggable\Util;
 use Illuminate\Database\Eloquent\Model as Eloquent;
 
 
 /**
- * Class Tag.
+ * Class Tag
+ *
+ * @package Cviebrock\EloquentTaggable\Models
  */
 class Tag extends Eloquent
 {
 
     /**
+     * The table associated with the model.
+     *
      * @var string
      */
     protected $table = 'taggable_tags';
 
     /**
+     * The primary key for the model.
+     *
      * @var string
      */
     protected $primaryKey = 'tag_id';
 
     /**
+     * The attributes that are mass assignable.
+     *
      * @var array
      */
     protected $fillable = [
@@ -32,7 +39,7 @@ class Tag extends Eloquent
     /**
      * Set the name attribute on the model.
      *
-     * @param $value
+     * @param string $value
      */
     public function setNameAttribute($value)
     {
@@ -42,7 +49,9 @@ class Tag extends Eloquent
     }
 
     /**
-     * @return mixed
+     * Convert the model to its string representation.
+     *
+     * @return string
      */
     public function __toString()
     {

@@ -7,32 +7,17 @@ use Illuminate\Database\Eloquent\Collection;
 
 
 /**
- * Class Taggable.
+ * Class Taggable
+ *
+ * @package Cviebrock\EloquentTaggable
  */
 trait Taggable
 {
 
     /**
-     * @var TagService
-     */
-    private $tagService;
-
-    /**
-     * Get the TagService instance.
-     *
-     * @return TagService
-     */
-    public static function bootTaggable()
-    {
-        static::created(function ($model) {
-            $model->tagService = app(TagService::class);
-        });
-    }
-
-    /**
      * Get a Collection of all Tags a Model has.
      *
-     * @return mixed
+     * @return \Illuminate\Database\Eloquent\Relations\MorphToMany
      */
     public function tags()
     {
@@ -43,13 +28,13 @@ trait Taggable
     /**
      * Attach one or multiple Tags to a Model.
      *
-     * @param $tags
+     * @param string|array $tags
      *
      * @return $this
      */
     public function tag($tags)
     {
-        $tags = $this->tagService->buildTagArray($tags);
+        $tags = app(TagService::class)->buildTagArray($tags);
 
         foreach ($tags as $tagName) {
             $this->addOneTag($tagName);
@@ -61,13 +46,13 @@ trait Taggable
     /**
      * Detach one or multiple Tags from a Model.
      *
-     * @param $tags
+     * @param string|array $tags
      *
      * @return $this
      */
     public function untag($tags)
     {
-        $tags = $this->tagService->buildTagArray($tags);
+        $tags = app(TagService::class)->buildTagArray($tags);
 
         foreach ($tags as $tagName) {
             $this->removeOneTag($tagName);
@@ -79,7 +64,7 @@ trait Taggable
     /**
      * Remove all Tags from a Model and assign the given ones.
      *
-     * @param $tags
+     * @param string|array $tags
      *
      * @return $this
      */
@@ -107,7 +92,7 @@ trait Taggable
      */
     protected function addOneTag($tagName)
     {
-        $tag = $this->tagService->findOrCreate($tagName);
+        $tag = app(TagService::class)->findOrCreate($tagName);
 
         if (!$this->tags->contains($tag->getKey())) {
             $this->tags()->attach($tag->getKey());
@@ -121,7 +106,7 @@ trait Taggable
      */
     protected function removeOneTag($tagName)
     {
-        $tag = $this->tagService->find($tagName);
+        $tag = app(TagService::class)->find($tagName);
 
         if ($tag) {
             $this->tags()->detach($tag);
@@ -136,7 +121,7 @@ trait Taggable
      */
     public function getTagListAttribute()
     {
-        return $this->tagService->makeTagList($this);
+        return app(TagService::class)->makeTagList($this);
     }
 
     /**
@@ -147,43 +132,40 @@ trait Taggable
      */
     public function getTagListNormalizedAttribute()
     {
-        return $this->tagService->makeTagList($this, 'normalized');
+        return app(TagService::class)->makeTagList($this, 'normalized');
     }
 
     /**
      * Get all tags of a Model as an array.
      *
-     * @return mixed
+     * @return array
      */
     public function getTagArrayAttribute()
     {
-        return $this->tagService->makeTagArray($this);
+        return app(TagService::class)->makeTagArray($this);
     }
 
     /**
      * Get all normalized tags of a Model as an array.
      *
-     * @return mixed
+     * @return array
      */
     public function getTagArrayNormalizedAttribute()
     {
-        return $this->tagService->makeTagArray($this, 'normalized');
+        return app(TagService::class)->makeTagArray($this, 'normalized');
     }
 
     /**
      * Scope for a Model that has all of the given tags.
      *
-     * @param Builder $query
+     * @param \Illuminate\Database\Eloquent\Builder $query
      * @param array|string $tags
      *
-     * @return mixed
+     * @return \Illuminate\Database\Eloquent\Builder
      */
     public function scopeWithAllTags(Builder $query, $tags)
     {
-        /** @var TagService $tagService */
-        $tagService = app(TagService::class);
-
-        $normalized = $tagService->buildTagArrayNormalized($tags);
+        $normalized = app(TagService::class)->buildTagArrayNormalized($tags);
 
         return $query->has('tags', '=', count($normalized), 'and', function (Builder $q) use ($normalized) {
             $q->whereIn('normalized', $normalized);
@@ -193,16 +175,14 @@ trait Taggable
     /**
      * Scope for a Model that has any of the given tags.
      *
-     * @param Builder $query
+     * @param \Illuminate\Database\Eloquent\Builder $query
      * @param array $tags
      *
-     * @return mixed
+     * @return \Illuminate\Database\Eloquent\Builder
      */
     public function scopeWithAnyTags(Builder $query, $tags = [])
     {
-        /** @var TagService $tagService */
-        $tagService = app(TagService::class);
-        $normalized = $tagService->buildTagArrayNormalized($tags);
+        $normalized = app(TagService::class)->buildTagArrayNormalized($tags);
 
         if (empty($normalized)) {
             return $query->has('tags');
@@ -216,9 +196,9 @@ trait Taggable
     /**
      * Scope for a Model that doesn't have any tags.
      *
-     * @param Builder $query
+     * @param \Illuminate\Database\Eloquent\Builder $query
      *
-     * @return mixed
+     * @return \Illuminate\Database\Eloquent\Builder
      */
     public function scopeWithoutTags(Builder $query)
     {

@@ -17,7 +17,7 @@ class ServiceProvider extends LaravelServiceProvider
      *
      * @var bool
      */
-    protected $defer = true;
+    protected $defer = false;
 
     /**
      * Bootstrap the application events.
@@ -49,8 +49,6 @@ class ServiceProvider extends LaravelServiceProvider
     {
         $this->mergeConfigFrom(__DIR__ . '/../resources/config/taggable.php', 'taggable');
 
-        $this->app->singleton(TagService::class, function ($app) {
-            return new TagService($app['config']);
-        });
+        $this->app->singleton(TagService::class);
     }
 }
