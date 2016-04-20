@@ -2,6 +2,8 @@
 
 use Cviebrock\EloquentTaggable\Models\Tag;
 use Cviebrock\EloquentTaggable\Services\TagService;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Collection;
 
 
 /**
@@ -22,7 +24,7 @@ trait Taggable
      */
     public static function bootTaggable()
     {
-        static::created(function($model) {
+        static::created(function ($model) {
             $model->tagService = app(TagService::class);
         });
     }
@@ -169,65 +171,80 @@ trait Taggable
     }
 
     /**
-     * Scope for a Model that has all of the given Tags.
+     * Scope for a Model that has all of the given tags.
      *
-     * @param $query
-     * @param $tags
-     *
-     * @return mixed
-     */
-    public function scopeWithAllTags($query, $tags)
-    {
-        $tags = $this->tagService->buildTagArray($tags);
-
-        $normalized = array_map([$this->tagService, 'normalize'], $tags);
-
-        return $query->whereHas('tags', function ($q) use ($normalized) {
-            $q->whereIn('normalized', $normalized);
-        }, '=', count($normalized));
-    }
-
-    /**
-     * Scope for a Model that has any of the given Tags.
-     *
-     * @param $query
-     * @param array $tags
+     * @param Builder $query
+     * @param array|string $tags
      *
      * @return mixed
      */
-    public function scopeWithAnyTags($query, $tags = [])
+    public function scopeWithAllTags(Builder $query, $tags)
     {
-        $tags = $this->tagService->buildTagArray($tags);
+        /** @var TagService $tagService */
+        $tagService = app(TagService::class);
 
-        if (empty($tags)) {
-            return $query->has('tags');
-        }
+        $normalized = $tagService->buildTagArrayNormalized($tags);
 
-        $normalized = array_map([$this->tagService, 'normalize'], $tags);
-
-        return $query->whereHas('tags', function ($q) use ($normalized) {
+        return $query->has('tags', '=', count($normalized), 'and', function (Builder $q) use ($normalized) {
             $q->whereIn('normalized', $normalized);
         });
     }
 
     /**
-     * Get all tags used for the called class.
+     * Scope for a Model that has any of the given tags.
+     *
+     * @param Builder $query
+     * @param array $tags
      *
      * @return mixed
      */
-    public function allTags()
+    public function scopeWithAnyTags(Builder $query, $tags = [])
     {
-        return $this->tagService->getAllTags($this);
+        /** @var TagService $tagService */
+        $tagService = app(TagService::class);
+        $normalized = $tagService->buildTagArrayNormalized($tags);
+
+        if (empty($normalized)) {
+            return $query->has('tags');
+        }
+
+        return $query->has('tags', '>', 0, 'and', function (Builder $q) use ($normalized) {
+            $q->whereIn('normalized', $normalized);
+        });
     }
 
     /**
-     * Get all tags for the called class as a string in which the tags are delimited
-     * by the character defined in config('taggable.delimiters').
+     * Scope for a Model that doesn't have any tags.
+     *
+     * @param Builder $query
+     *
+     * @return mixed
+     */
+    public function scopeWithoutTags(Builder $query)
+    {
+        return $query->has('tags', '=', 0);
+    }
+
+    /**
+     * Get an array of all tags used for the called class.
+     *
+     * @return array
+     */
+    public static function allTags()
+    {
+        /** @var Collection $tags */
+        $tags = app(TagService::class)->getAllTags(get_called_class());
+
+        return $tags->pluck('name')->sort()->all();
+    }
+
+    /**
+     * Get all the tags used for the called class as a delimited string.
      *
      * @return string
      */
-    public function allTagsList()
+    public static function allTagsList()
     {
-        return $this->tagService->joinList($this->allTags());
+        return app(TagService::class)->joinList(static::allTags());
     }
 }

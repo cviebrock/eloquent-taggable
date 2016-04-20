@@ -58,7 +58,7 @@ class TagService
     }
 
     /**
-     * Convert a delimited string into an array.
+     * Convert a delimited string into an array of tag strings.
      *
      * @param string|array $tags
      *
@@ -79,6 +79,20 @@ class TagService
     }
 
     /**
+     * Convert a delimited string into an array of normalized tag strings.
+     *
+     * @param string|array $tags
+     *
+     * @return array
+     */
+    public function buildTagArrayNormalized($tags)
+    {
+        $tags = $this->buildTagArray($tags);
+
+        return array_map([$this, 'normalize'], $tags);
+    }
+
+    /**
      * Build a delimited string from a model's tags.
      *
      * @param Model $model
@@ -94,12 +108,14 @@ class TagService
     }
 
     /**
+     * Join a list of strings together using glue.
+     *
      * @param array $array
-     * @return mixed
+     * @return string
      */
     public function joinList(array $array)
     {
-        return implode($this->config['list_glue'], $array);
+        return implode($this->config['glue'], $array);
     }
 
     /**
@@ -115,7 +131,7 @@ class TagService
         /** @var Collection $tags */
         $tags = $model->tags;
 
-        return $tags->pluck($field, 'tag_id')->all();
+        return $tags->pluck($field)->all();
     }
 
     /**
@@ -131,11 +147,11 @@ class TagService
     }
 
     /**
-     * Get all tags for the given class.
+     * Get all Tags for the given class.
      *
      * @param Model|string $class
      *
-     * @return array
+     * @return Collection
      */
     public function getAllTags($class)
     {
@@ -143,10 +159,10 @@ class TagService
             $class = get_class($class);
         }
 
-        return DB::table('taggable_taggables')->distinct()
-            ->where('taggable_type', '=', $class)
-            ->join('taggable_tags', 'taggable_taggables.taggable_id', '=', 'taggable_tags.tag_id')
-            ->orderBy('taggable_tags.normalized')
-            ->pluck('taggable_tags.normalized');
+        $sql = 'SELECT DISTINCT t.*' .
+          ' FROM taggable_taggables tt LEFT JOIN taggable_tags t ON tt.tag_id=t.tag_id' .
+          ' WHERE tt.taggable_type = ?';
+
+        return Tag::hydrateRaw($sql, [$class]);
     }
 }

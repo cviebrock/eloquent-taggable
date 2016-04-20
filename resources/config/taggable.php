@@ -3,7 +3,7 @@
 return [
     'delimiters' => ',;',
 
-    'list_glue' => ',',
+    'glue' => ',',
 
     'normalizer' => 'mb_strtolower',
 ];

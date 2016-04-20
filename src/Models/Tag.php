@@ -30,14 +30,6 @@ class Tag extends Eloquent
     ];
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\MorphTo
-     */
-    public function taggable()
-    {
-        return $this->morphTo();
-    }
-
-    /**
      * Set the name attribute on the model.
      *
      * @param $value

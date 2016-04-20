@@ -14,6 +14,12 @@ class CreateTestModelsTable extends Migration
             $table->increments('id');
             $table->string('title');
         });
+
+        Schema::create('test_dummies', function (Blueprint $table) {
+            $table->increments('id');
+            $table->string('title');
+        });
+
     }
 
     /**
@@ -22,5 +28,6 @@ class CreateTestModelsTable extends Migration
     public function down()
     {
         Schema::drop('test_models');
+        Schema::drop('test_dummies');
     }
 }

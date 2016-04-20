@@ -17,6 +17,11 @@ abstract class TestCase extends Orchestra
     protected $testModel;
 
     /**
+     * @var array
+     */
+    protected $testData = ['title' => 'title'];
+
+    /**
      * Setup the test environment.
      *
      * @return void
@@ -27,7 +32,7 @@ abstract class TestCase extends Orchestra
 
         $this->setUpDatabase($this->app);
 
-        $this->testModel = TestModel::create(['title' => 'Test']);
+        $this->testModel = $this->newModel();
     }
 
     /**
@@ -82,5 +87,29 @@ abstract class TestCase extends Orchestra
         return [
             \Cviebrock\EloquentTaggable\ServiceProvider::class
         ];
+    }
+
+    /**
+     * Custom test to see if two arrays have the same values, regardless
+     * of indices or order.
+     *
+     * @param array $expected
+     * @param array $actual
+     */
+    protected function assertArrayValuesAreEqual(array $expected, array $actual)
+    {
+        $this->assertEquals(count($expected), count($actual));
+        $this->assertEquals($expected, $actual, '', 0.0, 10, true);
+    }
+
+    /**
+     * Helper to generate a test model
+     *
+     * @param array $data
+     * @return \Cviebrock\EloquentTaggable\Test\TestModel
+     */
+    protected function newModel($data = ['title' => 'test'])
+    {
+        return TestModel::create($data);
     }
 }
