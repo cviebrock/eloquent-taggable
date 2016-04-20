@@ -50,9 +50,7 @@ class ServiceProvider extends LaravelServiceProvider
         $this->mergeConfigFrom(__DIR__ . '/../resources/config/taggable.php', 'taggable');
 
         $this->app->singleton(TagService::class, function ($app) {
-            return new TagService(
-                $app['config']->get('taggable')
-            );
+            return new TagService($app['config']);
         });
     }
 }

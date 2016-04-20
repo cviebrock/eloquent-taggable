@@ -4,6 +4,7 @@ use Cviebrock\EloquentTaggable\Models\Tag;
 use DB;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Config\Repository as Config;
 
 
 /**
@@ -20,11 +21,11 @@ class TagService
     /**
      * TagService constructor.
      *
-     * @param array $config
+     * @param \Illuminate\Config\Repository $config
      */
-    public function __construct(array $config)
+    public function __construct(Config $config)
     {
-        $this->config = $config;
+        $this->config = $config->get('taggable');
     }
 
     /**
