@@ -1,8 +1,13 @@
 # Changelog
 
+## 2.0.0 - 04-Jan-2015
+
+- Laravel 5 release (finally)
+
+
 ## 2.0.0-beta - 04-Mar-2015
 
-- First beta release for Laravel 5.
+- First beta release for Laravel 5
 
 
 ## 1.0.0 - 17-Feb-2015
@@ -12,9 +17,9 @@
 
 ## 0.9.1 - 16-May-2014
 
-- Minor bug fixes.
+- Minor bug fixes
 
 
 ## 0.9.0 - 15-May-2014
 
-- Initial release.
+- Initial release

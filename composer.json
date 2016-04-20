@@ -1,6 +1,6 @@
 {
   "name": "cviebrock/eloquent-taggable",
-  "description": "Easy ability to tag your Eloquent models in Laravel.",
+  "description": "Easy ability to tag your Eloquent models in Laravel 5.",
   "keywords": [
     "laravel",
     "eloquent",
@@ -17,18 +17,24 @@
     }
   ],
   "require": {
-    "php": ">=5.4.0",
-    "illuminate/config": "~4|~5",
-    "illuminate/support": "~4|~5"
+    "php": ">=5.5",
+    "illuminate/config": "~5.1|~5.2",
+    "illuminate/database": "~5.1|~5.2",
+    "illuminate/support": "~5.1|~5.2"
   },
   "require-dev": {
-    "phpunit/phpunit": "~4.0",
-    "orchestra/testbench": "~2.0|~3.0@dev"
+    "phpunit/phpunit": "^4.0",
+    "orchestra/testbench": "^3.0",
+    "mockery/mockery": "^0.9.4"
   },
   "autoload": {
     "psr-4": {
-      "Cviebrock\\EloquentTaggable\\": "src/"
+      "Cviebrock\\EloquentTaggable\\": "src"
     }
   },
-  "minimum-stability": "stable"
+  "autoload-dev": {
+    "psr-4": {
+      "Cviebrock\\EloquentTaggable\\Test\\": "tests"
+    }
+  }
 }

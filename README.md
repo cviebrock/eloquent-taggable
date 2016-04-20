@@ -1,21 +1,28 @@
 # Eloquent-Taggable
 
-Easily add the ability to tag your Eloquent models in Laravel.
+Easily add the ability to tag your Eloquent models in Laravel 5.
 
-[![Latest Stable Version](https://poser.pugx.org/cviebrock/eloquent-taggable/v/stable.png)](https://packagist.org/packages/cviebrock/eloquent-taggable)
-[![Total Downloads](https://poser.pugx.org/cviebrock/eloquent-taggable/downloads.png)](https://packagist.org/packages/cviebrock/eloquent-taggable)
+[![Build Status](https://travis-ci.org/cviebrock/eloquent-taggable?format=flat)](https://travis-ci.org/cviebrock/eloquent-taggable)
+[![Total Downloads](https://poser.pugx.org/cviebrock/eloquent-taggable/downloads?format=flat)](https://packagist.org/packages/cviebrock/eloquent-taggable)
+[![Latest Stable Version](https://poser.pugx.org/cviebrock/eloquent-taggable/v/stable?format=flat)](https://packagist.org/packages/cviebrock/eloquent-taggable)
+[![Latest Stable Version](https://poser.pugx.org/cviebrock/eloquent-taggable/v/unstable?format=flat)](https://packagist.org/packages/cviebrock/eloquent-taggable)
+[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/cviebrock/eloquent-taggable/badges/quality-score.png?b=rewrite-observer&format=flat)](https://scrutinizer-ci.com/g/cviebrock/eloquent-taggable)
 
-* [Installation and Requirements](#installation)
-* [Updating your Eloquent Models](#eloquent)
+
+* [Installation](#installation)
+* [Updating your Eloquent Models](#updating-your-eloquent-models)
 * [Usage](#usage)
-* [Configuration](#config)
-* [Extending Taggable](#extending)
-* [Bugs, Suggestions and Contributions](#bugs)
-* [Copyright and License](#copyright)
+* [The TagService Class](#the-tagservice-class)
+* [Configuration](#configuration)
+* [Bugs, Suggestions and Contributions](#bugs-suggestions-and-contributions)
+* [Copyright and License](#copyright-and-license)
 
 
-<a name="installation"></a>
-## Installation and Requirements
+> *NOTE:* If you are using Laravel 4, then please use the `1.*` branch and releases.
+
+---
+
+## Installation
 
 
 1. Install the `cviebrock/eloquent-taggable` package via composer:
@@ -23,68 +30,48 @@ Easily add the ability to tag your Eloquent models in Laravel.
     ```shell
     $ composer require cviebrock/eloquent-taggable
     ```
-
-2. Add the service provider (`app/config/app.php` for Laravel 4, `config/app.php` for Laravel 5):
+    
+2. Add the service provider to `config/app.php`:
 
     ```php
     # Add the service provider to the `providers` array
     'providers' => array(
         ...
-        'Cviebrock\EloquentTaggable\ServiceProvider',
+        \Cviebrock\EloquentTaggable\ServiceProvider::class,
     )
     ```
 
-3. Publish the configuration file.
-
-    For Laravel 4:
+3. Publish the configuration file and migrations
 
     ```shell
-    php artisan config:publish cviebrock/eloquent-taggable
-    ```
-
-    Or for Laravel 5:
-
-    ```shell
-    php artisan vendor:publish
+    php artisan vendor:publish --provider="Cviebrock\EloquentTaggable\ServiceProvider"
     ```
 
 4. Finally, use artisan to run the migration to create the required tables.
 
-    For Laravel 4:
-
     ```sh
-    php artisan migrate --package=cviebrock/eloquent-taggable
-    ```
-
-    For Laravel 5:
-
-    ```sh
-    php artisan taggable:table
+    composer dump-autoload
     php artisan migrate
     ```
 
 
-<a name="eloquent"></a>
 ## Updating your Eloquent Models
 
-Your models should implement Taggable's interface and use it's trait:
+Your models should use the Taggable trait:
 
 ```php
-use Cviebrock\EloquentTaggable\Contracts\Taggable;
-use Cviebrock\EloquentTaggable\Traits\Taggable as TaggableImpl;
+use Cviebrock\EloquentTaggable\Taggable;
 
-class MyModel extends Eloquent implements Taggable
+class MyModel extends Eloquent
 {
-    use TaggableImpl;
+    use Taggable;
 }
 ```
 
 That's it ... your model is now "taggable"!
 
 
-
-<a name="usage"></a>
-## Using the Class
+## Usage
 
 Tag your models with the `tag()` method:
 
@@ -163,7 +150,7 @@ var_dump($model->tagList);
 // string 'Apple' (length=5)
 ```
 
-Finally, you can easily find models with tags through some query scopes:
+You can easily find models with tags through some query scopes:
 
 ```php
 Model::withAllTags('apple,banana,cherry');
@@ -176,9 +163,32 @@ Model::withAnyTags();
 // returns models with any tags at all
 ```
 
+Finally, you can easily find all the tags used across all instances of a model:
+
+```php
+Model::allTags();
+// returns an array of all the tags used by any Model instances
+```
 
 
-<a name="config"></a>
+## The TagService Class
+
+There a few other things you can do using the `TagService` class directly,
+such as getting an `Illuminate\Database\Eloquent\Collection` of all the tag
+models for a given class:
+
+```php
+$service = app(\Cviebrock\EloquentTaggable\Services\TagService::class);
+$tags = $service->getAllTags(\App\Model::class);
+```
+
+All the functionality you get from using the model methods is driven
+(in part) by methods in the service class, and most of those methods are
+public and so you can access them directly if you need to.
+
+As always, take a look at the code for full documention of those methods.
+
+
 ## Configuration
 
 Configuration is handled through the settings in `/app/config/taggable.php`.  The default values are:
@@ -187,6 +197,7 @@ Configuration is handled through the settings in `/app/config/taggable.php`.  Th
 
 return array(
     'delimiters' => ',;',
+    'glue' => ',',
     'normalizer' => 'mb_strtolower',
 );
 ```
@@ -202,12 +213,14 @@ $model->tag('Apple/Banana;Cherry,Durian');
 // $model will have four tags
 ```
 
-When using multiple delimiters, the first one will be used to build strings for the `tagList` attribute.  So, in the above case:
+### glue
+
+When building a string for the `tagList` attribute, this is the "glue" that is used to join tags.  With the default values, in the above case:
 
 ```php
 var_dump($model->tagList);
 
-// string 'Apple;Banana;Cherry;Durian' (length=26)
+// string 'Apple,Banana,Cherry,Durian' (length=26)
 ```
 
 ### normalizer
@@ -245,35 +258,21 @@ echo $tag->normalized;
 ```
 
 
-
-<a name="extending"></a>
-## Extending Taggable
-
-_Coming soon._
-
-
-
-<a name="bugs"></a>
 ## Bugs, Suggestions and Contributions
 
-Please use Github for bugs, comments, suggestions.
+Thanks to [everyone](https://github.com/cviebrock/eloquent-taggable/graphs/contributors)
+who has contributed to this project!
 
-1. Fork the project.
-2. Create your bugfix/feature branch and write your (well-commented) code.
-3. Create unit tests for your code:
-	- Run `composer install --dev` in the root directory to install required testing packages.
-	- Add your test methods to `eloquent-taggable/tests/TaggableTest.php`.
-	- Run `vendor/bin/phpunit` to the new (and all previous) tests and make sure everything passes.
-3. Commit your changes (and your tests) and push to your branch.
-4. Create a new pull request against the eloquent-sluggable `master` branch.
-
-> **Note:** You must create your pull request against the `master` branch for the Laravel-5-compatible package.
+Please use [Github](https://github.com/cviebrock/eloquent-taggable) for reporting bugs, 
+and making comments or suggestions.
+ 
+See [CONTRIBUTING.md](CONTRIBUTING.md) for how to contribute changes.
 
 
-
-<a name="copyright"></a>
 ## Copyright and License
 
-Eloquent-Taggable was written by Colin Viebrock and released under the MIT License. See the LICENSE file for details.
+[eloquent-taggable](https://github.com/cviebrock/eloquent-taggable)
+was written by [Colin Viebrock](http://viebrock.ca) and is released under the 
+[MIT License](LICENSE.md).
 
-Copyright 2014 Colin Viebrock
+Copyright (c) 2013 Colin Viebrock
