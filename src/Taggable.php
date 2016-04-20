@@ -3,7 +3,6 @@
 use Cviebrock\EloquentTaggable\Models\Tag;
 use Cviebrock\EloquentTaggable\Services\TagService;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\Collection;
 
 
 /**
@@ -15,7 +14,7 @@ trait Taggable
 {
 
     /**
-     * Get a Collection of all Tags a Model has.
+     * Get a collection of all Tags a Model has.
      *
      * @return \Illuminate\Database\Eloquent\Relations\MorphToMany
      */
@@ -212,7 +211,7 @@ trait Taggable
      */
     public static function allTags()
     {
-        /** @var Collection $tags */
+        /** @var \Illuminate\Database\Eloquent\Collection $tags */
         $tags = app(TagService::class)->getAllTags(get_called_class());
 
         return $tags->pluck('name')->sort()->all();
