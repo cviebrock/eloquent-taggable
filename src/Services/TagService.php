@@ -2,7 +2,6 @@
 
 use Cviebrock\EloquentTaggable\Models\Tag;
 use DB;
-use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 
 
@@ -60,8 +59,12 @@ class TagService
         }
 
         if (is_string($tags)) {
-            return preg_split('#[' . preg_quote(config('taggable.delimiters'), '#') . ']#', $tags, null,
-                PREG_SPLIT_NO_EMPTY);
+            return preg_split(
+                '#[' . preg_quote(config('taggable.delimiters'), '#') . ']#',
+                $tags,
+                null,
+                PREG_SPLIT_NO_EMPTY
+            );
         }
 
         return (array)$tags;
