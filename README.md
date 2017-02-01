@@ -19,8 +19,6 @@ Easily add the ability to tag your Eloquent models in Laravel 5.
 * [Copyright and License](#copyright-and-license)
 
 
-> *NOTE:* If you are using Laravel 4, then please use the `1.*` branch and releases.
-
 ---
 
 ## Installation
@@ -30,6 +28,7 @@ Easily add the ability to tag your Eloquent models in Laravel 5.
 > 
 > | Laravel Version | Taggable Version |
 > |:---------------:|:----------------:|
+> |       4.*       |        1.0       |
 > | 5.1*, 5.2*, 5.3 |        2.0       |
 > |       5.4       |        2.1       |
 
