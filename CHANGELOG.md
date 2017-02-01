@@ -1,6 +1,6 @@
 # Changelog
 
-## 2.1.0-beta - 01-Feb-2017
+## 2.1.0 - 01-Feb-2017
 
 - Laravel 5.4 updates/fixes
 
