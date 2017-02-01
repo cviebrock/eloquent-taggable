@@ -25,6 +25,13 @@ Easily add the ability to tag your Eloquent models in Laravel 5.
 
 ## Installation
 
+> **NOTE**: Depending on your version of Laravel, you should install a different
+> version of the package:
+> 
+> | Laravel Version | Taggable Version |
+> |:---------------:|:----------------:|
+> | 5.1*, 5.2*, 5.3 |        2.0       |
+> |       5.4       |        2.1       |
 
 1. Install the `cviebrock/eloquent-taggable` package via composer:
 
