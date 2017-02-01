@@ -155,6 +155,6 @@ class TagService
             ' FROM taggable_taggables tt LEFT JOIN taggable_tags t ON tt.tag_id=t.tag_id' .
             ' WHERE tt.taggable_type = ?';
 
-        return Tag::hydrateRaw($sql, [$class]);
+        return Tag::fromQuery($sql, [$class]);
     }
 }

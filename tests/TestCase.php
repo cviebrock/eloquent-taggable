@@ -1,5 +1,6 @@
 <?php namespace Cviebrock\EloquentTaggable\Test;
 
+use Cviebrock\EloquentTaggable\ServiceProvider;
 use Orchestra\Testbench\TestCase as Orchestra;
 
 
@@ -17,11 +18,6 @@ abstract class TestCase extends Orchestra
     protected $testModel;
 
     /**
-     * @var array
-     */
-    protected $testData = ['title' => 'title'];
-
-    /**
      * Setup the test environment.
      *
      * @return void
@@ -30,31 +26,13 @@ abstract class TestCase extends Orchestra
     {
         parent::setUp();
 
-        $this->setUpDatabase($this->app);
+        $this->artisan('migrate', ['--database' => 'testbench']);
 
-        $this->testModel = $this->newModel();
-    }
-
-    /**
-     * @param \Illuminate\Foundation\Application $app
-     */
-    protected function setUpDatabase($app)
-    {
-        // Create the taggable tables
-        $this->artisan('migrate', [
-            '--database' => 'testbench',
-            '--realpath' => realpath(__DIR__ . '/../resources/database/migrations'),
-        ]);
-
-        // Create our test tables
-        $this->artisan('migrate', [
-            '--database' => 'testbench',
-            '--realpath' => realpath(__DIR__ . '/database/migrations'),
-        ]);
-
-        $this->beforeApplicationDestroyed(function () {
+        $this->beforeApplicationDestroyed(function() {
             $this->artisan('migrate:rollback');
         });
+
+        $this->testModel = $this->newModel();
     }
 
     /**
@@ -69,9 +47,9 @@ abstract class TestCase extends Orchestra
         // set up database configuration
         $app['config']->set('database.default', 'testbench');
         $app['config']->set('database.connections.testbench', [
-            'driver' => 'sqlite',
+            'driver'   => 'sqlite',
             'database' => ':memory:',
-            'prefix' => '',
+            'prefix'   => '',
         ]);
     }
 
@@ -85,7 +63,8 @@ abstract class TestCase extends Orchestra
     protected function getPackageProviders($app)
     {
         return [
-            \Cviebrock\EloquentTaggable\ServiceProvider::class
+            ServiceProvider::class,
+            TestServiceProvider::class,
         ];
     }
 
@@ -108,7 +87,7 @@ abstract class TestCase extends Orchestra
      * @param array $data
      * @return \Cviebrock\EloquentTaggable\Test\TestModel
      */
-    protected function newModel($data = ['title' => 'test'])
+    protected function newModel(array $data = ['title' => 'test'])
     {
         return TestModel::create($data);
     }
