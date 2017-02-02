@@ -2,11 +2,12 @@
 
 Easily add the ability to tag your Eloquent models in Laravel 5.
 
-[![Latest Version](https://img.shields.io/packagist/v/cviebrock/eloquent-taggable.svg?style=flat-square)](https://github.com/cviebrock/eloquent-taggable/releases)
-[![Total Downloads](https://img.shields.io/packagist/dt/cviebrock/eloquent-taggable.svg?style=flat-square)](https://packagist.org/packages/cviebrock/eloquent-taggable)
-[![Build Status](https://img.shields.io/travis/cviebrock/eloquent-taggable/master.svg?style=flat-square)](https://travis-ci.org/cviebrock/eloquent-taggable)
-[![SensioLabsInsight](https://img.shields.io/sensiolabs/i/9e1bb86e-2659-4123-9b6f-89370ef1483d.svg?style=flat-square)](https://insight.sensiolabs.com/projects/9e1bb86e-2659-4123-9b6f-89370ef1483d)
-[![Quality Score](https://img.shields.io/scrutinizer/g/cviebrock/eloquent-taggable.svg?style=flat-square)](https://scrutinizer-ci.com/g/cviebrock/eloquent-taggable)
+[![Build Status](https://travis-ci.org/cviebrock/eloquent-taggable.svg?branch=master&format=flat)](https://travis-ci.org/cviebrock/eloquent-taggable)
+[![Total Downloads](https://poser.pugx.org/cviebrock/eloquent-taggable/downloads?format=flat)](https://packagist.org/packages/cviebrock/eloquent-taggable)
+[![Latest Stable Version](https://poser.pugx.org/cviebrock/eloquent-taggable/v/stable?format=flat)](https://packagist.org/packages/cviebrock/eloquent-taggable)
+[![Latest Unstable Version](https://poser.pugx.org/cviebrock/eloquent-taggable/v/unstable?format=flat)](https://packagist.org/packages/cviebrock/eloquent-taggable)
+[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/cviebrock/eloquent-taggable/badges/quality-score.png?format=flat)](https://scrutinizer-ci.com/g/cviebrock/eloquent-taggable)
+[![SensioLabsInsight](https://insight.sensiolabs.com/projects/9e1bb86e-2659-4123-9b6f-89370ef1483d/mini.png)](https://insight.sensiolabs.com/projects/9e1bb86e-2659-4123-9b6f-89370ef1483d)
 [![Software License](https://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat-square)](LICENSE.md)
 
 
