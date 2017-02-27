@@ -1,5 +1,10 @@
 # Changelog
 
+## 2.1.1 - 27-Feb-2017
+
+- fix for migrations running more than once
+
+
 ## 2.1.0 - 01-Feb-2017
 
 - Laravel 5.4 updates/fixes
