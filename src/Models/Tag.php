@@ -36,6 +36,14 @@ class Tag extends Eloquent
         'normalized',
     ];
 
+    public function __construct()
+    {
+        $connection = config('taggable.db_connection');
+        if ($connection) {
+            $this->connection = $connection;
+        }
+    }
+
     /**
      * Set the name attribute on the model.
      *

@@ -6,4 +6,6 @@ return [
     'glue' => ',',
 
     'normalizer' => 'mb_strtolower',
+
+    'db_connection' => null
 ];
