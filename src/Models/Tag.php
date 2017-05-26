@@ -36,13 +36,19 @@ class Tag extends Eloquent
         'normalized',
     ];
 
-    public function __construct()
+    /**
+     * Create a new Eloquent model instance.
+     *
+     * @param  array  $attributes
+     * @return void
+     */
+    public function __construct(array $attributes = [])
     {
-        parent::__construct();
-
         if ($connection = config('taggable.db_connection')) {
             $this->connection = $connection;
         }
+
+        parent::__construct($attributes);
     }
 
     /**
