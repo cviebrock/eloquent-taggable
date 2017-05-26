@@ -2,10 +2,7 @@
 
 return [
     'delimiters' => ',;',
-
-    'glue' => ',',
-
+    'glue'       => ',',
     'normalizer' => 'mb_strtolower',
-
-    'db_connection' => null
+    'connection' => null,
 ];

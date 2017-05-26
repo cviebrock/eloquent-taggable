@@ -15,6 +15,7 @@ class CreateTaggableTable extends Migration
     public function up()
     {
         $connection = config('taggable.db_connection');
+
         if (!Schema::connection($connection)->hasTable('taggable_tags')) {
             Schema::connection($connection)->create('taggable_tags', function(Blueprint $table) {
                 $table->increments('tag_id');
@@ -42,6 +43,7 @@ class CreateTaggableTable extends Migration
     public function down()
     {
         $connection = config('taggable.db_connection');
+
         if (Schema::connection($connection)->hasTable('taggable_tags')) {
             Schema::connection($connection)->drop('taggable_tags');
         }

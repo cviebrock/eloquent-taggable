@@ -38,8 +38,9 @@ class Tag extends Eloquent
 
     public function __construct()
     {
-        $connection = config('taggable.db_connection');
-        if ($connection) {
+        parent::__construct();
+
+        if ($connection = config('taggable.db_connection')) {
             $this->connection = $connection;
         }
     }

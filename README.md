@@ -202,12 +202,12 @@ As always, take a look at the code for full documention of those methods.
 Configuration is handled through the settings in `/app/config/taggable.php`.  The default values are:
 
 ```php
-
-return array(
+return [
     'delimiters' => ',;',
-    'glue' => ',',
+    'glue'       => ',',
     'normalizer' => 'mb_strtolower',
-);
+    'connection' => null,
+];
 ```
 
 ### delimiters
@@ -264,6 +264,11 @@ And you can, of course, access the normalized name directly from a tag:
 ```php
 echo $tag->normalized;
 ```
+
+### connection
+
+You can set this to specify that the Tag model should use a different database connection.
+Otherwise, it will use the default connection (i.e. from `config('database.default')`).
 
 
 ## Bugs, Suggestions and Contributions

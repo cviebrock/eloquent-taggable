@@ -1,5 +1,10 @@
 # Changelog
 
+## 2.1.2 - 26-May-2017
+
+- support a different database connection for the Tag model
+
+
 ## 2.1.1 - 27-Feb-2017
 
 - fix for migrations running more than once
