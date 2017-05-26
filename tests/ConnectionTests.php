@@ -1,5 +1,8 @@
 <?php namespace Cviebrock\EloquentTaggable\Test;
 
+use Cviebrock\EloquentTaggable\Models\Tag;
+
+
 /**
  * Class ConnectionTests
  */
@@ -61,6 +64,7 @@ class ConnectionTests extends TestCase
 
         $this->assertEquals('test', $this->testModel->getConnectionName());
 
+        /** @var Tag $tag */
         $tag = $this->testModel->tags->first();
 
         $this->assertEquals('test2', $tag->getConnectionName());

@@ -39,8 +39,7 @@ class Tag extends Eloquent
     /**
      * Create a new Eloquent model instance.
      *
-     * @param  array  $attributes
-     * @return void
+     * @param  array $attributes
      */
     public function __construct(array $attributes = [])
     {
