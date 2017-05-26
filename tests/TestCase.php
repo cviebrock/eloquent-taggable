@@ -26,7 +26,7 @@ abstract class TestCase extends Orchestra
     {
         parent::setUp();
 
-        $this->artisan('migrate', ['--database' => 'testbench']);
+        $this->artisan('migrate', ['--database' => 'test']);
 
         $this->beforeApplicationDestroyed(function() {
             $this->artisan('migrate:rollback');
@@ -45,8 +45,8 @@ abstract class TestCase extends Orchestra
     protected function getEnvironmentSetUp($app)
     {
         // set up database configuration
-        $app['config']->set('database.default', 'testbench');
-        $app['config']->set('database.connections.testbench', [
+        $app['config']->set('database.default', 'test');
+        $app['config']->set('database.connections.test', [
             'driver'   => 'sqlite',
             'database' => ':memory:',
             'prefix'   => '',
