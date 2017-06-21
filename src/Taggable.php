@@ -14,7 +14,7 @@ trait Taggable
 {
 
     /**
-     * Get a collection of all Tags a Model has.
+     * Get a collection of all tags the model has.
      *
      * @return \Illuminate\Database\Eloquent\Relations\MorphToMany
      */
@@ -25,7 +25,7 @@ trait Taggable
     }
 
     /**
-     * Attach one or multiple Tags to a Model.
+     * Attach one or multiple tags to the model.
      *
      * @param string|array $tags
      *
@@ -43,7 +43,7 @@ trait Taggable
     }
 
     /**
-     * Detach one or multiple Tags from a Model.
+     * Detach one or multiple tags from the model.
      *
      * @param string|array $tags
      *
@@ -61,7 +61,7 @@ trait Taggable
     }
 
     /**
-     * Remove all Tags from a Model and assign the given ones.
+     * Remove all tags from the model and assign the given ones.
      *
      * @param string|array $tags
      *
@@ -113,8 +113,7 @@ trait Taggable
     }
 
     /**
-     * Get all tags of a Model as a string in which the tags are delimited
-     * by the character defined in config('taggable.delimiters').
+     * Get all the tags of the model as a delimited string.
      *
      * @return string
      */
@@ -124,8 +123,7 @@ trait Taggable
     }
 
     /**
-     * Get all normalized tags of a Model as a string in which the tags are delimited
-     * by the character defined in config('taggable.delimiters').
+     * Get all normalized tags of a model as a delimited string.
      *
      * @return string
      */
@@ -135,7 +133,7 @@ trait Taggable
     }
 
     /**
-     * Get all tags of a Model as an array.
+     * Get all tags of a model as an array.
      *
      * @return array
      */
@@ -145,7 +143,7 @@ trait Taggable
     }
 
     /**
-     * Get all normalized tags of a Model as an array.
+     * Get all normalized tags of a model as an array.
      *
      * @return array
      */
@@ -155,53 +153,145 @@ trait Taggable
     }
 
     /**
-     * Scope for a Model that has all of the given tags.
+     * Query scope for models that have all of the given tags.
      *
      * @param \Illuminate\Database\Eloquent\Builder $query
      * @param array|string $tags
      *
-     * @return \Illuminate\Database\Eloquent\Builder
+     * @return \Illuminate\Database\Query\Builder
      */
     public function scopeWithAllTags(Builder $query, $tags)
     {
-        $normalized = app(TagService::class)->buildTagArrayNormalized($tags);
+        /** @var TagService $service */
+        $service = app(TagService::class);
+        $normalized = $service->buildTagArrayNormalized($tags);
 
-        return $query->has('tags', '=', count($normalized), 'and', function (Builder $q) use ($normalized) {
-            $q->whereIn('normalized', $normalized);
-        });
-    }
-
-    /**
-     * Scope for a Model that has any of the given tags.
-     *
-     * @param \Illuminate\Database\Eloquent\Builder $query
-     * @param array $tags
-     *
-     * @return \Illuminate\Database\Eloquent\Builder
-     */
-    public function scopeWithAnyTags(Builder $query, $tags = [])
-    {
-        $normalized = app(TagService::class)->buildTagArrayNormalized($tags);
-
-        if (empty($normalized)) {
-            return $query->has('tags');
+        // If there are no tags specified, then there
+        // can't be any results so short-circuit
+        if (count($normalized) === 0) {
+            return $query->where(\DB::raw(1), 0);
         }
 
-        return $query->has('tags', '>', 0, 'and', function (Builder $q) use ($normalized) {
-            $q->whereIn('normalized', $normalized);
-        });
+        $tagKeys = $service->getTagModelKeys($normalized);
+
+        // If some of the tags specified don't exist, then there can't
+        // be any models with all the tags, so so short-circuit
+        if (count($tagKeys) !== count($normalized)) {
+            return $query->where(\DB::raw(1), 0);
+        }
+
+        return $this->getMorphQuery($query, $tagKeys, count($tagKeys));
     }
 
     /**
-     * Scope for a Model that doesn't have any tags.
+     * Query scope for models that have any of the given tags.
+     *
+     * @param \Illuminate\Database\Eloquent\Builder $query
+     * @param array|string $tags
+     *
+     * @return mixed
+     */
+    public function scopeWithAnyTags(Builder $query, $tags)
+    {
+        /** @var TagService $service */
+        $service = app(TagService::class);
+        $normalized = $service->buildTagArrayNormalized($tags);
+
+        // If there are no tags specified, then there is
+        // no filtering to be done so short-circuit
+        if (count($normalized) === 0) {
+            return $query;
+        }
+
+        $tagKeys = $service->getTagModelKeys($normalized);
+
+        return $this->getMorphQuery($query, $tagKeys);
+    }
+
+    /**
+     * Query scope for models that have any tag.
      *
      * @param \Illuminate\Database\Eloquent\Builder $query
      *
      * @return \Illuminate\Database\Eloquent\Builder
      */
-    public function scopeWithoutTags(Builder $query)
+    public function scopeHasTags(Builder $query)
     {
-        return $query->has('tags', '=', 0);
+        return $this->getMorphQuery($query);
+    }
+
+    /**
+     * @param \Illuminate\Database\Eloquent\Builder $query
+     * @param array $tagKeys
+     *
+     * @return mixed
+     */
+    private function getMorphQuery(Builder $query, array $tagKeys = [], $limit = 0)
+    {
+        $keyColumn = $this->getQualifiedKeyName();
+        $morphTable = $this->tags()->getTable();
+        $morphKeyName = $this->tags()->getQualifiedRelatedKeyName();
+        $morphForeignKeyName = $this->tags()->getQualifiedForeignKeyName();
+        $morphTypeColumnName = $morphTable . '.' . $this->tags()->getMorphType();
+
+        $query->select($this->getTable() . '.*')
+            ->leftJoin($morphTable, $keyColumn, $morphForeignKeyName)
+            ->where($morphTypeColumnName, static::class)
+            ->groupBy($keyColumn);
+
+        if (count($tagKeys)) {
+            $query->whereIn($morphKeyName, $tagKeys);
+        }
+
+        if ($limit > 0) {
+            $query->havingRaw("COUNT({$morphKeyName}) >= ?", [$limit]);
+        }
+
+        return $query;
+    }
+
+    /**
+     * Query scope for models that do not have all of the given tags.
+     *
+     * @param \Illuminate\Database\Eloquent\Builder $query
+     * @param string|array $tags
+     *
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function scopeWithoutAllTags(Builder $query, $tags)
+    {
+        $keys = static::withAllTags($tags)->pluck($this->getKeyName());
+
+        return $query->whereNotIn($this->getKeyName(), $keys);
+    }
+
+    /**
+     * Query scope for models that do not have any of the given tags.
+     *
+     * @param \Illuminate\Database\Eloquent\Builder $query
+     * @param string|array $tags
+     *
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function scopeWithoutAnyTags(Builder $query, $tags)
+    {
+        $keys = static::withAnyTags($tags)->pluck($this->getKeyName());
+
+        return $query->whereNotIn($this->getKeyName(), $keys);
+    }
+
+    /**
+     * Query scope for models that does not have have any tags.
+     *
+     * @param \Illuminate\Database\Eloquent\Builder $query
+     *
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function scopeHasNoTags(Builder $query)
+    {
+        $keys = static::hasTags()->pluck($this->getKeyName());
+
+        return $query->whereNotIn($this->getKeyName(), $keys);
     }
 
     /**

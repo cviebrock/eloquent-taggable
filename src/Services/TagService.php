@@ -1,6 +1,7 @@
 <?php namespace Cviebrock\EloquentTaggable\Services;
 
 use Cviebrock\EloquentTaggable\Models\Tag;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 
 
@@ -66,7 +67,7 @@ class TagService
             );
         }
 
-        return (array)$tags;
+        return (array) $tags;
     }
 
     /**
@@ -81,6 +82,24 @@ class TagService
         $tags = $this->buildTagArray($tags);
 
         return array_map([$this, 'normalize'], $tags);
+    }
+
+    /**
+     * Return an array of tag models for the given normalized tags
+     *
+     * @param array $normalized
+     *
+     * @return array
+     */
+    public function getTagModelKeys(array $normalized = [])
+    {
+        if (count($normalized) === 0) {
+            return [];
+        }
+
+        return Tag::whereIn('normalized', $normalized)
+            ->pluck('tag_id')
+            ->toArray();
     }
 
     /**
