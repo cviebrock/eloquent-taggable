@@ -74,8 +74,6 @@ class ScopeTests extends TestCase
 
         $this->testDummyAD = TestDummy::create(['title' => 'title']);
         $this->testDummyAD->tag('Apple,Durian');
-
-        \DB::enableQueryLog();
     }
 
     /**
