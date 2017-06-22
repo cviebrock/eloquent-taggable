@@ -50,6 +50,13 @@
             "phpunit"
         ]
     },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Cviebrock\\EloquentTaggable\\ServiceProvider"
+            ]
+        }
+    },
     "minimum-stability": "dev",
     "prefer-stable": true
 }
