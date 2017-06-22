@@ -180,7 +180,11 @@ trait Taggable
             return $query->where(\DB::raw(1), 0);
         }
 
-        return $this->getMorphQuery($query, $tagKeys, count($tagKeys));
+        $morphTagKeyName = $this->tags()->getQualifiedRelatedKeyName();
+
+        return $this->prepareTableJoin($query, 'inner')
+            ->whereIn($morphTagKeyName, $tagKeys)
+            ->havingRaw("COUNT({$morphTagKeyName}) = ?", [count($tagKeys)]);
     }
 
     /**
@@ -205,7 +209,10 @@ trait Taggable
 
         $tagKeys = $service->getTagModelKeys($normalized);
 
-        return $this->getMorphQuery($query, $tagKeys);
+        $morphTagKeyName = $this->tags()->getQualifiedRelatedKeyName();
+
+        return $this->prepareTableJoin($query, 'inner')
+            ->whereIn($morphTagKeyName, $tagKeys);
     }
 
     /**
@@ -217,37 +224,7 @@ trait Taggable
      */
     public function scopeHasTags(Builder $query)
     {
-        return $this->getMorphQuery($query);
-    }
-
-    /**
-     * @param \Illuminate\Database\Eloquent\Builder $query
-     * @param array $tagKeys
-     *
-     * @return mixed
-     */
-    private function getMorphQuery(Builder $query, array $tagKeys = [], $limit = 0)
-    {
-        $keyColumn = $this->getQualifiedKeyName();
-        $morphTable = $this->tags()->getTable();
-        $morphKeyName = $this->tags()->getQualifiedRelatedKeyName();
-        $morphForeignKeyName = $this->tags()->getQualifiedForeignKeyName();
-        $morphTypeColumnName = $morphTable . '.' . $this->tags()->getMorphType();
-
-        $query->select($this->getTable() . '.*')
-            ->leftJoin($morphTable, $keyColumn, $morphForeignKeyName)
-            ->where($morphTypeColumnName, static::class)
-            ->groupBy($keyColumn);
-
-        if (count($tagKeys)) {
-            $query->whereIn($morphKeyName, $tagKeys);
-        }
-
-        if ($limit > 0) {
-            $query->havingRaw("COUNT({$morphKeyName}) >= ?", [$limit]);
-        }
-
-        return $query;
+        return $this->prepareTableJoin($query, 'inner');
     }
 
     /**
@@ -255,14 +232,29 @@ trait Taggable
      *
      * @param \Illuminate\Database\Eloquent\Builder $query
      * @param string|array $tags
+     * @param bool $includeUntagged
      *
      * @return \Illuminate\Database\Eloquent\Builder
      */
-    public function scopeWithoutAllTags(Builder $query, $tags)
+    public function scopeWithoutAllTags(Builder $query, $tags, $includeUntagged = false)
     {
-        $keys = static::withAllTags($tags)->pluck($this->getKeyName());
+        /** @var TagService $service */
+        $service = app(TagService::class);
+        $normalized = $service->buildTagArrayNormalized($tags);
+        $tagKeys = $service->getTagModelKeys($normalized);
+        $tagKeyList = implode(',', $tagKeys);
 
-        return $query->whereNotIn($this->getKeyName(), $keys);
+        $morphTagKeyName = $this->tags()->getQualifiedRelatedKeyName();
+
+        $query = $this->prepareTableJoin($query, 'left')
+            ->havingRaw("COUNT(DISTINCT CASE WHEN ({$morphTagKeyName} IN ({$tagKeyList})) THEN {$morphTagKeyName} ELSE NULL END) < ?",
+                [count($tagKeys)]);
+
+        if (!$includeUntagged) {
+            $query->havingRaw("COUNT(DISTINCT {$morphTagKeyName}) > 0");
+        }
+
+        return $query;
     }
 
     /**
@@ -270,14 +262,28 @@ trait Taggable
      *
      * @param \Illuminate\Database\Eloquent\Builder $query
      * @param string|array $tags
+     * @param bool $includeUntagged
      *
      * @return \Illuminate\Database\Eloquent\Builder
      */
-    public function scopeWithoutAnyTags(Builder $query, $tags)
+    public function scopeWithoutAnyTags(Builder $query, $tags, $includeUntagged = false)
     {
-        $keys = static::withAnyTags($tags)->pluck($this->getKeyName());
+        /** @var TagService $service */
+        $service = app(TagService::class);
+        $normalized = $service->buildTagArrayNormalized($tags);
+        $tagKeys = $service->getTagModelKeys($normalized);
+        $tagKeyList = implode(',', $tagKeys);
 
-        return $query->whereNotIn($this->getKeyName(), $keys);
+        $morphTagKeyName = $this->tags()->getQualifiedRelatedKeyName();
+
+        $query = $this->prepareTableJoin($query, 'left')
+            ->havingRaw("COUNT(DISTINCT CASE WHEN ({$morphTagKeyName} IN ({$tagKeyList})) THEN {$morphTagKeyName} ELSE NULL END) = 0");
+
+        if (!$includeUntagged) {
+            $query->havingRaw("COUNT(DISTINCT {$morphTagKeyName}) > 0");
+        }
+
+        return $query;
     }
 
     /**
@@ -289,9 +295,40 @@ trait Taggable
      */
     public function scopeHasNoTags(Builder $query)
     {
-        $keys = static::hasTags()->pluck($this->getKeyName());
+        $morphForeignKeyName = $this->tags()->getQualifiedForeignKeyName();
 
-        return $query->whereNotIn($this->getKeyName(), $keys);
+        return $this->prepareTableJoin($query, 'left')
+            ->havingRaw("COUNT(DISTINCT {$morphForeignKeyName}) = 0");
+    }
+
+    /**
+     * @param \Illuminate\Database\Eloquent\Builder $query
+     * @param string $joinType
+     * @param \Closure $joinClosure
+     *
+     * @return mixed
+     */
+    private function prepareTableJoin(Builder $query, $joinType, \Closure $joinClosure = null)
+    {
+        $modelKeyName = $this->getQualifiedKeyName();
+        $morphTable = $this->tags()->getTable();
+        $morphForeignKeyName = $this->tags()->getQualifiedForeignKeyName();
+        $morphTypeName = $morphTable . '.' . $this->tags()->getMorphType();
+
+        $closure = function($join) use ($modelKeyName, $morphForeignKeyName, $morphTypeName, $joinClosure) {
+            $join->on($modelKeyName, $morphForeignKeyName)
+                ->on($morphTypeName, static::class);
+            if ($joinClosure) {
+                $join = $joinClosure($join);
+            }
+
+            return $join;
+        };
+
+        return $query
+            ->select($this->getTable() . '.*')
+            ->join($morphTable, $closure, null, null, $joinType)
+            ->groupBy($modelKeyName);
     }
 
     /**

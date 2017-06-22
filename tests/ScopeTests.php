@@ -74,6 +74,8 @@ class ScopeTests extends TestCase
 
         $this->testDummyAD = TestDummy::create(['title' => 'title']);
         $this->testDummyAD->tag('Apple,Durian');
+
+        \DB::enableQueryLog();
     }
 
     /**
@@ -164,12 +166,32 @@ class ScopeTests extends TestCase
     }
 
     /**
-     * Test searching for models without any of the given tags.
+     * Test searching for models without any of the given tags,
+     * not including models with no tags (default behaviour).
      */
     public function testWithoutAllTags()
     {
         /** @var Collection $models */
         $models = TestModel::withoutAllTags('Apple,Banana')->get();
+        $keys = $models->modelKeys();
+
+        $this->assertArrayValuesAreEqual(
+            [
+                $this->testModelC->getKey(),
+                $this->testModelAD->getKey(),
+            ],
+            $keys
+        );
+    }
+
+    /**
+     * Test searching for models without any of the given tags,
+     * including models with no tags.
+     */
+    public function testWithoutAllTagsIncludingUntagged()
+    {
+        /** @var Collection $models */
+        $models = TestModel::withoutAllTags('Apple,Banana', true)->get();
         $keys = $models->modelKeys();
 
         $this->assertArrayValuesAreEqual(
@@ -183,23 +205,42 @@ class ScopeTests extends TestCase
     }
 
     /**
-     * Test searching for models without any of the given tags.
+     * Test searching for models without any of the given tags,
+     * not including models with no tags (default behaviour).
      */
     public function testWithoutAnyTags()
     {
         /** @var Collection $models */
-        $models = TestModel::withoutAnyTags('Banana,Cherry')->get();
+        $models = TestModel::withoutAnyTags('Apple,Banana')->get();
         $keys = $models->modelKeys();
 
         $this->assertArrayValuesAreEqual(
             [
-                $this->testModel->getKey(),
-                $this->testModelAD->getKey(),
+                $this->testModelC->getKey(),
             ],
             $keys
         );
     }
 
+
+    /**
+     * Test searching for models without any of the given tags.
+     * including models with no tags.
+     */
+    public function testWithoutAnyTagsIncludingUntagged()
+    {
+        /** @var Collection $models */
+        $models = TestModel::withoutAnyTags('Apple,Banana', true)->get();
+        $keys = $models->modelKeys();
+
+        $this->assertArrayValuesAreEqual(
+            [
+                $this->testModel->getKey(),
+                $this->testModelC->getKey(),
+            ],
+            $keys
+        );
+    }
     /**
      * Test searching for models that have no tags at all.
      */

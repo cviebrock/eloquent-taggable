@@ -1,5 +1,11 @@
 # Changelog
 
+## 3.0.0 - xx-xxx-2017
+
+- refactor SQL queries to be more performant 
+(special thanks to Michael Riediger for help with the SQL)
+
+
 ## 2.1.2 - 26-May-2017
 
 - support a different database connection for the Tag model
