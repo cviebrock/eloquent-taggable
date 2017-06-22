@@ -11,8 +11,6 @@ class CollectionTests extends TestCase
 
     /**
      * Test adding tags.
-     *
-     * @test
      */
     public function testIsCollection()
     {
@@ -23,9 +21,7 @@ class CollectionTests extends TestCase
     }
 
     /**
-     * Test getting the tag list
-     *
-     * @test
+     * Test getting the tag list.
      */
     public function testTagList()
     {
@@ -34,9 +30,7 @@ class CollectionTests extends TestCase
     }
 
     /**
-     * Test getting the normalized tag list
-     *
-     * @test
+     * Test getting the normalized tag list.
      */
     public function testTagListNormalized()
     {
@@ -45,9 +39,7 @@ class CollectionTests extends TestCase
     }
 
     /**
-     * Test getting the tag array
-     *
-     * @test
+     * Test getting the tag array.
      */
     public function testTagArray()
     {
@@ -56,9 +48,7 @@ class CollectionTests extends TestCase
     }
 
     /**
-     * Test getting the normalized tag array
-     *
-     * @test
+     * Test getting the normalized tag array.
      */
     public function testTagArrayNormalized()
     {
