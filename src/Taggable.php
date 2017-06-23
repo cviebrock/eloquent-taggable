@@ -1,5 +1,6 @@
 <?php namespace Cviebrock\EloquentTaggable;
 
+use Cviebrock\EloquentTaggable\Exceptions\NoTagsSpecifiedException;
 use Cviebrock\EloquentTaggable\Models\Tag;
 use Cviebrock\EloquentTaggable\Services\TagService;
 use Illuminate\Database\Eloquent\Builder;
@@ -159,6 +160,8 @@ trait Taggable
      * @param array|string $tags
      *
      * @return \Illuminate\Database\Query\Builder
+     * @throws \Cviebrock\EloquentTaggable\Exceptions\NoTagsSpecifiedException
+     * @throws \ErrorException
      */
     public function scopeWithAllTags(Builder $query, $tags)
     {
@@ -169,6 +172,9 @@ trait Taggable
         // If there are no tags specified, then there
         // can't be any results so short-circuit
         if (count($normalized) === 0) {
+            if (config('taggable.throwEmptyExceptions')) {
+                throw new NoTagsSpecifiedException('Empty tag data passed to withAllTags scope.');
+            }
             return $query->where(\DB::raw(1), 0);
         }
 
@@ -194,6 +200,8 @@ trait Taggable
      * @param array|string $tags
      *
      * @return mixed
+     * @throws \Cviebrock\EloquentTaggable\Exceptions\NoTagsSpecifiedException
+     * @throws \ErrorException
      */
     public function scopeWithAnyTags(Builder $query, $tags)
     {
@@ -204,7 +212,10 @@ trait Taggable
         // If there are no tags specified, then there is
         // no filtering to be done so short-circuit
         if (count($normalized) === 0) {
-            return $query;
+            if (config('taggable.throwEmptyExceptions')) {
+                throw new NoTagsSpecifiedException('Empty tag data passed to withAnyTags scope.');
+            }
+            return $query->where(\DB::raw(1), 0);
         }
 
         $tagKeys = $service->getTagModelKeys($normalized);
@@ -222,7 +233,7 @@ trait Taggable
      *
      * @return \Illuminate\Database\Eloquent\Builder
      */
-    public function scopeHasTags(Builder $query)
+    public function scopeIsTagged(Builder $query)
     {
         return $this->prepareTableJoin($query, 'inner');
     }
@@ -235,6 +246,7 @@ trait Taggable
      * @param bool $includeUntagged
      *
      * @return \Illuminate\Database\Eloquent\Builder
+     * @throws \ErrorException
      */
     public function scopeWithoutAllTags(Builder $query, $tags, $includeUntagged = false)
     {
@@ -265,6 +277,7 @@ trait Taggable
      * @param bool $includeUntagged
      *
      * @return \Illuminate\Database\Eloquent\Builder
+     * @throws \ErrorException
      */
     public function scopeWithoutAnyTags(Builder $query, $tags, $includeUntagged = false)
     {
@@ -293,7 +306,7 @@ trait Taggable
      *
      * @return \Illuminate\Database\Eloquent\Builder
      */
-    public function scopeHasNoTags(Builder $query)
+    public function scopeIsNotTagged(Builder $query)
     {
         $morphForeignKeyName = $this->tags()->getQualifiedForeignKeyName();
 
@@ -304,24 +317,19 @@ trait Taggable
     /**
      * @param \Illuminate\Database\Eloquent\Builder $query
      * @param string $joinType
-     * @param \Closure $joinClosure
      *
      * @return mixed
      */
-    private function prepareTableJoin(Builder $query, $joinType, \Closure $joinClosure = null)
+    private function prepareTableJoin(Builder $query, $joinType)
     {
         $modelKeyName = $this->getQualifiedKeyName();
         $morphTable = $this->tags()->getTable();
         $morphForeignKeyName = $this->tags()->getQualifiedForeignKeyName();
         $morphTypeName = $morphTable . '.' . $this->tags()->getMorphType();
 
-        $closure = function($join) use ($modelKeyName, $morphForeignKeyName, $morphTypeName, $joinClosure) {
+        $closure = function($join) use ($modelKeyName, $morphForeignKeyName, $morphTypeName) {
             $join->on($modelKeyName, $morphForeignKeyName)
                 ->on($morphTypeName, static::class);
-            if ($joinClosure) {
-                $join = $joinClosure($join);
-            }
-
             return $join;
         };
 

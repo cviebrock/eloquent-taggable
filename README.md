@@ -14,6 +14,7 @@ Easily add the ability to tag your Eloquent models in Laravel 5.
 * [Installation](#installation)
 * [Updating your Eloquent Models](#updating-your-eloquent-models)
 * [Usage](#usage)
+* [Query Scopes](#query-scopes)
 * [The TagService Class](#the-tagservice-class)
 * [Configuration](#configuration)
 * [Bugs, Suggestions and Contributions](#bugs-suggestions-and-contributions)
@@ -158,17 +159,80 @@ var_dump($model->tagList);
 // string 'Apple' (length=5)
 ```
 
+
+## Query Scopes
+
+For reference, imagine the following models that are tagged:
+
+| Model Id | Tags                  |
+|:--------:|-----------------------|
+|     1    | - no tags -           |
+|     2    | apple                 |
+|     3    | apple, banana         |
+|     4    | apple, banana, cherry |
+|     5    | cherry                |
+|     6    | apple, durian         |
+|     7    | banana, durian        |
+|     8    | apple, banana, durian |
+
+
 You can easily find models with tags through some query scopes:
 
 ```php
-Model::withAllTags('apple,banana,cherry');
-// returns models that are tagged with all 3 of those tags
+// Find models that are tagged with all of the given tags
+// i.e. everything tagged "Apple AND Banana".
+// (returns models with Ids: 3, 4, 8)
+Model::withAllTags('Apple,Banana')->get();
 
-Model::withAnyTags('apple,banana,cherry');
-// returns models with any one of those 3 tags
+// Find models with any one of the given tags
+// i.e. everything tagged "Apple OR Banana".
+// (returns Ids: 2, 3, 4, 6, 7, 8)
+Model::withAnyTags('Apple,Banana')->get();
 
-Model::withAnyTags();
-// returns models with any tags at all
+// Find models that have any tags
+// (returns Ids: 2, 3, 4, 5, 6, 7, 8)
+Model::isTagged()->get();
+```
+
+And the inverse:
+
+```php
+// Find models that are not tagged with all of the given tags,
+// i.e. everything not tagged "Apple AND Banana".
+// (returns models with Ids: 2, 5, 6, 7)
+Model::withoutAllTags('Apple,Banana')->get();
+
+// To also include untagged models, pass another parameter:
+// (returns models with Ids: 1, 2, 5, 6, 7)
+Model::withoutAllTags('Apple,Banana', true)->get();
+
+
+// Find models without any one of the given tags
+// i.e. everything not tagged "Apple OR Banana".
+// (returns Ids: 5)
+Model::withoutAnyTags('Apple,Banana')->get();
+
+// To also include untagged models, pass another parameter:
+// (returns models with Ids: 1, 5)
+Model::withoutAnyTags('Apple,Banana', true)->get();
+
+// Find models that have no tags
+// (returns Ids: 1)
+Model::isNotTagged()->get();
+```
+
+Some edge-case examples:
+
+```php
+// Passing an empty tag list to a scope either throws an 
+// exception or returns nothing, depending on the
+// "throwEmptyExceptions" configuration option
+Model::withAllTags('');
+Model::withAnyTags('');
+
+// Returns nothing, because the "Fig" tag doesn't exist
+// so no model has that tag
+Model::withAllTags('Apple,Fig');
 ```
 
 Finally, you can easily find all the tags used across all instances of a model:

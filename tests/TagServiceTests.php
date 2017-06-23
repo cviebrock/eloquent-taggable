@@ -152,10 +152,11 @@ class TagServiceTests extends TestCase
      */
     public function testGettingTagModelKeys()
     {
-        // First, tag the test model so we have some Tags
-        $this->testModel->tag('Apple');
-        $this->testModel->tag('Banana');
-        $this->testModel->tag('Cherry');
+        // Create a model and generate some Tags
+        $model = $this->newModel();
+        $model->tag('Apple');
+        $model->tag('Banana');
+        $model->tag('Cherry');
 
         $keys = $this->service->getTagModelKeys(['apple', 'cherry']);
 
@@ -170,7 +171,7 @@ class TagServiceTests extends TestCase
      */
     public function testGettingTagModelKeysFromEmptyArray()
     {
-        $keys = $this->service->getTagModelKeys([]);
+        $keys = $this->service->getTagModelKeys();
 
         $this->assertEmpty($keys);
     }
@@ -180,13 +181,14 @@ class TagServiceTests extends TestCase
      */
     public function testGettingAllTags()
     {
-        // First, tag the test model so we have some Tags
-        $this->testModel->tag('Apple');
-        $this->testModel->tag('Banana');
-        $this->testModel->tag('Cherry');
+        // Create a model and generate some Tags
+        $model = $this->newModel();
+        $model->tag('Apple');
+        $model->tag('Banana');
+        $model->tag('Cherry');
 
         // Add a dummy model as well and tag it
-        $dummy = TestDummy::create(['title' => 'dummy']);
+        $dummy = $this->newDummy();
         $dummy->tag('Apple');
         $dummy->tag('Durian');
 

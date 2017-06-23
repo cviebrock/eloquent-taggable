@@ -1,8 +1,9 @@
 <?php
 
 return [
-    'delimiters' => ',;',
-    'glue'       => ',',
-    'normalizer' => 'mb_strtolower',
-    'connection' => null,
+    'delimiters'           => ',;',
+    'glue'                 => ',',
+    'normalizer'           => 'mb_strtolower',
+    'connection'           => null,
+    'throwEmptyExceptions' => false,
 ];

@@ -7,6 +7,21 @@ class TaggingTests extends TestCase
 {
 
     /**
+     * @var TestModel
+     */
+    protected $testModel;
+
+    /**
+     * @inheritdoc
+     */
+    public function setUp()
+    {
+        parent::setUp();
+
+        $this->testModel = $this->newModel();
+    }
+
+    /**
      * Test basic tagging.
      */
     public function testTagging()

@@ -10,41 +10,6 @@ class ScopeTests extends TestCase
 {
 
     /**
-     * @var TestModel
-     */
-    protected $testModelABC;
-
-    /**
-     * @var TestModel
-     */
-    protected $testModelAB;
-
-    /**
-     * @var TestModel
-     */
-    protected $testModelC;
-
-    /**
-     * @var TestModel
-     */
-    protected $testModelAD;
-
-    /**
-     * @var TestDummy
-     */
-    protected $testDummyABC;
-
-    /**
-     * @var TestDummy
-     */
-    protected $testDummyAB;
-
-    /**
-     * @var TestDummy
-     */
-    protected $testDummyAD;
-
-    /**
      * Setup the test environment.
      *
      * @return void
@@ -53,27 +18,20 @@ class ScopeTests extends TestCase
     {
         parent::setUp();
 
-        $this->testModelABC = $this->newModel(['title' => 'ABC']);
-        $this->testModelABC->tag('Apple,Banana,Cherry');
-
-        $this->testModelAB = $this->newModel(['title' => 'AB']);
-        $this->testModelAB->tag('Apple,Banana');
-
-        $this->testModelC = $this->newModel(['title' => 'C']);
-        $this->testModelC->tag('Cherry');
-
-        $this->testModelAD = $this->newModel(['title' => 'AD']);
-        $this->testModelAD->tag('Apple,Durian');
+        // test models
+        $this->testModel1 = $this->newModel(); // no tags
+        $this->testModel2 = $this->newModel()->tag('Apple');
+        $this->testModel3 = $this->newModel()->tag('Apple,Banana');
+        $this->testModel4 = $this->newModel()->tag('Apple,Banana,Cherry');
+        $this->testModel5 = $this->newModel()->tag('Cherry');
+        $this->testModel6 = $this->newModel()->tag('Apple,Durian');
+        $this->testModel7 = $this->newModel()->tag('Banana,Durian');
+        $this->testModel8 = $this->newModel()->tag('Apple,Banana,Durian');
 
         // extra data to check for cross-model issues
-        $this->testDummyABC = TestDummy::create(['title' => 'title']);
-        $this->testDummyABC->tag('Apple,Banana,Cherry');
-
-        $this->testDummyAB = TestDummy::create(['title' => 'title']);
-        $this->testDummyAB->tag('Apple,Banana');
-
-        $this->testDummyAD = TestDummy::create(['title' => 'title']);
-        $this->testDummyAD->tag('Apple,Durian');
+        $this->testDummy1 = $this->newDummy()->tag('Apple,Banana,Cherry');
+        $this->testDummy2 = $this->newDummy()->tag('Apple,Banana');
+        $this->testDummy3 = $this->newDummy()->tag('Apple,Durian');
     }
 
     /**
@@ -87,11 +45,23 @@ class ScopeTests extends TestCase
 
         $this->assertArrayValuesAreEqual(
             [
-                $this->testModelABC->getKey(),
-                $this->testModelAB->getKey(),
+                $this->testModel3->getKey(),
+                $this->testModel4->getKey(),
+                $this->testModel8->getKey(),
             ],
             $keys
         );
+    }
+
+    /**
+     * Test searching by all tags, but passing no tags.
+     */
+    public function testWithAllTagsEmpty()
+    {
+        /** @var Collection $models */
+        $models = TestModel::withAllTags('')->get();
+
+        $this->assertEmpty($models);
     }
 
     /**
@@ -101,9 +71,8 @@ class ScopeTests extends TestCase
     {
         /** @var Collection $models */
         $models = TestModel::withAllTags('Apple,Kumquat')->get();
-        $keys = $models->modelKeys();
 
-        $this->assertEmpty($keys);
+        $this->assertEmpty($models);
     }
 
     /**
@@ -112,17 +81,31 @@ class ScopeTests extends TestCase
     public function testWithAnyTags()
     {
         /** @var Collection $models */
-        $models = TestModel::withAnyTags('Cherry,Durian')->get();
+        $models = TestModel::withAnyTags('Apple,Banana')->get();
         $keys = $models->modelKeys();
 
         $this->assertArrayValuesAreEqual(
             [
-                $this->testModelABC->getKey(),
-                $this->testModelC->getKey(),
-                $this->testModelAD->getKey(),
+                $this->testModel2->getKey(),
+                $this->testModel3->getKey(),
+                $this->testModel4->getKey(),
+                $this->testModel6->getKey(),
+                $this->testModel7->getKey(),
+                $this->testModel8->getKey(),
             ],
             $keys
         );
+    }
+
+    /**
+     * Test searching by any tags, but passing no tags.
+     */
+    public function testWithAnyTagsEmpty()
+    {
+        /** @var Collection $models */
+        $models = TestModel::withAnyTags('')->get();
+
+        $this->assertEmpty($models);
     }
 
     /**
@@ -136,9 +119,11 @@ class ScopeTests extends TestCase
 
         $this->assertArrayValuesAreEqual(
             [
-                $this->testModelABC->getKey(),
-                $this->testModelAB->getKey(),
-                $this->testModelAD->getKey(),
+                $this->testModel2->getKey(),
+                $this->testModel3->getKey(),
+                $this->testModel4->getKey(),
+                $this->testModel6->getKey(),
+                $this->testModel8->getKey(),
             ],
             $keys
         );
@@ -147,24 +132,27 @@ class ScopeTests extends TestCase
     /**
      * Test searching for a model with any tags (i.e. at least one tag).
      */
-    public function testHasTags()
+    public function testIsTagged()
     {
-        $models = TestModel::hasTags()->get();
+        $models = TestModel::isTagged()->get();
         $keys = $models->modelKeys();
 
         $this->assertArrayValuesAreEqual(
             [
-                $this->testModelABC->getKey(),
-                $this->testModelAB->getKey(),
-                $this->testModelC->getKey(),
-                $this->testModelAD->getKey(),
+                $this->testModel2->getKey(),
+                $this->testModel3->getKey(),
+                $this->testModel4->getKey(),
+                $this->testModel5->getKey(),
+                $this->testModel6->getKey(),
+                $this->testModel7->getKey(),
+                $this->testModel8->getKey(),
             ],
             $keys
         );
     }
 
     /**
-     * Test searching for models without any of the given tags,
+     * Test searching for models without all of the given tags,
      * not including models with no tags (default behaviour).
      */
     public function testWithoutAllTags()
@@ -175,8 +163,10 @@ class ScopeTests extends TestCase
 
         $this->assertArrayValuesAreEqual(
             [
-                $this->testModelC->getKey(),
-                $this->testModelAD->getKey(),
+                $this->testModel2->getKey(),
+                $this->testModel5->getKey(),
+                $this->testModel6->getKey(),
+                $this->testModel7->getKey(),
             ],
             $keys
         );
@@ -194,9 +184,11 @@ class ScopeTests extends TestCase
 
         $this->assertArrayValuesAreEqual(
             [
-                $this->testModel->getKey(),
-                $this->testModelC->getKey(),
-                $this->testModelAD->getKey(),
+                $this->testModel1->getKey(),
+                $this->testModel2->getKey(),
+                $this->testModel5->getKey(),
+                $this->testModel6->getKey(),
+                $this->testModel7->getKey(),
             ],
             $keys
         );
@@ -214,12 +206,11 @@ class ScopeTests extends TestCase
 
         $this->assertArrayValuesAreEqual(
             [
-                $this->testModelC->getKey(),
+                $this->testModel5->getKey(),
             ],
             $keys
         );
     }
-
 
     /**
      * Test searching for models without any of the given tags.
@@ -233,24 +224,25 @@ class ScopeTests extends TestCase
 
         $this->assertArrayValuesAreEqual(
             [
-                $this->testModel->getKey(),
-                $this->testModelC->getKey(),
+                $this->testModel1->getKey(),
+                $this->testModel5->getKey(),
             ],
             $keys
         );
     }
+
     /**
      * Test searching for models that have no tags at all.
      */
-    public function testHasNoTags()
+    public function testIsNotTagged()
     {
         /** @var Collection $models */
-        $models = TestModel::hasNoTags()->get();
+        $models = TestModel::isNotTagged()->get();
         $keys = $models->modelKeys();
 
         $this->assertArrayValuesAreEqual(
             [
-                $this->testModel->getKey(),
+                $this->testModel1->getKey(),
             ],
             $keys
         );
