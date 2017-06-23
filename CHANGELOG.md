@@ -1,6 +1,6 @@
 # Changelog
 
-## 3.0.0 - xx-xxx-2017
+## 3.0.0 - 23-Jun-2017
 
 - refactor SQL queries to be more performant
 - add new and rename scope queries:
@@ -15,7 +15,11 @@
     - `allTags`
     - `allTagsList`
 - better test coverage
-- support Laravel 5.5 auto-discovery
+
+
+## 2.1.3 - 23-Jun-2017
+
+- support for Laravel 5.5 and auto-discovery
 
 
 ## 2.1.2 - 26-May-2017
