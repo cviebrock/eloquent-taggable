@@ -2,6 +2,7 @@
 
 use Cviebrock\EloquentTaggable\Models\Tag;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Collection;
 
 
 /**
@@ -47,14 +48,19 @@ class TagService
     /**
      * Convert a delimited string into an array of tag strings.
      *
-     * @param string|array $tags
+     * @param string|array|\Illuminate\Support\Collection $tags
      *
      * @return array
+     * @throws \ErrorException
      */
     public function buildTagArray($tags)
     {
         if (is_array($tags)) {
             return $tags;
+        }
+
+        if ($tags instanceof Collection) {
+            return $this->buildTagArray($tags->all());
         }
 
         if (is_string($tags)) {
@@ -66,21 +72,43 @@ class TagService
             );
         }
 
-        return (array)$tags;
+        throw new \ErrorException(
+            __CLASS__ . '::' . __METHOD__ . ' expects parameter 1 to be string, array or Collection; ' .
+            gettype($tags) . ' given'
+        );
     }
 
     /**
      * Convert a delimited string into an array of normalized tag strings.
      *
-     * @param string|array $tags
+     * @param string|array|\Illuminate\Support\Collection $tags
      *
      * @return array
+     * @throws \ErrorException
      */
     public function buildTagArrayNormalized($tags)
     {
         $tags = $this->buildTagArray($tags);
 
         return array_map([$this, 'normalize'], $tags);
+    }
+
+    /**
+     * Return an array of tag models for the given normalized tags
+     *
+     * @param array $normalized
+     *
+     * @return array
+     */
+    public function getTagModelKeys(array $normalized = [])
+    {
+        if (count($normalized) === 0) {
+            return [];
+        }
+
+        return Tag::whereIn('normalized', $normalized)
+            ->pluck('tag_id')
+            ->toArray();
     }
 
     /**

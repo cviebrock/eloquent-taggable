@@ -1,62 +1,62 @@
 {
-  "name": "cviebrock/eloquent-taggable",
-  "description": "Easy ability to tag your Eloquent models in Laravel 5.",
-  "keywords": [
-    "laravel",
-    "eloquent",
-    "tag",
-    "tagging",
-    "taggable"
-  ],
-  "homepage": "https://github.com/cviebrock/eloquent-taggable",
-  "support": {
-    "issues": "https://github.com/cviebrock/eloquent-taggable/issues",
-    "source": "https://github.com/cviebrock/eloquent-taggable"
-  },
-  "license": "MIT",
-  "authors": [
-    {
-      "name": "Colin Viebrock",
-      "email": "colin@viebrock.ca"
-    }
-  ],
-  "require": {
-    "php": ">=5.6.4",
-    "illuminate/config": "^5.4 | ^5.5",
-    "illuminate/database": "^5.4 | ^5.5",
-    "illuminate/support": "^5.4 | ^5.5"
-  },
-  "require-dev": {
-    "friendsofphp/php-cs-fixer": "^1.11",
-    "mockery/mockery": "^0.9.4",
-    "orchestra/database": "~3.4",
-    "orchestra/testbench": "^3.4",
-    "phpunit/phpunit": "~5.7",
-    "scrutinizer/ocular": "^1.3"
-  },
-  "autoload": {
-    "psr-4": {
-      "Cviebrock\\EloquentTaggable\\": "src"
-    }
-  },
-  "autoload-dev": {
-    "psr-4": {
-      "Cviebrock\\EloquentTaggable\\Test\\": "tests"
-    }
-  },
-  "scripts": {
-    "test": [
-      "parallel-lint . --exclude vendor",
-      "phpunit"
-    ]
-  },
-  "minimum-stability": "dev",
-  "prefer-stable": true,
-  "extra": {
+    "name": "cviebrock/eloquent-taggable",
+    "description": "Easy ability to tag your Eloquent models in Laravel 5.",
+    "keywords": [
+        "laravel",
+        "eloquent",
+        "tag",
+        "tagging",
+        "taggable"
+    ],
+    "homepage": "https://github.com/cviebrock/eloquent-taggable",
+    "support": {
+        "issues": "https://github.com/cviebrock/eloquent-taggable/issues",
+        "source": "https://github.com/cviebrock/eloquent-taggable"
+    },
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Colin Viebrock",
+            "email": "colin@viebrock.ca"
+        }
+    ],
+    "require": {
+        "php": ">=5.6.4",
+        "illuminate/config": "^5.4 || ^5.5",
+        "illuminate/database": "^5.4 || ^5.5",
+        "illuminate/support": "^5.4 || ^5.5"
+    },
+    "require-dev": {
+        "friendsofphp/php-cs-fixer": "^1.11",
+        "mockery/mockery": "^0.9.4",
+        "orchestra/database": "~3.4",
+        "orchestra/testbench": "^3.4 || ^3.5",
+        "phpunit/phpunit": "~5.7",
+        "scrutinizer/ocular": "^1.3"
+    },
+    "autoload": {
+        "psr-4": {
+            "Cviebrock\\EloquentTaggable\\": "src"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Cviebrock\\EloquentTaggable\\Test\\": "tests"
+        }
+    },
+    "scripts": {
+        "test": [
+            "parallel-lint . --exclude vendor",
+            "phpunit"
+        ]
+    },
+    "extra": {
         "laravel": {
             "providers": [
                 "Cviebrock\\EloquentTaggable\\ServiceProvider"
             ]
         }
-    }
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true
 }

@@ -9,7 +9,12 @@ class StaticTests extends TestCase
     /**
      * @var TestModel
      */
-    protected $testModelAB;
+    protected $testModel;
+
+    /**
+     * @var TestModel
+     */
+    protected $testModel2;
 
     /**
      * @var TestDummy
@@ -25,20 +30,16 @@ class StaticTests extends TestCase
     {
         parent::setUp();
 
-        $this->testModel->tag('Apple,Banana,Cherry');
+        // build some test models
+        $this->testModel = $this->newModel()->tag('Apple,Banana,Cherry');
+        $this->testModel2 = $this->newModel()->tag('Apple,Cherry');
 
-        $this->testModelAB = $this->newModel()->tag('Apple,Banana,Cherry');
-
-        // Tag another model
-
-        $this->testDummy = TestDummy::create(['title' => 'title']);
-        $this->testDummy->tag('Durian');
+        // build another model
+        $this->testDummy = $this->newDummy()->tag('Durian');
     }
 
     /**
-     * Test finding all the tags for a model
-     *
-     * @test
+     * Test finding all the tags for a model.
      */
     public function testAllTags()
     {
@@ -48,9 +49,7 @@ class StaticTests extends TestCase
     }
 
     /**
-     * Test finding all the tags for a model
-     *
-     * @test
+     * Test finding all the tags for a model, in a list.
      */
     public function testAllTagsList()
     {

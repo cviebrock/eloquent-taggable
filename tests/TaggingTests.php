@@ -7,102 +7,106 @@ class TaggingTests extends TestCase
 {
 
     /**
-     * Test basic tagging
-     *
-     * @test
+     * @var TestModel
+     */
+    protected $testModel;
+
+    /**
+     * @inheritdoc
+     */
+    public function setUp()
+    {
+        parent::setUp();
+
+        $this->testModel = $this->newModel();
+    }
+
+    /**
+     * Test basic tagging.
      */
     public function testTagging()
     {
         $this->testModel->tag('Apple,Banana,Cherry');
 
-        $this->assertEquals(3, count($this->testModel->tags));
+        $this->assertCount(3, $this->testModel->tags);
         $this->assertArrayValuesAreEqual(['Apple', 'Banana', 'Cherry'], $this->testModel->tagArray);
     }
 
     /**
-     * Test adding tags from an array
-     *
-     * @test
+     * Test adding tags from an array.
      */
     public function testTaggingFromArray()
     {
         $this->testModel->tag(['Apple', 'Banana', 'Cherry']);
 
-        $this->assertEquals(3, count($this->testModel->tags));
+        $this->assertCount(3, $this->testModel->tags);
         $this->assertArrayValuesAreEqual(['Apple', 'Banana', 'Cherry'], $this->testModel->tagArray);
     }
 
     /**
-     * Test tagging with an alternate delimiter
-     *
-     * @test
+     * Test tagging with an alternate delimiter.
      */
     public function testTaggingWithDelimiters()
     {
         $this->testModel->tag('Apple;Banana;Cherry');
 
-        $this->assertEquals(3, count($this->testModel->tags));
+        $this->assertCount(3, $this->testModel->tags);
         $this->assertArrayValuesAreEqual(['Apple', 'Banana', 'Cherry'], $this->testModel->tagArray);
     }
 
     /**
-     * Test adding additional tags
-     *
-     * @test
+     * Test adding additional tags.
      */
     public function testTaggingAgain()
     {
         $this->testModel->tag('Apple,Banana,Cherry');
         $this->testModel->tag('Durian');
 
-        $this->assertEquals(4, count($this->testModel->tags));
+        $this->assertCount(4, $this->testModel->tags);
         $this->assertArrayValuesAreEqual(['Apple', 'Banana', 'Cherry', 'Durian'], $this->testModel->tagArray);
     }
 
     /**
-     * Test removing tags
-     *
-     * @test
+     * Test removing tags.
      */
     public function testUntagging()
     {
         $this->testModel->tag('Apple,Banana,Cherry');
         $this->testModel->untag('Banana');
 
-        $this->assertEquals(2, count($this->testModel->tags));
+        $this->assertCount(2, $this->testModel->tags);
         $this->assertArrayValuesAreEqual(['Apple', 'Cherry'], $this->testModel->tagArray);
     }
 
     /**
-     * Test removing all tags
-     *
-     * @test
+     * Test removing all tags.
      */
     public function testRemovingAllTags()
     {
         $this->testModel->tag('Apple,Banana,Cherry');
 
-        $this->assertEquals(3, count($this->testModel->tags));
+        $this->assertCount(3, $this->testModel->tags);
         $this->assertArrayValuesAreEqual(['Apple', 'Banana', 'Cherry'], $this->testModel->tagArray);
 
         $this->testModel->detag();
-        $this->assertEquals(0, count($this->testModel->tags));
+        $this->assertCount(0, $this->testModel->tags);
     }
 
     /**
-     * Test retagging tags
-     *
-     * @tags
+     * Test retagging tags.
      */
     public function testRetagging()
     {
         $this->testModel->tag('Apple,Banana,Cherry');
         $this->testModel->retag('Etrog,Fig,Grape');
 
-        $this->assertEquals(3, count($this->testModel->tags));
+        $this->assertCount(3, $this->testModel->tags);
         $this->assertArrayValuesAreEqual(['Etrog', 'Fig', 'Grape'], $this->testModel->tagArray);
     }
 
+    /**
+     * Test tag normalization.
+     */
     public function testNormalization()
     {
         $this->testModel->tag('Apple');
@@ -110,5 +114,19 @@ class TaggingTests extends TestCase
         $this->testModel->tag('APPLE');
 
         $this->assertArrayValuesAreEqual(['Apple'], $this->testModel->tagArray);
+    }
+
+    /**
+     * Test casting Tag to a string works
+     */
+    public function testTagToString()
+    {
+        $this->testModel->tag('Apple');
+
+        $tag = $this->testModel->tags->first();
+        $tagAsString = (string) $tag;
+
+        $this->assertEquals('string', gettype($tagAsString));
+        $this->assertEquals('Apple', $tagAsString);
     }
 }

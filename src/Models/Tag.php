@@ -44,7 +44,7 @@ class Tag extends Eloquent
     public function __construct(array $attributes = [])
     {
         if ($connection = config('taggable.connection')) {
-            $this->connection = $connection;
+            $this->setConnection($connection);
         }
 
         parent::__construct($attributes);

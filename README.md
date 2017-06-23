@@ -14,6 +14,7 @@ Easily add the ability to tag your Eloquent models in Laravel 5.
 * [Installation](#installation)
 * [Updating your Eloquent Models](#updating-your-eloquent-models)
 * [Usage](#usage)
+* [Query Scopes](#query-scopes)
 * [The TagService Class](#the-tagservice-class)
 * [Configuration](#configuration)
 * [Bugs, Suggestions and Contributions](#bugs-suggestions-and-contributions)
@@ -31,7 +32,7 @@ Easily add the ability to tag your Eloquent models in Laravel 5.
 > |:---------------:|:----------------:|
 > |       4.*       |        1.0       |
 > | 5.1*, 5.2*, 5.3 |        2.0       |
-> |       5.4       |        2.1       |
+> |       5.4       |      2.1, 3.0    |
 
 1. Install the `cviebrock/eloquent-taggable` package via composer:
 
@@ -158,43 +159,104 @@ var_dump($model->tagList);
 // string 'Apple' (length=5)
 ```
 
+
+## Query Scopes
+
+For reference, imagine the following models that are tagged:
+
+| Model Id | Tags                  |
+|:--------:|-----------------------|
+|     1    | - no tags -           |
+|     2    | apple                 |
+|     3    | apple, banana         |
+|     4    | apple, banana, cherry |
+|     5    | cherry                |
+|     6    | apple, durian         |
+|     7    | banana, durian        |
+|     8    | apple, banana, durian |
+
+
 You can easily find models with tags through some query scopes:
 
 ```php
-Model::withAllTags('apple,banana,cherry');
-// returns models that are tagged with all 3 of those tags
+// Find models that are tagged with all of the given tags
+// i.e. everything tagged "Apple AND Banana".
+// (returns models with Ids: 3, 4, 8)
+Model::withAllTags('Apple,Banana')->get();
 
-Model::withAnyTags('apple,banana,cherry');
-// returns models with any one of those 3 tags
+// Find models with any one of the given tags
+// i.e. everything tagged "Apple OR Banana".
+// (returns Ids: 2, 3, 4, 6, 7, 8)
+Model::withAnyTags('Apple,Banana')->get();
 
-Model::withAnyTags();
-// returns models with any tags at all
+// Find models that have any tags
+// (returns Ids: 2, 3, 4, 5, 6, 7, 8)
+Model::isTagged()->get();
+```
+
+And the inverse:
+
+```php
+// Find models that are not tagged with all of the given tags,
+// i.e. everything not tagged "Apple AND Banana".
+// (returns models with Ids: 2, 5, 6, 7)
+Model::withoutAllTags('Apple,Banana')->get();
+
+// To also include untagged models, pass another parameter:
+// (returns models with Ids: 1, 2, 5, 6, 7)
+Model::withoutAllTags('Apple,Banana', true)->get();
+
+
+// Find models without any one of the given tags
+// i.e. everything not tagged "Apple OR Banana".
+// (returns Ids: 5)
+Model::withoutAnyTags('Apple,Banana')->get();
+
+// To also include untagged models, pass another parameter:
+// (returns models with Ids: 1, 5)
+Model::withoutAnyTags('Apple,Banana', true)->get();
+
+// Find models that have no tags
+// (returns Ids: 1)
+Model::isNotTagged()->get();
+```
+
+Some edge-case examples:
+
+```php
+// Passing an empty tag list to a scope either throws an 
+// exception or returns nothing, depending on the
+// "throwEmptyExceptions" configuration option
+Model::withAllTags('');
+Model::withAnyTags('');
+
+// Returns nothing, because the "Fig" tag doesn't exist
+// so no model has that tag
+Model::withAllTags('Apple,Fig');
 ```
 
 Finally, you can easily find all the tags used across all instances of a model:
 
 ```php
+// Returns a collection of all the Tag models used by any Model instances
+Model::allTagModels();
+
+// Returns an array of tag names used by all Model instances
+// e.g.: ['apple','banana','cherry','durian']
 Model::allTags();
-// returns an array of all the tags used by any Model instances
+
+// Same as above, but as a delimited list
+// e.g. 'apple,banana,cherry,durian'
+Model::allTagsList();
 ```
 
 
 ## The TagService Class
 
-There a few other things you can do using the `TagService` class directly,
-such as getting an `Illuminate\Database\Eloquent\Collection` of all the tag
-models for a given class:
+You can also use `TagService` class directly, however all the functionality is
+exposed via the various methods provided by the trait, so you probably don't need to.
 
-```php
-$service = app(\Cviebrock\EloquentTaggable\Services\TagService::class);
-$tags = $service->getAllTags(\App\Model::class);
-```
-
-All the functionality you get from using the model methods is driven
-(in part) by methods in the service class, and most of those methods are
-public and so you can access them directly if you need to.
-
-As always, take a look at the code for full documention of those methods.
+As always, take a look at the code for full documentation of the service class.
 
 
 ## Configuration
@@ -203,16 +265,18 @@ Configuration is handled through the settings in `/app/config/taggable.php`.  Th
 
 ```php
 return [
-    'delimiters' => ',;',
-    'glue'       => ',',
-    'normalizer' => 'mb_strtolower',
-    'connection' => null,
+    'delimiters'           => ',;',
+    'glue'                 => ',',
+    'normalizer'           => 'mb_strtolower',
+    'connection'           => null,
+    'throwEmptyExceptions' => false,
 ];
 ```
 
 ### delimiters
 
-These are the single-character strings that can delimit the list of tags passed to the `tag()` method.  By default, it's just the comma, but you can change it to another character, or use multiple characters.
+These are the single-character strings that can delimit the list of tags passed to the `tag()` method.
+By default, it's just the comma, but you can change it to another character, or use multiple characters.
 
 For example, if __delimiters__ is set to ";,/", the this will work as expected:
 
@@ -223,7 +287,8 @@ $model->tag('Apple/Banana;Cherry,Durian');
 
 ### glue
 
-When building a string for the `tagList` attribute, this is the "glue" that is used to join tags.  With the default values, in the above case:
+When building a string for the `tagList` attribute, this is the "glue" that is used to join tags.
+With the default values, in the above case:
 
 ```php
 var_dump($model->tagList);
@@ -233,7 +298,9 @@ var_dump($model->tagList);
 
 ### normalizer
 
-Each tag is "normalized" before being stored in the database.  This is so that variations in the spelling or capitalization of tags don't generate duplicate tags.  For example, we don't want three different tags in the following case:
+Each tag is "normalized" before being stored in the database.  This is so that variations in the 
+spelling or capitalization of tags don't generate duplicate tags.  For example, we don't want three 
+different tags in the following case:
 
 ```php
 $model->tag('Apple');
@@ -241,7 +308,9 @@ $model->tag('APPLE');
 $model->tag('apple');
 ```
 
-Normalization happens by passing each tag name through a normalizer function.  By default, this is PHP's `mb_strtolower()` function, but you can change this to any function or callable that takes a single string value and returns a string value.  Some ideas:
+Normalization happens by passing each tag name through a normalizer function.  By default, this is 
+PHP's `mb_strtolower()` function, but you can change this to any function or callable that takes a 
+single string value and returns a string value.  Some ideas:
 
 ```php
 
@@ -257,7 +326,9 @@ Normalization happens by passing each tag name through a normalizer function.  B
     'normalizer' => array('Str','slug'),
 ```
 
-You can access the normalized values of the tags through `$model->tagListNormalized` and `$model->tagArrayNormalized`, which work identically to `$model->tagList` and `$model->tagArray` (described above) except that they return the normalized values instead.
+You can access the normalized values of the tags through `$model->tagListNormalized` and 
+`$model->tagArrayNormalized`, which work identically to `$model->tagList` and `$model->tagArray` 
+(described above) except that they return the normalized values instead.
 
 And you can, of course, access the normalized name directly from a tag:
 
@@ -270,11 +341,25 @@ echo $tag->normalized;
 You can set this to specify that the Tag model should use a different database connection.
 Otherwise, it will use the default connection (i.e. from `config('database.default')`).
 
+### throwEmptyExceptions
+
+Passing empty strings or arrays to any of the scope methods is an interesting situation.
+Logically, you can't get a list of models that have all or any of a list of tags ... if the list is empty!
+
+By default, the `throwEmptyExceptions` is set to false.  Passing an empty value to a query scope 
+will "short-circuit" the query and return no models.  This makes your application code cleaner 
+so you don't need to check for empty values before calling the scope.
+
+However, if `throwEmptyExceptions` is set to true, then passing an empty value to the scope will 
+throw a `Cviebrock\EloquentTaggable\Exceptions\NoTagsSpecifiedException` exception in these cases.
+You can then catch the exception in your application code and handle it however you like.
+
 
 ## Bugs, Suggestions and Contributions
 
 Thanks to [everyone](https://github.com/cviebrock/eloquent-taggable/graphs/contributors)
-who has contributed to this project!
+who has contributed to this project, with a big shout-out to 
+[Michael Riediger](https://stackoverflow.com/users/502502/riedsio) for help optimizing the SQL.
 
 Please use [Github](https://github.com/cviebrock/eloquent-taggable) for reporting bugs, 
 and making comments or suggestions.

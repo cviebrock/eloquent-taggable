@@ -1,8 +1,10 @@
 <?php namespace Cviebrock\EloquentTaggable;
 
+use Cviebrock\EloquentTaggable\Exceptions\NoTagsSpecifiedException;
 use Cviebrock\EloquentTaggable\Models\Tag;
 use Cviebrock\EloquentTaggable\Services\TagService;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Collection;
 
 
 /**
@@ -14,7 +16,7 @@ trait Taggable
 {
 
     /**
-     * Get a collection of all Tags a Model has.
+     * Get a collection of all tags the model has.
      *
      * @return \Illuminate\Database\Eloquent\Relations\MorphToMany
      */
@@ -25,7 +27,7 @@ trait Taggable
     }
 
     /**
-     * Attach one or multiple Tags to a Model.
+     * Attach one or multiple tags to the model.
      *
      * @param string|array $tags
      *
@@ -43,7 +45,7 @@ trait Taggable
     }
 
     /**
-     * Detach one or multiple Tags from a Model.
+     * Detach one or multiple tags from the model.
      *
      * @param string|array $tags
      *
@@ -61,7 +63,7 @@ trait Taggable
     }
 
     /**
-     * Remove all Tags from a Model and assign the given ones.
+     * Remove all tags from the model and assign the given ones.
      *
      * @param string|array $tags
      *
@@ -113,8 +115,7 @@ trait Taggable
     }
 
     /**
-     * Get all tags of a Model as a string in which the tags are delimited
-     * by the character defined in config('taggable.delimiters').
+     * Get all the tags of the model as a delimited string.
      *
      * @return string
      */
@@ -124,8 +125,7 @@ trait Taggable
     }
 
     /**
-     * Get all normalized tags of a Model as a string in which the tags are delimited
-     * by the character defined in config('taggable.delimiters').
+     * Get all normalized tags of a model as a delimited string.
      *
      * @return string
      */
@@ -135,7 +135,7 @@ trait Taggable
     }
 
     /**
-     * Get all tags of a Model as an array.
+     * Get all tags of a model as an array.
      *
      * @return array
      */
@@ -145,7 +145,7 @@ trait Taggable
     }
 
     /**
-     * Get all normalized tags of a Model as an array.
+     * Get all normalized tags of a model as an array.
      *
      * @return array
      */
@@ -155,53 +155,199 @@ trait Taggable
     }
 
     /**
-     * Scope for a Model that has all of the given tags.
+     * Query scope for models that have all of the given tags.
      *
      * @param \Illuminate\Database\Eloquent\Builder $query
      * @param array|string $tags
      *
-     * @return \Illuminate\Database\Eloquent\Builder
+     * @return \Illuminate\Database\Query\Builder
+     * @throws \Cviebrock\EloquentTaggable\Exceptions\NoTagsSpecifiedException
+     * @throws \ErrorException
      */
     public function scopeWithAllTags(Builder $query, $tags)
     {
-        $normalized = app(TagService::class)->buildTagArrayNormalized($tags);
+        /** @var TagService $service */
+        $service = app(TagService::class);
+        $normalized = $service->buildTagArrayNormalized($tags);
 
-        return $query->has('tags', '=', count($normalized), 'and', function (Builder $q) use ($normalized) {
-            $q->whereIn('normalized', $normalized);
-        });
-    }
-
-    /**
-     * Scope for a Model that has any of the given tags.
-     *
-     * @param \Illuminate\Database\Eloquent\Builder $query
-     * @param array $tags
-     *
-     * @return \Illuminate\Database\Eloquent\Builder
-     */
-    public function scopeWithAnyTags(Builder $query, $tags = [])
-    {
-        $normalized = app(TagService::class)->buildTagArrayNormalized($tags);
-
-        if (empty($normalized)) {
-            return $query->has('tags');
+        // If there are no tags specified, then there
+        // can't be any results so short-circuit
+        if (count($normalized) === 0) {
+            if (config('taggable.throwEmptyExceptions')) {
+                throw new NoTagsSpecifiedException('Empty tag data passed to withAllTags scope.');
+            }
+            return $query->where(\DB::raw(1), 0);
         }
 
-        return $query->has('tags', '>', 0, 'and', function (Builder $q) use ($normalized) {
-            $q->whereIn('normalized', $normalized);
-        });
+        $tagKeys = $service->getTagModelKeys($normalized);
+
+        // If some of the tags specified don't exist, then there can't
+        // be any models with all the tags, so so short-circuit
+        if (count($tagKeys) !== count($normalized)) {
+            return $query->where(\DB::raw(1), 0);
+        }
+
+        $morphTagKeyName = $this->tags()->getQualifiedRelatedKeyName();
+
+        return $this->prepareTableJoin($query, 'inner')
+            ->whereIn($morphTagKeyName, $tagKeys)
+            ->havingRaw("COUNT({$morphTagKeyName}) = ?", [count($tagKeys)]);
     }
 
     /**
-     * Scope for a Model that doesn't have any tags.
+     * Query scope for models that have any of the given tags.
+     *
+     * @param \Illuminate\Database\Eloquent\Builder $query
+     * @param array|string $tags
+     *
+     * @return mixed
+     * @throws \Cviebrock\EloquentTaggable\Exceptions\NoTagsSpecifiedException
+     * @throws \ErrorException
+     */
+    public function scopeWithAnyTags(Builder $query, $tags)
+    {
+        /** @var TagService $service */
+        $service = app(TagService::class);
+        $normalized = $service->buildTagArrayNormalized($tags);
+
+        // If there are no tags specified, then there is
+        // no filtering to be done so short-circuit
+        if (count($normalized) === 0) {
+            if (config('taggable.throwEmptyExceptions')) {
+                throw new NoTagsSpecifiedException('Empty tag data passed to withAnyTags scope.');
+            }
+            return $query->where(\DB::raw(1), 0);
+        }
+
+        $tagKeys = $service->getTagModelKeys($normalized);
+
+        $morphTagKeyName = $this->tags()->getQualifiedRelatedKeyName();
+
+        return $this->prepareTableJoin($query, 'inner')
+            ->whereIn($morphTagKeyName, $tagKeys);
+    }
+
+    /**
+     * Query scope for models that have any tag.
      *
      * @param \Illuminate\Database\Eloquent\Builder $query
      *
      * @return \Illuminate\Database\Eloquent\Builder
      */
-    public function scopeWithoutTags(Builder $query)
+    public function scopeIsTagged(Builder $query)
     {
-        return $query->has('tags', '=', 0);
+        return $this->prepareTableJoin($query, 'inner');
+    }
+
+    /**
+     * Query scope for models that do not have all of the given tags.
+     *
+     * @param \Illuminate\Database\Eloquent\Builder $query
+     * @param string|array $tags
+     * @param bool $includeUntagged
+     *
+     * @return \Illuminate\Database\Eloquent\Builder
+     * @throws \ErrorException
+     */
+    public function scopeWithoutAllTags(Builder $query, $tags, $includeUntagged = false)
+    {
+        /** @var TagService $service */
+        $service = app(TagService::class);
+        $normalized = $service->buildTagArrayNormalized($tags);
+        $tagKeys = $service->getTagModelKeys($normalized);
+        $tagKeyList = implode(',', $tagKeys);
+
+        $morphTagKeyName = $this->tags()->getQualifiedRelatedKeyName();
+
+        $query = $this->prepareTableJoin($query, 'left')
+            ->havingRaw("COUNT(DISTINCT CASE WHEN ({$morphTagKeyName} IN ({$tagKeyList})) THEN {$morphTagKeyName} ELSE NULL END) < ?",
+                [count($tagKeys)]);
+
+        if (!$includeUntagged) {
+            $query->havingRaw("COUNT(DISTINCT {$morphTagKeyName}) > 0");
+        }
+
+        return $query;
+    }
+
+    /**
+     * Query scope for models that do not have any of the given tags.
+     *
+     * @param \Illuminate\Database\Eloquent\Builder $query
+     * @param string|array $tags
+     * @param bool $includeUntagged
+     *
+     * @return \Illuminate\Database\Eloquent\Builder
+     * @throws \ErrorException
+     */
+    public function scopeWithoutAnyTags(Builder $query, $tags, $includeUntagged = false)
+    {
+        /** @var TagService $service */
+        $service = app(TagService::class);
+        $normalized = $service->buildTagArrayNormalized($tags);
+        $tagKeys = $service->getTagModelKeys($normalized);
+        $tagKeyList = implode(',', $tagKeys);
+
+        $morphTagKeyName = $this->tags()->getQualifiedRelatedKeyName();
+
+        $query = $this->prepareTableJoin($query, 'left')
+            ->havingRaw("COUNT(DISTINCT CASE WHEN ({$morphTagKeyName} IN ({$tagKeyList})) THEN {$morphTagKeyName} ELSE NULL END) = 0");
+
+        if (!$includeUntagged) {
+            $query->havingRaw("COUNT(DISTINCT {$morphTagKeyName}) > 0");
+        }
+
+        return $query;
+    }
+
+    /**
+     * Query scope for models that does not have have any tags.
+     *
+     * @param \Illuminate\Database\Eloquent\Builder $query
+     *
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function scopeIsNotTagged(Builder $query)
+    {
+        $morphForeignKeyName = $this->tags()->getQualifiedForeignKeyName();
+
+        return $this->prepareTableJoin($query, 'left')
+            ->havingRaw("COUNT(DISTINCT {$morphForeignKeyName}) = 0");
+    }
+
+    /**
+     * @param \Illuminate\Database\Eloquent\Builder $query
+     * @param string $joinType
+     *
+     * @return mixed
+     */
+    private function prepareTableJoin(Builder $query, $joinType)
+    {
+        $modelKeyName = $this->getQualifiedKeyName();
+        $morphTable = $this->tags()->getTable();
+        $morphForeignKeyName = $this->tags()->getQualifiedForeignKeyName();
+        $morphTypeName = $morphTable . '.' . $this->tags()->getMorphType();
+
+        $closure = function($join) use ($modelKeyName, $morphForeignKeyName, $morphTypeName) {
+            $join->on($modelKeyName, $morphForeignKeyName)
+                ->on($morphTypeName, static::class);
+            return $join;
+        };
+
+        return $query
+            ->select($this->getTable() . '.*')
+            ->join($morphTable, $closure, null, null, $joinType)
+            ->groupBy($modelKeyName);
+    }
+
+    /**
+     * Get a collection of all the tag models used for the called class.
+     *
+     * @return Collection
+     */
+    public static function allTagModels()
+    {
+        return app(TagService::class)->getAllTags(get_called_class());
     }
 
     /**
@@ -212,7 +358,7 @@ trait Taggable
     public static function allTags()
     {
         /** @var \Illuminate\Database\Eloquent\Collection $tags */
-        $tags = app(TagService::class)->getAllTags(get_called_class());
+        $tags = static::allTagModels();
 
         return $tags->pluck('name')->sort()->all();
     }

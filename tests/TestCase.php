@@ -13,11 +13,6 @@ abstract class TestCase extends Orchestra
 {
 
     /**
-     * @var TestModel
-     */
-    protected $testModel;
-
-    /**
      * Setup the test environment.
      *
      * @return void
@@ -31,8 +26,6 @@ abstract class TestCase extends Orchestra
         $this->beforeApplicationDestroyed(function() {
             $this->artisan('migrate:rollback');
         });
-
-        $this->testModel = $this->newModel();
     }
 
     /**
@@ -46,6 +39,7 @@ abstract class TestCase extends Orchestra
     {
         // set up database configuration
         $app['config']->set('database.default', 'test');
+
         $app['config']->set('database.connections.test', [
             'driver'   => 'sqlite',
             'database' => ':memory:',
@@ -85,10 +79,23 @@ abstract class TestCase extends Orchestra
      * Helper to generate a test model
      *
      * @param array $data
+     *
      * @return \Cviebrock\EloquentTaggable\Test\TestModel
      */
     protected function newModel(array $data = ['title' => 'test'])
     {
         return TestModel::create($data);
+    }
+
+    /**
+     * Helper to generate a test dummy model
+     *
+     * @param array $data
+     *
+     * @return \Cviebrock\EloquentTaggable\Test\TestDummy
+     */
+    protected function newDummy(array $data = ['title' => 'dummy'])
+    {
+        return TestDummy::create($data);
     }
 }
