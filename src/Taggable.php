@@ -4,6 +4,7 @@ use Cviebrock\EloquentTaggable\Exceptions\NoTagsSpecifiedException;
 use Cviebrock\EloquentTaggable\Models\Tag;
 use Cviebrock\EloquentTaggable\Services\TagService;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Collection;
 
 
 /**
@@ -340,6 +341,16 @@ trait Taggable
     }
 
     /**
+     * Get a collection of all the tag models used for the called class.
+     *
+     * @return Collection
+     */
+    public static function allTagModels()
+    {
+        return app(TagService::class)->getAllTags(get_called_class());
+    }
+
+    /**
      * Get an array of all tags used for the called class.
      *
      * @return array
@@ -347,7 +358,7 @@ trait Taggable
     public static function allTags()
     {
         /** @var \Illuminate\Database\Eloquent\Collection $tags */
-        $tags = app(TagService::class)->getAllTags(get_called_class());
+        $tags = static::allTagModels();
 
         return $tags->pluck('name')->sort()->all();
     }

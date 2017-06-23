@@ -2,8 +2,20 @@
 
 ## 3.0.0 - xx-xxx-2017
 
-- refactor SQL queries to be more performant 
-(special thanks to Michael Riediger for help with the SQL)
+- refactor SQL queries to be more performant
+- add new and rename scope queries:
+    - `withAllTags`
+    - `withAnyTags`
+    - `isTagged`
+    - `withoutAllTags`
+    - `withoutAnyTags`
+    - `isNotTagged`
+- add and refactor static methods:
+    - `allTagModels`
+    - `allTags`
+    - `allTagsList`
+- better test coverage
+- support Laravel 5.5 auto-discovery
 
 
 ## 2.1.2 - 26-May-2017
