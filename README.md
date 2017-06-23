@@ -33,6 +33,7 @@ Easily add the ability to tag your Eloquent models in Laravel 5.
 > |       4.*       |        1.0       |
 > | 5.1*, 5.2*, 5.3 |        2.0       |
 > |       5.4       |      2.1, 3.0    |
+> |       5.5       |        3.0       |
 
 1. Install the `cviebrock/eloquent-taggable` package via composer:
 
@@ -40,14 +41,15 @@ Easily add the ability to tag your Eloquent models in Laravel 5.
     $ composer require cviebrock/eloquent-taggable
     ```
     
-2. Add the service provider to `config/app.php`:
+2. Unless you are using Laravel 5.5 and it's package auto-discovery, you will
+need to add the service provider to `config/app.php`:
 
     ```php
     # Add the service provider to the `providers` array
-    'providers' => array(
+    'providers' => [
         ...
         \Cviebrock\EloquentTaggable\ServiceProvider::class,
-    )
+    ]
     ```
 
 3. Publish the configuration file and migrations
@@ -119,6 +121,7 @@ You can also completely retag a model (a short form for detagging then tagging):
 $model->tag('Apple,Banana,Cherry');
 
 $model->retag('Etrog,Fig,Grape');
+
 // $model is now just tagged with "Etrog", "Fig", and "Grape"
 ```
 
@@ -156,13 +159,14 @@ $model->tag('apple');
 $model->tag('APPLE');
 
 var_dump($model->tagList);
+
 // string 'Apple' (length=5)
 ```
 
 
 ## Query Scopes
 
-For reference, imagine the following models that are tagged:
+For reference, imagine the following models have been tagged:
 
 | Model Id | Tags                  |
 |:--------:|-----------------------|
@@ -182,15 +186,18 @@ You can easily find models with tags through some query scopes:
 // Find models that are tagged with all of the given tags
 // i.e. everything tagged "Apple AND Banana".
 // (returns models with Ids: 3, 4, 8)
+
 Model::withAllTags('Apple,Banana')->get();
 
 // Find models with any one of the given tags
 // i.e. everything tagged "Apple OR Banana".
 // (returns Ids: 2, 3, 4, 6, 7, 8)
+
 Model::withAnyTags('Apple,Banana')->get();
 
 // Find models that have any tags
 // (returns Ids: 2, 3, 4, 5, 6, 7, 8)
+
 Model::isTagged()->get();
 ```
 
@@ -200,24 +207,28 @@ And the inverse:
 // Find models that are not tagged with all of the given tags,
 // i.e. everything not tagged "Apple AND Banana".
 // (returns models with Ids: 2, 5, 6, 7)
+
 Model::withoutAllTags('Apple,Banana')->get();
 
 // To also include untagged models, pass another parameter:
 // (returns models with Ids: 1, 2, 5, 6, 7)
-Model::withoutAllTags('Apple,Banana', true)->get();
 
+Model::withoutAllTags('Apple,Banana', true)->get();
 
 // Find models without any one of the given tags
 // i.e. everything not tagged "Apple OR Banana".
 // (returns Ids: 5)
+
 Model::withoutAnyTags('Apple,Banana')->get();
 
 // To also include untagged models, pass another parameter:
 // (returns models with Ids: 1, 5)
+
 Model::withoutAnyTags('Apple,Banana', true)->get();
 
 // Find models that have no tags
 // (returns Ids: 1)
+
 Model::isNotTagged()->get();
 ```
 
@@ -227,27 +238,32 @@ Some edge-case examples:
 // Passing an empty tag list to a scope either throws an 
 // exception or returns nothing, depending on the
 // "throwEmptyExceptions" configuration option
+
 Model::withAllTags('');
 Model::withAnyTags('');
 
 // Returns nothing, because the "Fig" tag doesn't exist
 // so no model has that tag
+
 Model::withAllTags('Apple,Fig');
 ```
 
 Finally, you can easily find all the tags used across all instances of a model:
 
 ```php
-// Returns a collection of all the Tag models used by any Model instances
-Model::allTagModels();
-
 // Returns an array of tag names used by all Model instances
 // e.g.: ['apple','banana','cherry','durian']
+
 Model::allTags();
 
 // Same as above, but as a delimited list
 // e.g. 'apple,banana,cherry,durian'
+
 Model::allTagsList();
+
+// Returns a collection of all the Tag models used by any Model instances
+
+Model::allTagModels();
 ```
 
 
@@ -282,6 +298,7 @@ For example, if __delimiters__ is set to ";,/", the this will work as expected:
 
 ```php
 $model->tag('Apple/Banana;Cherry,Durian');
+
 // $model will have four tags
 ```
 
@@ -323,7 +340,7 @@ single string value and returns a string value.  Some ideas:
     },
 
     // using a class method
-    'normalizer' => array('Str','slug'),
+    'normalizer' => ['Illuminate\Support\Str', 'slug'],
 ```
 
 You can access the normalized values of the tags through `$model->tagListNormalized` and 
