@@ -1,5 +1,10 @@
 # Changelog
 
+## 2.1.3 - 23-Jun-2017
+
+- support for Laravel 5.5 and auto-discovery
+
+
 ## 2.1.2 - 26-May-2017
 
 - support a different database connection for the Tag model
