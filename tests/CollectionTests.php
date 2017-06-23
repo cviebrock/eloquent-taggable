@@ -10,60 +10,68 @@ class CollectionTests extends TestCase
 {
 
     /**
+     * @var TestModel
+     */
+    protected $testModel;
+
+    /**
+     * @inheritdoc
+     */
+    public function setUp()
+    {
+        parent::setUp();
+
+        $this->testModel = $this->newModel()->tag('Apple,Banana,Cherry');
+    }
+
+    /**
      * Test adding tags.
-     *
-     * @test
      */
     public function testIsCollection()
     {
-        $this->testModel->tag('Apple,Banana,Cherry');
         $tags = $this->testModel->tags;
 
         $this->assertEquals(Collection::class, get_class($tags));
     }
 
     /**
-     * Test getting the tag list
-     *
-     * @test
+     * Test getting the tag list.
      */
     public function testTagList()
     {
-        $this->testModel->tag('Apple,Banana,Cherry');
-        $this->assertEquals('Apple,Banana,Cherry', $this->testModel->tagList);
+        $tagList = $this->testModel->tagList;
+
+        $this->assertEquals('Apple,Banana,Cherry', $tagList);
     }
 
     /**
-     * Test getting the normalized tag list
-     *
-     * @test
+     * Test getting the normalized tag list.
      */
     public function testTagListNormalized()
     {
-        $this->testModel->tag('Apple,Banana,Cherry');
-        $this->assertEquals('apple,banana,cherry', $this->testModel->tagListNormalized);
+        $tagListNormalized = $this->testModel->tagListNormalized;
+
+        $this->assertEquals('apple,banana,cherry', $tagListNormalized);
     }
 
     /**
-     * Test getting the tag array
-     *
-     * @test
+     * Test getting the tag array.
      */
     public function testTagArray()
     {
-        $this->testModel->tag('Apple,Banana,Cherry');
-        $this->assertArrayValuesAreEqual(['Apple', 'Banana', 'Cherry'], $this->testModel->tagArray);
+        $tagArray = $this->testModel->tagArray;
+
+        $this->assertArrayValuesAreEqual(['Apple', 'Banana', 'Cherry'], $tagArray);
     }
 
     /**
-     * Test getting the normalized tag array
-     *
-     * @test
+     * Test getting the normalized tag array.
      */
     public function testTagArrayNormalized()
     {
-        $this->testModel->tag('Apple,Banana,Cherry');
-        $this->assertArrayValuesAreEqual(['apple', 'banana', 'cherry'], $this->testModel->tagArrayNormalized);
+        $tagArrayNormalized = $this->testModel->tagArrayNormalized;
+
+        $this->assertArrayValuesAreEqual(['apple', 'banana', 'cherry'], $tagArrayNormalized);
     }
 
 }

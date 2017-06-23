@@ -9,6 +9,9 @@ use Cviebrock\EloquentTaggable\Test\TestCase;
 class CustomDelimiterTests extends TestCase
 {
 
+    /**
+     * @inheritdoc
+     */
     protected function getEnvironmentSetUp($app)
     {
         parent::getEnvironmentSetUp($app);
@@ -18,14 +21,12 @@ class CustomDelimiterTests extends TestCase
 
     /**
      * Test adding tags.
-     *
-     * @test
      */
     public function testCustomDelimiters()
     {
-        $this->testModel->tag('Apple;Banana/Cherry,Durian|Etrog');
+        $model = $this->newModel()->tag('Apple;Banana/Cherry,Durian|Etrog');
 
-        $this->assertEquals(5, count($this->testModel->tags));
-        $this->assertArrayValuesAreEqual(['Apple', 'Banana', 'Cherry', 'Durian', 'Etrog'], $this->testModel->tagArray);
+        $this->assertCount(5, $model->tags);
+        $this->assertArrayValuesAreEqual(['Apple', 'Banana', 'Cherry', 'Durian', 'Etrog'], $model->tagArray);
     }
 }

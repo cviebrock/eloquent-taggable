@@ -10,11 +10,12 @@ class ConnectionTests extends TestCase
 {
 
     /**
-     * Define environment setup.
-     *
-     * @param  \Illuminate\Foundation\Application $app
-     *
-     * @return void
+     * @var TestModel
+     */
+    protected $testModel;
+
+    /**
+     * @inheritdoc
      */
     protected function getEnvironmentSetUp($app)
     {
@@ -31,16 +32,20 @@ class ConnectionTests extends TestCase
     }
 
     /**
-     * Setup the test environment.
-     *
-     * @return void
+     * @inheritdoc
      */
     public function setUp()
     {
         parent::setUp();
 
+        // test model
+        $this->testModel = $this->newModel();
+
         // migration for the second database connection
         $this->artisan('migrate', ['--database' => 'test2']);
+
+        // tag model
+        $this->testModel->tag('Apple,Banana,Cherry');
     }
 
     /**
@@ -48,9 +53,7 @@ class ConnectionTests extends TestCase
      */
     public function testTagging()
     {
-        $this->testModel->tag('Apple,Banana,Cherry');
-
-        $this->assertEquals(3, count($this->testModel->tags));
+        $this->assertCount(3, $this->testModel->tags);
         $this->assertArrayValuesAreEqual(['Apple', 'Banana', 'Cherry'], $this->testModel->tagArray);
     }
 
@@ -60,8 +63,6 @@ class ConnectionTests extends TestCase
      */
     public function testModelConnection()
     {
-        $this->testModel->tag('Apple,Banana,Cherry');
-
         $this->assertEquals('test', $this->testModel->getConnectionName());
 
         /** @var Tag $tag */
@@ -69,5 +70,4 @@ class ConnectionTests extends TestCase
 
         $this->assertEquals('test2', $tag->getConnectionName());
     }
-
 }
