@@ -42,19 +42,6 @@ class Tag extends Model
     }
 
     /**
-     * Get the inverse of the polymorphic relation, via an attribute
-     * defining the type of models to return.
-     *
-     * @param string $class
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\MorphToMany
-     */
-    public function taggedModels($class)
-    {
-        return $this->morphedByMany($class, 'taggable', 'taggable_taggables', 'tag_id');
-    }
-
-    /**
      * Set the name attribute on the model.
      *
      * @param string $value
@@ -64,18 +51,6 @@ class Tag extends Model
         $value = trim($value);
         $this->attributes['name'] = $value;
         $this->attributes['normalized'] = app(TagService::class)->normalize($value);
-    }
-
-    /**
-     * Find the tag with the given name.
-     *
-     * @param string $value
-     *
-     * @return static|null
-     */
-    public static function findByName($value)
-    {
-        return static::byName($value)->first();
     }
 
     /**
@@ -107,12 +82,37 @@ class Tag extends Model
         $relatedClass = array_get(config('taggable.taggedModels'), $key);
 
         if ($relatedClass) {
-            $relation = $this->morphedByMany($relatedClass, 'taggable', 'taggable_taggables', 'tag_id');
+            $relation = $this->taggedModels($relatedClass);
 
             return tap($relation->getResults(), function($results) use ($key) {
                 $this->setRelation($key, $results);
             });
         }
+    }
+
+    /**
+     * Get the inverse of the polymorphic relation, via an attribute
+     * defining the type of models to return.
+     *
+     * @param string $class
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\MorphToMany
+     */
+    protected function taggedModels($class)
+    {
+        return $this->morphedByMany($class, 'taggable', 'taggable_taggables', 'tag_id');
+    }
+
+    /**
+     * Find the tag with the given name.
+     *
+     * @param string $value
+     *
+     * @return static|null
+     */
+    public static function findByName($value)
+    {
+        return app(TagService::class)->find($value);
     }
 
     /**

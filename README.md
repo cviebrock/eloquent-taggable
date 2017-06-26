@@ -270,13 +270,13 @@ Model::allTagModels();
 
 ## The Tag Model
 
-There are a few methods you can run on the Tag model itself:
+There are a few methods you can run on the Tag model itself.
 
 `Tag::findByName('Apple')` will return the Tag model for the given name.  This can 
 then be chained to find all the related models.
 
-Under the hood, the above uses the `byName()` scope, which you are free to use if 
-you wanted to write a custom query.
+Under the hood, the above uses a `byName()` query scope on the Tag model, which you
+are also free to use if you want to write a custom query.
 
 
 ## The TagService Class

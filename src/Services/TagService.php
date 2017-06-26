@@ -21,9 +21,7 @@ class TagService
      */
     public function find($tagName)
     {
-        $normalized = $this->normalize($tagName);
-
-        return Tag::where('normalized', $normalized)->first();
+        return Tag::byName($tagName)->first();
     }
 
     /**
@@ -214,6 +212,19 @@ class TagService
         $tags = $this->getAllTags($class);
 
         return $tags->pluck('normalized')->toArray();
+    }
+
+    /**
+     * Get all Tags that are unused by any model.
+     *
+     * @return \Illuminate\Database\Eloquent\Collection
+     */
+    public function getAllUnusedTags()
+    {
+        $sql = 'SELECT t.* FROM taggable_tags t LEFT JOIN taggable_taggables tt ON tt.tag_id=t.tag_id ' .
+            'WHERE tt.taggable_id IS NULL';
+
+        return Tag::fromQuery($sql);
     }
 
     /**

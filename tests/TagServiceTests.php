@@ -239,9 +239,35 @@ class TagServiceTests extends TestCase
         );
     }
 
+    /**
+     * Test finding all unused tags.
+     */
+    public function testGettingAllUnusedTags()
+    {
+        // Create a model and generate some tags
+        $model = $this->newModel();
+        $model->tag('Apple');
+        $model->tag('Banana');
+        $model->tag('Cherry');
+
+        // remove some
+        $model->untag(['Apple', 'Banana']);
+
+        $unusedTags = $this->service->getAllUnusedTags();
+
+        $this->assertCount(2, $unusedTags);
+        $this->assertArrayValuesAreEqual(
+            ['Apple', 'Banana'],
+            $unusedTags->pluck('name')->toArray()
+        );
+    }
+
+    /**
+     * Test renaming a tag.
+     */
     public function testRenamingTag()
     {
-        // Create a model and generate some Tags
+        // Create a model and generate some tags
         $model = $this->newModel();
         $model->tag('Apple');
         $model->tag('Banana');
@@ -287,6 +313,9 @@ class TagServiceTests extends TestCase
         );
     }
 
+    /**
+     * Test renaming a tag across all models.
+     */
     public function testRenamingTagAllModels()
     {
         // Create a model and generate some Tags
@@ -303,7 +332,7 @@ class TagServiceTests extends TestCase
         // Rename the tags just for all model classes
         $count = $this->service->renameTags('Apple', 'Apricot');
 
-        $this->assertEquals(1,$count);
+        $this->assertEquals(1, $count);
 
         // Check the test model's tags were renamed
         $model->load('tags');
@@ -335,6 +364,9 @@ class TagServiceTests extends TestCase
         );
     }
 
+    /**
+     * Test renaming a non-existent tag.
+     */
     public function testRenamingNonExistingTag()
     {
         // Create a model and generate some Tags
