@@ -42,7 +42,7 @@ Easily add the ability to tag your Eloquent models in Laravel 5.
 1. Install the `cviebrock/eloquent-taggable` package via composer:
 
     ```shell
-    $ composer require cviebrock/eloquent-taggable
+    $ composer require cviebrock/eloquent-taggable:^3.0
     ```
     
 2. Unless you are using Laravel 5.5 and it's package auto-discovery, you will
