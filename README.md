@@ -15,6 +15,7 @@ Easily add the ability to tag your Eloquent models in Laravel 5.
 * [Updating your Eloquent Models](#updating-your-eloquent-models)
 * [Usage](#usage)
 * [Query Scopes](#query-scopes)
+* [The Tag Model](#the-tag-model)
 * [The TagService Class](#the-tagservice-class)
 * [Configuration](#configuration)
 * [Bugs, Suggestions and Contributions](#bugs-suggestions-and-contributions)
@@ -267,6 +268,17 @@ Model::allTagModels();
 ```
 
 
+## The Tag Model
+
+There are a few methods you can run on the Tag model itself:
+
+`Tag::findByName('Apple')` will return the Tag model for the given name.  This can 
+then be chained to find all the related models.
+
+Under the hood, the above uses the `byName()` scope, which you are free to use if 
+you wanted to write a custom query.
+
+
 ## The TagService Class
 
 You can also use `TagService` class directly, however almost all the functionality is
@@ -309,6 +321,7 @@ return [
     'normalizer'           => 'mb_strtolower',
     'connection'           => null,
     'throwEmptyExceptions' => false,
+    'taggedModels'         => [],
 ];
 ```
 
@@ -393,6 +406,28 @@ so you don't need to check for empty values before calling the scope.
 However, if `throwEmptyExceptions` is set to true, then passing an empty value to the scope will 
 throw a `Cviebrock\EloquentTaggable\Exceptions\NoTagsSpecifiedException` exception in these cases.
 You can then catch the exception in your application code and handle it however you like.
+
+### taggedModels
+
+If you want to be able to find all the models that share a tag, you will need
+to define the inverse relations here.  The array keys are the relation names
+you would use to access them (e.g. "posts") and the values are the qualified
+class names of the models that are taggable (e.g. "\App\Post).  e.g. with
+the following configuration:
+
+```php
+'taggedModels' => [
+    'posts' => \App\Post::class
+]
+```
+
+You will be able to do:
+
+```php
+$posts = Tag::findByName('Apple')->posts;
+```
+
+This will return a collection of all the Posts that are tagged "Apple".
 
 
 ## Bugs, Suggestions and Contributions

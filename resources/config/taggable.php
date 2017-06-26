@@ -33,4 +33,24 @@ return [
      * value to the scope queries will throw an exception instead.
      */
     'throwEmptyExceptions' => false,
+
+    /**
+     * If you want to be able to find all the models that share a tag, you will need
+     * to define the inverse relations here.  The array keys are the relation names
+     * you would use to access them (e.g. "posts") and the values are the qualified
+     * class names of the models that are taggable (e.g. "\App\Post).  e.g. with
+     * the following configuration:
+     *
+     *  'taggedModels' => [
+     *      'posts' => \App\Post::class
+     *  ]
+     *
+     * You will be able to do:
+     *
+     *  $posts = Tag::findByName('Apple')->posts;
+     *
+     * to get a collection of all the Posts that are tagged "Apple".
+     */
+
+    'taggedModels' => [],
 ];
