@@ -13,9 +13,7 @@ class ServiceProvider extends LaravelServiceProvider
 {
 
     /**
-     * Indicates if loading of the provider is deferred.
-     *
-     * @var bool
+     * @inheritdoc
      */
     protected $defer = false;
 

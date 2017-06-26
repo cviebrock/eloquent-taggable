@@ -269,8 +269,31 @@ Model::allTagModels();
 
 ## The TagService Class
 
-You can also use `TagService` class directly, however all the functionality is
+You can also use `TagService` class directly, however almost all the functionality is
 exposed via the various methods provided by the trait, so you probably don't need to.
+
+```php
+// Instantiate the service (can also be done via dependency injection)
+$tagService = app(\Cviebrock\EloquentTaggable\Services\TagService::class);
+
+// Return a collection of all the Tag models used by \App\Model instances
+// (same as doing \App\Model::allTagModels() ):
+
+$tagService->getAllTags(\App\Model);
+
+// Return a collection of all the Tag models used by all models:
+
+$tagService->getAllTags();
+
+// Rename all tags from "Apple" to "Apricot" for the \App\Model uses
+// (same as doing \App\Model::renameTag("Apple", "Apricot") ):
+
+$tagService->renameTags("Apple", "Apricot", \App\Model);
+
+// Rename all tags from "Apple" to "Apricot" across all models
+
+$tagService->renameTags("Apple", "Apricot");
+```
 
 As always, take a look at the code for full documentation of the service class.
 

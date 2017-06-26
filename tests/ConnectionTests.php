@@ -54,7 +54,10 @@ class ConnectionTests extends TestCase
     public function testTagging()
     {
         $this->assertCount(3, $this->testModel->tags);
-        $this->assertArrayValuesAreEqual(['Apple', 'Banana', 'Cherry'], $this->testModel->tagArray);
+        $this->assertArrayValuesAreEqual(
+            ['Apple', 'Banana', 'Cherry'],
+            $this->testModel->getTagArrayAttribute()
+        );
     }
 
     /**

@@ -73,5 +73,4 @@ class CollectionTests extends TestCase
 
         $this->assertArrayValuesAreEqual(['apple', 'banana', 'cherry'], $tagArrayNormalized);
     }
-
 }

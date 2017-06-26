@@ -30,9 +30,7 @@ class TagServiceTests extends TestCase
     protected $testString;
 
     /**
-     * Setup the test environment.
-     *
-     * @return void
+     * @inheritdoc
      */
     public function setUp()
     {
@@ -193,25 +191,161 @@ class TagServiceTests extends TestCase
         $dummy->tag('Durian');
 
         // check the test model
-        $allTags = $this->service->getAllTags(TestModel::class);
+        $allTags = $this->service->getAllTagsArray(TestModel::class);
 
-        $this->assertEquals(3, $allTags->count());
-        $plucked = $allTags->pluck('name')->toArray();
-
+        $this->assertCount(3, $allTags);
         $this->assertArrayValuesAreEqual(
             $this->testArray,
-            $plucked
+            $allTags
+        );
+
+        $allTagsNormalized = $this->service->getAllTagsArrayNormalized(TestModel::class);
+        $this->assertCount(3, $allTagsNormalized);
+        $this->assertArrayValuesAreEqual(
+            $this->testArrayNormalized,
+            $allTagsNormalized
         );
 
         // check the dummy model
-        $allTags = $this->service->getAllTags($dummy);
+        $allTags = $this->service->getAllTagsArray($dummy);
 
-        $this->assertEquals(2, $allTags->count());
-        $plucked = $allTags->pluck('name')->toArray();
-
+        $this->assertCount(2, $allTags);
         $this->assertArrayValuesAreEqual(
             ['Apple', 'Durian'],
-            $plucked
+            $allTags
         );
+
+        $allTagsNormalized = $this->service->getAllTagsArrayNormalized($dummy);
+        $this->assertCount(2, $allTagsNormalized);
+        $this->assertArrayValuesAreEqual(
+            ['apple', 'durian'],
+            $allTagsNormalized
+        );
+
+        // check all models
+        $allTags = $this->service->getAllTagsArray();
+
+        $this->assertCount(4, $allTags);
+        $this->assertArrayValuesAreEqual(
+            ['Apple', 'Banana', 'Cherry', 'Durian'],
+            $allTags
+        );
+
+        $allTagsNormalized = $this->service->getAllTagsArrayNormalized();
+        $this->assertCount(4, $allTagsNormalized);
+        $this->assertArrayValuesAreEqual(
+            ['apple', 'banana', 'cherry', 'durian'],
+            $allTagsNormalized
+        );
+    }
+
+    public function testRenamingTag()
+    {
+        // Create a model and generate some Tags
+        $model = $this->newModel();
+        $model->tag('Apple');
+        $model->tag('Banana');
+        $model->tag('Cherry');
+
+        // Add a dummy model as well and tag it
+        $dummy = $this->newDummy();
+        $dummy->tag('Apple');
+        $dummy->tag('Durian');
+
+        // Rename the tags just for one model class
+        $count = $this->service->renameTags('Apple', 'Apricot', TestModel::class);
+
+        $this->assertEquals(1, $count);
+
+        // Check the test model's tags were renamed
+        $model->load('tags');
+        $testTags = $model->getTagArrayAttribute();
+
+        $this->assertCount(3, $testTags);
+        $this->assertArrayValuesAreEqual(
+            ['Apricot', 'Banana', 'Cherry'],
+            $testTags
+        );
+
+        // Check the dummy model's tags were not renamed
+        $dummy->load('tags');
+        $dummyTags = $dummy->getTagArrayAttribute();
+
+        $this->assertCount(2, $dummyTags);
+        $this->assertArrayValuesAreEqual(
+            ['Apple', 'Durian'],
+            $dummyTags
+        );
+
+        // Confirm the list of all tags
+        $allTags = $this->service->getAllTagsArray();
+
+        $this->assertCount(5, $allTags);
+        $this->assertArrayValuesAreEqual(
+            ['Apricot', 'Apple', 'Banana', 'Cherry', 'Durian'],
+            $allTags
+        );
+    }
+
+    public function testRenamingTagAllModels()
+    {
+        // Create a model and generate some Tags
+        $model = $this->newModel();
+        $model->tag('Apple');
+        $model->tag('Banana');
+        $model->tag('Cherry');
+
+        // Add a dummy model as well and tag it
+        $dummy = $this->newDummy();
+        $dummy->tag('Apple');
+        $dummy->tag('Durian');
+
+        // Rename the tags just for all model classes
+        $count = $this->service->renameTags('Apple', 'Apricot');
+
+        $this->assertEquals(1,$count);
+
+        // Check the test model's tags were renamed
+        $model->load('tags');
+        $testTags = $model->getTagArrayAttribute();
+
+        $this->assertCount(3, $testTags);
+        $this->assertArrayValuesAreEqual(
+            ['Apricot', 'Banana', 'Cherry'],
+            $testTags
+        );
+
+        // Check the dummy model's tags were renamed
+        $dummy->load('tags');
+        $dummyTags = $dummy->getTagArrayAttribute();
+
+        $this->assertCount(2, $dummyTags);
+        $this->assertArrayValuesAreEqual(
+            ['Apricot', 'Durian'],
+            $dummyTags
+        );
+
+        // Confirm the list of all tags
+        $allTags = $this->service->getAllTagsArray();
+
+        $this->assertCount(4, $allTags);
+        $this->assertArrayValuesAreEqual(
+            ['Apricot', 'Banana', 'Cherry', 'Durian'],
+            $allTags
+        );
+    }
+
+    public function testRenamingNonExistingTag()
+    {
+        // Create a model and generate some Tags
+        $model = $this->newModel();
+        $model->tag('Apple');
+        $model->tag('Banana');
+        $model->tag('Cherry');
+
+        // Rename the tags just for one model class
+        $count = $this->service->renameTags('Durian', 'Date', TestModel::class);
+
+        $this->assertEquals(0, $count);
     }
 }

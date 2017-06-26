@@ -6,16 +6,12 @@ use Orchestra\Testbench\TestCase as Orchestra;
 
 /**
  * Class TestCase
- *
- * @package Tests
  */
 abstract class TestCase extends Orchestra
 {
 
     /**
-     * Setup the test environment.
-     *
-     * @return void
+     * @inheritdoc
      */
     public function setUp()
     {
@@ -29,11 +25,7 @@ abstract class TestCase extends Orchestra
     }
 
     /**
-     * Define environment setup.
-     *
-     * @param  \Illuminate\Foundation\Application $app
-     *
-     * @return void
+     * @inheritdoc
      */
     protected function getEnvironmentSetUp($app)
     {
@@ -48,11 +40,7 @@ abstract class TestCase extends Orchestra
     }
 
     /**
-     * Get package providers.
-     *
-     * @param  \Illuminate\Foundation\Application $app
-     *
-     * @return array
+     * @inheritdoc
      */
     protected function getPackageProviders($app)
     {

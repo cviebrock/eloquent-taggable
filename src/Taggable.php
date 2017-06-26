@@ -347,7 +347,7 @@ trait Taggable
      */
     public static function allTagModels()
     {
-        return app(TagService::class)->getAllTags(get_called_class());
+        return app(TagService::class)->getAllTags(static::class);
     }
 
     /**

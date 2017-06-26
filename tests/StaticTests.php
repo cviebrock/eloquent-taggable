@@ -22,9 +22,7 @@ class StaticTests extends TestCase
     protected $testDummy;
 
     /**
-     * Setup the test environment.
-     *
-     * @return void
+     * @inheritdoc
      */
     public function setUp()
     {

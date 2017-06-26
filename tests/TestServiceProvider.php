@@ -5,16 +5,12 @@ use Illuminate\Support\ServiceProvider as LaravelServiceProvider;
 
 /**
  * Class TestServiceProvider
- *
- * @package Cviebrock\EloquentTaggable
  */
 class TestServiceProvider extends LaravelServiceProvider
 {
 
     /**
-     * Indicates if loading of the provider is deferred.
-     *
-     * @var bool
+     * @inheritdoc
      */
     protected $defer = false;
 

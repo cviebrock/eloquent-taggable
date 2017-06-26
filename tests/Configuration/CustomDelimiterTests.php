@@ -27,6 +27,9 @@ class CustomDelimiterTests extends TestCase
         $model = $this->newModel()->tag('Apple;Banana/Cherry,Durian|Etrog');
 
         $this->assertCount(5, $model->tags);
-        $this->assertArrayValuesAreEqual(['Apple', 'Banana', 'Cherry', 'Durian', 'Etrog'], $model->tagArray);
+        $this->assertArrayValuesAreEqual(
+            ['Apple', 'Banana', 'Cherry', 'Durian', 'Etrog'],
+            $model->getTagArrayAttribute()
+        );
     }
 }

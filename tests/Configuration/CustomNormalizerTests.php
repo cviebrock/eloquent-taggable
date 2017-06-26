@@ -44,7 +44,10 @@ class CustomNormalizerTests extends TestCase
     public function testCustomNormalizer()
     {
         $this->testModel->tag('Apple,Banana,Cherry');
-        $this->assertArrayValuesAreEqual(['Apple', 'Banana', 'Cherry'], $this->testModel->tagArray);
+        $this->assertArrayValuesAreEqual(
+            ['Apple', 'Banana', 'Cherry'],
+            $this->testModel->getTagArrayAttribute()
+        );
     }
 
     /**
@@ -53,6 +56,9 @@ class CustomNormalizerTests extends TestCase
     public function testCustomNormalizerNormalized()
     {
         $this->testModel->tag('Apple,Banana,Cherry');
-        $this->assertArrayValuesAreEqual(['elppA', 'ananaB', 'yrrehC'], $this->testModel->tagArrayNormalized);
+        $this->assertArrayValuesAreEqual(
+            ['elppA', 'ananaB', 'yrrehC'],
+            $this->testModel->getTagArrayNormalizedAttribute()
+        );
     }
 }

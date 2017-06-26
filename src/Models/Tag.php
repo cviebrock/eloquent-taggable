@@ -6,30 +6,22 @@ use Illuminate\Database\Eloquent\Model as Eloquent;
 
 /**
  * Class Tag
- *
- * @package Cviebrock\EloquentTaggable\Models
  */
 class Tag extends Eloquent
 {
 
     /**
-     * The table associated with the model.
-     *
-     * @var string
+     * @inheritdoc
      */
     protected $table = 'taggable_tags';
 
     /**
-     * The primary key for the model.
-     *
-     * @var string
+     * @inheritdoc
      */
     protected $primaryKey = 'tag_id';
 
     /**
-     * The attributes that are mass assignable.
-     *
-     * @var array
+     * @inheritdoc
      */
     protected $fillable = [
         'name',
@@ -37,9 +29,7 @@ class Tag extends Eloquent
     ];
 
     /**
-     * Create a new Eloquent model instance.
-     *
-     * @param  array $attributes
+     * @inheritdoc
      */
     public function __construct(array $attributes = [])
     {
@@ -49,6 +39,7 @@ class Tag extends Eloquent
 
         parent::__construct($attributes);
     }
+
 
     /**
      * Set the name attribute on the model.
@@ -63,9 +54,7 @@ class Tag extends Eloquent
     }
 
     /**
-     * Convert the model to its string representation.
-     *
-     * @return string
+     * @inheritdoc
      */
     public function __toString()
     {

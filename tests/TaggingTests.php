@@ -29,7 +29,10 @@ class TaggingTests extends TestCase
         $this->testModel->tag('Apple,Banana,Cherry');
 
         $this->assertCount(3, $this->testModel->tags);
-        $this->assertArrayValuesAreEqual(['Apple', 'Banana', 'Cherry'], $this->testModel->tagArray);
+        $this->assertArrayValuesAreEqual(
+            ['Apple', 'Banana', 'Cherry'],
+            $this->testModel->getTagArrayAttribute()
+        );
     }
 
     /**
@@ -40,7 +43,10 @@ class TaggingTests extends TestCase
         $this->testModel->tag(['Apple', 'Banana', 'Cherry']);
 
         $this->assertCount(3, $this->testModel->tags);
-        $this->assertArrayValuesAreEqual(['Apple', 'Banana', 'Cherry'], $this->testModel->tagArray);
+        $this->assertArrayValuesAreEqual(
+            ['Apple', 'Banana', 'Cherry'],
+            $this->testModel->getTagArrayAttribute()
+        );
     }
 
     /**
@@ -51,7 +57,10 @@ class TaggingTests extends TestCase
         $this->testModel->tag('Apple;Banana;Cherry');
 
         $this->assertCount(3, $this->testModel->tags);
-        $this->assertArrayValuesAreEqual(['Apple', 'Banana', 'Cherry'], $this->testModel->tagArray);
+        $this->assertArrayValuesAreEqual(
+            ['Apple', 'Banana', 'Cherry'],
+            $this->testModel->getTagArrayAttribute()
+        );
     }
 
     /**
@@ -63,7 +72,10 @@ class TaggingTests extends TestCase
         $this->testModel->tag('Durian');
 
         $this->assertCount(4, $this->testModel->tags);
-        $this->assertArrayValuesAreEqual(['Apple', 'Banana', 'Cherry', 'Durian'], $this->testModel->tagArray);
+        $this->assertArrayValuesAreEqual(
+            ['Apple', 'Banana', 'Cherry', 'Durian'],
+            $this->testModel->getTagArrayAttribute()
+        );
     }
 
     /**
@@ -75,7 +87,10 @@ class TaggingTests extends TestCase
         $this->testModel->untag('Banana');
 
         $this->assertCount(2, $this->testModel->tags);
-        $this->assertArrayValuesAreEqual(['Apple', 'Cherry'], $this->testModel->tagArray);
+        $this->assertArrayValuesAreEqual(
+            ['Apple', 'Cherry'],
+            $this->testModel->getTagArrayAttribute()
+        );
     }
 
     /**
@@ -86,7 +101,10 @@ class TaggingTests extends TestCase
         $this->testModel->tag('Apple,Banana,Cherry');
 
         $this->assertCount(3, $this->testModel->tags);
-        $this->assertArrayValuesAreEqual(['Apple', 'Banana', 'Cherry'], $this->testModel->tagArray);
+        $this->assertArrayValuesAreEqual(
+            ['Apple', 'Banana', 'Cherry'],
+            $this->testModel->getTagArrayAttribute()
+        );
 
         $this->testModel->detag();
         $this->assertCount(0, $this->testModel->tags);
@@ -101,7 +119,10 @@ class TaggingTests extends TestCase
         $this->testModel->retag('Etrog,Fig,Grape');
 
         $this->assertCount(3, $this->testModel->tags);
-        $this->assertArrayValuesAreEqual(['Etrog', 'Fig', 'Grape'], $this->testModel->tagArray);
+        $this->assertArrayValuesAreEqual(
+            ['Etrog', 'Fig', 'Grape'],
+            $this->testModel->getTagArrayAttribute()
+        );
     }
 
     /**
@@ -113,7 +134,10 @@ class TaggingTests extends TestCase
         $this->testModel->tag('apple');
         $this->testModel->tag('APPLE');
 
-        $this->assertArrayValuesAreEqual(['Apple'], $this->testModel->tagArray);
+        $this->assertArrayValuesAreEqual(
+            ['Apple'],
+            $this->testModel->getTagArrayAttribute()
+        );
     }
 
     /**

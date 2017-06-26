@@ -40,7 +40,10 @@ class CustomGlueTests extends TestCase
      */
     public function testCustomGlue()
     {
-        $this->assertEquals('Apple.Banana.Cherry', $this->testModel->tagList);
+        $this->assertEquals(
+            'Apple.Banana.Cherry',
+            $this->testModel->getTagListAttribute()
+        );
     }
 
     /**
@@ -48,6 +51,9 @@ class CustomGlueTests extends TestCase
      */
     public function testCustomGlueNormalized()
     {
-        $this->assertEquals('apple.banana.cherry', $this->testModel->tagListNormalized);
+        $this->assertEquals(
+            'apple.banana.cherry',
+            $this->testModel->getTagListNormalizedAttribute()
+        );
     }
 }

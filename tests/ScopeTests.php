@@ -10,9 +10,62 @@ class ScopeTests extends TestCase
 {
 
     /**
-     * Setup the test environment.
-     *
-     * @return void
+     * @var TestModel
+     */
+    protected $testModel1;
+
+    /**
+     * @var TestModel
+     */
+    protected $testModel2;
+
+    /**
+     * @var TestModel
+     */
+    protected $testModel3;
+
+    /**
+     * @var TestModel
+     */
+    protected $testModel4;
+
+    /**
+     * @var TestModel
+     */
+    protected $testModel5;
+
+    /**
+     * @var TestModel
+     */
+    protected $testModel6;
+
+    /**
+     * @var TestModel
+     */
+    protected $testModel7;
+
+    /**
+     * @var TestModel
+     */
+    protected $testModel8;
+
+    /**
+     * @var TestDummy
+     */
+    protected $testDummy1;
+
+    /**
+     * @var TestDummy
+     */
+    protected $testDummy2;
+
+    /**
+     * @var TestDummy
+     */
+    protected $testDummy3;
+
+    /**
+     * @inheritdoc
      */
     public function setUp()
     {

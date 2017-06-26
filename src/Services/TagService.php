@@ -2,13 +2,12 @@
 
 use Cviebrock\EloquentTaggable\Models\Tag;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\MorphToMany;
 use Illuminate\Support\Collection;
 
 
 /**
  * Class TagService
- *
- * @package Cviebrock\EloquentTaggable\Services
  */
 class TagService
 {
@@ -167,22 +166,101 @@ class TagService
     }
 
     /**
-     * Get all Tags for the given class.
+     * Get all Tags for the given class, or all classes.
      *
-     * @param \Illuminate\Database\Eloquent\Model|string $class
+     * @param \Illuminate\Database\Eloquent\Model|string|null $class
      *
      * @return \Illuminate\Database\Eloquent\Collection
      */
-    public function getAllTags($class)
+    public function getAllTags($class = null)
     {
+        if ($class === null) {
+            return Tag::all();
+        }
+
         if ($class instanceof Model) {
             $class = get_class($class);
         }
 
-        $sql = 'SELECT DISTINCT t.*' .
-            ' FROM taggable_taggables tt LEFT JOIN taggable_tags t ON tt.tag_id=t.tag_id' .
+        $sql = 'SELECT DISTINCT t.* FROM taggable_taggables tt LEFT JOIN taggable_tags t ON tt.tag_id=t.tag_id' .
             ' WHERE tt.taggable_type = ?';
 
         return Tag::fromQuery($sql, [$class]);
+    }
+
+    /**
+     * Get all tag names for the given class, or all classes.
+     *
+     * @param \Illuminate\Database\Eloquent\Model|string|null $class
+     *
+     * @return array
+     */
+    public function getAllTagsArray($class = null)
+    {
+        $tags = $this->getAllTags($class);
+
+        return $tags->pluck('name')->toArray();
+    }
+
+    /**
+     * Get all normalized tag names for the given class, or all classes.
+     *
+     * @param \Illuminate\Database\Eloquent\Model|string|null $class
+     *
+     * @return array
+     */
+    public function getAllTagsArrayNormalized($class = null)
+    {
+        $tags = $this->getAllTags($class);
+
+        return $tags->pluck('normalized')->toArray();
+    }
+
+    /**
+     * @param string $oldName
+     * @param string $newName
+     * @param \Illuminate\Database\Eloquent\Model|string|null $class
+     *
+     * @return int
+     */
+    public function renameTags($oldName, $newName, $class = null)
+    {
+        // If no class is specified, we can do the rename with a simple SQL update
+        if ($class === null) {
+            return Tag::where('normalized', $this->normalize($oldName))
+                ->update([
+                    'name'       => $newName,
+                    'normalized' => $this->normalize($newName),
+                ]);
+        }
+
+        if (!($class instanceof Model)) {
+            $class = new $class;
+        }
+
+        // First find the old tag
+        $oldTag = $this->find($oldName);
+
+        // If the old tag doesn't exist, we can short-circuit the process
+        if (!$oldTag) {
+            return 0;
+        }
+
+        // Find or create the new tag
+        $newTag = $this->findOrCreate($newName);
+
+        /** @var MorphToMany $morph */
+        $morph = $class->tags();
+        $pivot = $morph->newPivot();
+
+        $relatedKeyName = $pivot->getRelatedKey();
+        $relatedMorphType = $morph->getMorphType();
+
+        return $pivot
+            ->where($relatedKeyName, $oldTag->getKey())
+            ->where($relatedMorphType, get_class($class))
+            ->update([
+                $relatedKeyName => $newTag->getKey(),
+            ]);
     }
 }
