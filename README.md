@@ -31,10 +31,13 @@ Easily add the ability to tag your Eloquent models in Laravel 5.
 > 
 > | Laravel Version | Taggable Version |
 > |:---------------:|:----------------:|
-> |       4.*       |        1.0       |
-> | 5.1*, 5.2*, 5.3 |        2.0       |
-> |       5.4       |      2.1, 3.0    |
-> |       5.5       |        3.0       |
+> |       4.2       |       1.0        |
+> |  5.1, 5.2, 5.3  |       2.0        |
+> |       5.4       |     2.1, 3.0†    |
+> |       5.5       |       3.0        |
+>
+> † Version 3.0 of the package requires PHP 7.0 or later, even though Laravel 5.4 doesn't.
+
 
 1. Install the `cviebrock/eloquent-taggable` package via composer:
 
@@ -302,9 +305,13 @@ $tagService->getAllTags();
 
 $tagService->renameTags("Apple", "Apricot", \App\Model);
 
-// Rename all tags from "Apple" to "Apricot" across all models
+// Rename all tags from "Apple" to "Apricot" across all models:
 
 $tagService->renameTags("Apple", "Apricot");
+
+// Find all the tags that aren't used by any model:
+
+$tagService->getAllUnusedTags();
 ```
 
 As always, take a look at the code for full documentation of the service class.
