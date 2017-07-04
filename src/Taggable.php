@@ -22,7 +22,8 @@ trait Taggable
      */
     public function tags()
     {
-        return $this->morphToMany(Tag::class, 'taggable', 'taggable_taggables', 'taggable_id', 'tag_id')
+        $model = config('taggable.model');
+        return $this->morphToMany($model, 'taggable', 'taggable_taggables', 'taggable_id', 'tag_id')
             ->withTimestamps();
     }
 
