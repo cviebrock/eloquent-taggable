@@ -15,7 +15,7 @@ class TagService
     protected $tagModel;
     public function __construct()
     {
-        $this->tagModel = config('model', \Cviebrock\EloquentTaggable\Models\Tag::class);
+        $this->tagModel = config('taggable.model');
     }
     /**
      * Find an existing tag by name.
