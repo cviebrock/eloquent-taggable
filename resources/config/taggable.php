@@ -53,8 +53,8 @@ return [
      */
 
     'taggedModels' => [],
-     /**
-      *	 Model to use to store the tags in the database
-      */
-    'model'  => App\Models\Teams\Tag::class,
+    /**
+     *	 Model to use to store the tags in the database
+     */
+    'model'  => \Cviebrock\EloquentTaggable\Models\Tag::class,
 ];

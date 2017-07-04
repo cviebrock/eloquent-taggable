@@ -1,6 +1,7 @@
-<?php namespace Cviebrock\EloquentTaggable\Services;
+<?php
+namespace Cviebrock\EloquentTaggable\Services;
 
-use Cviebrock\EloquentTaggable\Models\Tag;
+//use Cviebrock\EloquentTaggable\Models\Tag;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\MorphToMany;
 use Illuminate\Support\Collection;
@@ -11,7 +12,11 @@ use Illuminate\Support\Collection;
  */
 class TagService
 {
-
+    protected $tagModel;
+    public function __construct()
+    {
+        $this->tagModel = config('model', \Cviebrock\EloquentTaggable\Models\Tag::class);
+    }
     /**
      * Find an existing tag by name.
      *
@@ -21,7 +26,7 @@ class TagService
      */
     public function find($tagName)
     {
-        return Tag::byName($tagName)->first();
+        return $this->tagModel::byName($tagName)->first();
     }
 
     /**
@@ -36,7 +41,7 @@ class TagService
         $tag = $this->find($tagName);
 
         if (!$tag) {
-            $tag = Tag::create(['name' => $tagName]);
+            $tag = $this->tagModel::create(['name' => $tagName]);
         }
 
         return $tag;
@@ -103,7 +108,7 @@ class TagService
             return [];
         }
 
-        return Tag::whereIn('normalized', $normalized)
+        return $this->tagModel::whereIn('normalized', $normalized)
             ->pluck('tag_id')
             ->toArray();
     }
@@ -173,7 +178,7 @@ class TagService
     public function getAllTags($class = null)
     {
         if ($class === null) {
-            return Tag::all();
+            return $this->tagModel::all();
         }
 
         if ($class instanceof Model) {
@@ -183,7 +188,7 @@ class TagService
         $sql = 'SELECT DISTINCT t.* FROM taggable_taggables tt LEFT JOIN taggable_tags t ON tt.tag_id=t.tag_id' .
             ' WHERE tt.taggable_type = ?';
 
-        return Tag::fromQuery($sql, [$class]);
+        return $this->tagModel::fromQuery($sql, [$class]);
     }
 
     /**
@@ -224,7 +229,7 @@ class TagService
         $sql = 'SELECT t.* FROM taggable_tags t LEFT JOIN taggable_taggables tt ON tt.tag_id=t.tag_id ' .
             'WHERE tt.taggable_id IS NULL';
 
-        return Tag::fromQuery($sql);
+        return $this->tagModel::fromQuery($sql);
     }
 
     /**
@@ -238,7 +243,7 @@ class TagService
     {
         // If no class is specified, we can do the rename with a simple SQL update
         if ($class === null) {
-            return Tag::where('normalized', $this->normalize($oldName))
+            return $this->tagModel::where('normalized', $this->normalize($oldName))
                 ->update([
                     'name'       => $newName,
                     'normalized' => $this->normalize($newName),
