@@ -372,4 +372,14 @@ trait Taggable
     {
         return app(TagService::class)->joinList(static::allTags());
     }
+    
+    /**
+     * Get all the tags used for the called class as a collection of models.
+     *
+     * @return collection
+     */
+    public static function allTagModels()
+    {
+        return app(TagService::class)->getAllTags(get_called_class());
+    }
 }
