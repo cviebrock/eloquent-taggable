@@ -22,15 +22,15 @@
     ],
     "require": {
         "php": ">=7.0",
-        "illuminate/config": "^5.4 || ^5.5",
-        "illuminate/database": "^5.4 || ^5.5",
-        "illuminate/support": "^5.4 || ^5.5"
+        "illuminate/config": "~5.4 | ~5.5",
+        "illuminate/database": "~5.4 | ~5.5",
+        "illuminate/support": "~5.4 | ~5.5"
     },
     "require-dev": {
         "friendsofphp/php-cs-fixer": "^1.11",
         "mockery/mockery": "^0.9.4",
         "orchestra/database": "~3.4",
-        "orchestra/testbench": "^3.4 || ^3.5",
+        "orchestra/testbench": "~3.4 | ~3.5",
         "phpunit/phpunit": "~5.7",
         "scrutinizer/ocular": "^1.3"
     },
