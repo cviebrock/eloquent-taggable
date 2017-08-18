@@ -176,6 +176,7 @@ trait Taggable
             if (config('taggable.throwEmptyExceptions')) {
                 throw new NoTagsSpecifiedException('Empty tag data passed to withAllTags scope.');
             }
+
             return $query->where(\DB::raw(1), 0);
         }
 
@@ -216,6 +217,7 @@ trait Taggable
             if (config('taggable.throwEmptyExceptions')) {
                 throw new NoTagsSpecifiedException('Empty tag data passed to withAnyTags scope.');
             }
+
             return $query->where(\DB::raw(1), 0);
         }
 
@@ -331,6 +333,7 @@ trait Taggable
         $closure = function($join) use ($modelKeyName, $morphForeignKeyName, $morphTypeName) {
             $join->on($modelKeyName, $morphForeignKeyName)
                 ->on($morphTypeName, static::class);
+
             return $join;
         };
 
@@ -371,5 +374,48 @@ trait Taggable
     public static function allTagsList()
     {
         return app(TagService::class)->joinList(static::allTags());
+    }
+
+    /**
+     * Rename one the tags for the called class.
+     *
+     * @param string $oldTag
+     * @param string $newTag
+     *
+     * @return int
+     */
+    public static function renameTag($oldTag, $newTag)
+    {
+        return app(TagService::class)->renameTags($oldTag, $newTag, static::class);
+    }
+
+    /**
+     * Get the most popular tags for the called class.
+     *
+     * @param int $limit
+     *
+     * @return array
+     */
+    public static function popularTags($limit = 10)
+    {
+        /** @var Collection $tags */
+        $tags = app(TagService::class)->getPopularTags($limit, static::class);
+
+        return $tags->pluck('taggable_count', 'name')->all();
+    }
+
+    /**
+     * Get the most popular tags for the called class.
+     *
+     * @param int $limit
+     *
+     * @return array
+     */
+    public static function popularTagsNormalized($limit = 10)
+    {
+        /** @var Collection $tags */
+        $tags = app(TagService::class)->getPopularTags($limit, static::class);
+
+        return $tags->pluck('taggable_count', 'normalized')->all();
     }
 }

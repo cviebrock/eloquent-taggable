@@ -237,7 +237,7 @@ class TagService
      */
     public function getPopularTags($limit = 10, $class = null)
     {
-        $sql = 'SELECT t.* FROM taggable_tags t LEFT JOIN taggable_taggables tt ON tt.tag_id=t.tag_id';
+        $sql = 'SELECT t.*, COUNT(t.tag_id) AS taggable_count FROM taggable_tags t LEFT JOIN taggable_taggables tt ON tt.tag_id=t.tag_id';
         $bindings = [];
 
         if ($class !== null) {
@@ -245,7 +245,7 @@ class TagService
             $bindings[] = ($class instanceof Model) ? get_class($class) : $class;
         }
 
-        $sql .= ' GROUP BY t.tag_id ORDER BY COUNT(t.tag_id) DESC LIMIT ?';
+        $sql .= ' GROUP BY t.tag_id ORDER BY taggable_count DESC LIMIT ?';
         $bindings[] = $limit;
 
         return Tag::fromQuery($sql, $bindings);

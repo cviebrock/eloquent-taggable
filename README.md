@@ -271,6 +271,38 @@ Model::allTagModels();
 ```
 
 
+## Other Methods
+
+You can rename a tag for your model:
+
+```php
+Model::rename('Apple', 'Apricot');
+```
+
+This will only affect instances of `Model` that were tagged "Apple".  If another model was also tagged
+"Apple", those tags won't be renamed.  (To rename a tag across all models, see the example below under
+the [TagService Class](#the-tagservice-class).)
+
+You can also get a list of popular tags for your model (including the model count):
+
+```php
+$tags = Model::popularTags($limit);
+$tags = Model::popularTagsNormalized($limit);
+
+// Will return an array like:
+//
+// [
+//     'apple' => 5,
+//     'banana' => 3,
+//     'durian' => 3,
+//     'cherry' => 2,
+// ]
+```
+
+(Again, the above will limit the query to one particular model.  To get a list of
+popular tag across all models, see the example below under the [TagService Class](#the-tagservice-class).)
+
+
 ## The Tag Model
 
 There are a few methods you can run on the Tag model itself.

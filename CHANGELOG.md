@@ -14,6 +14,9 @@
     - `allTagModels`
     - `allTags`
     - `allTagsList`
+    - `renameTag`
+    - `popularTags`
+    - `popularTagsNormalized`
 - new/improved service methods:
     - `getAllUnusedTags`
     - `getPopularTags`

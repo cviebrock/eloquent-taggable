@@ -406,11 +406,6 @@ class TagServiceTests extends TestCase
         $popularNames = implode(',', $popular->pluck('name')->toArray());
         $this->assertEquals('Apple,Cherry,Durian,Banana', $popularNames);
 
-        // test just one model
-        $popular = $this->service->getPopularTags(null, TestDummy::class);
-        $popularNames = implode(',', $popular->pluck('name')->toArray());
-        $this->assertEquals('Durian,Cherry,Apple', $popularNames);
-
         // test limit
         $popular = $this->service->getPopularTags(2);
 
