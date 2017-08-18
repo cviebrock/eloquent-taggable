@@ -5,6 +5,7 @@ use Cviebrock\EloquentTaggable\Models\Tag;
 use Cviebrock\EloquentTaggable\Services\TagService;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Database\Eloquent\Relations\MorphToMany;
 
 
 /**
@@ -20,7 +21,7 @@ trait Taggable
      *
      * @return \Illuminate\Database\Eloquent\Relations\MorphToMany
      */
-    public function tags()
+    public function tags(): MorphToMany
     {
         return $this->morphToMany(Tag::class, 'taggable', 'taggable_taggables', 'taggable_id', 'tag_id')
             ->withTimestamps();
@@ -91,7 +92,7 @@ trait Taggable
      *
      * @param string $tagName
      */
-    protected function addOneTag($tagName)
+    protected function addOneTag(string $tagName)
     {
         $tag = app(TagService::class)->findOrCreate($tagName);
 
@@ -105,7 +106,7 @@ trait Taggable
      *
      * @param string $tagName
      */
-    protected function removeOneTag($tagName)
+    protected function removeOneTag(string $tagName)
     {
         $tag = app(TagService::class)->find($tagName);
 
@@ -119,7 +120,7 @@ trait Taggable
      *
      * @return string
      */
-    public function getTagListAttribute()
+    public function getTagListAttribute(): string
     {
         return app(TagService::class)->makeTagList($this);
     }
@@ -129,7 +130,7 @@ trait Taggable
      *
      * @return string
      */
-    public function getTagListNormalizedAttribute()
+    public function getTagListNormalizedAttribute(): string
     {
         return app(TagService::class)->makeTagList($this, 'normalized');
     }
@@ -139,7 +140,7 @@ trait Taggable
      *
      * @return array
      */
-    public function getTagArrayAttribute()
+    public function getTagArrayAttribute(): array
     {
         return app(TagService::class)->makeTagArray($this);
     }
@@ -149,7 +150,7 @@ trait Taggable
      *
      * @return array
      */
-    public function getTagArrayNormalizedAttribute()
+    public function getTagArrayNormalizedAttribute(): array
     {
         return app(TagService::class)->makeTagArray($this, 'normalized');
     }
@@ -157,14 +158,14 @@ trait Taggable
     /**
      * Query scope for models that have all of the given tags.
      *
-     * @param \Illuminate\Database\Eloquent\Builder $query
+     * @param Builder $query
      * @param array|string $tags
      *
-     * @return \Illuminate\Database\Query\Builder
+     * @return Builder
      * @throws \Cviebrock\EloquentTaggable\Exceptions\NoTagsSpecifiedException
      * @throws \ErrorException
      */
-    public function scopeWithAllTags(Builder $query, $tags)
+    public function scopeWithAllTags(Builder $query, $tags): Builder
     {
         /** @var TagService $service */
         $service = app(TagService::class);
@@ -198,14 +199,14 @@ trait Taggable
     /**
      * Query scope for models that have any of the given tags.
      *
-     * @param \Illuminate\Database\Eloquent\Builder $query
+     * @param Builder $query
      * @param array|string $tags
      *
-     * @return mixed
+     * @return Builder
      * @throws \Cviebrock\EloquentTaggable\Exceptions\NoTagsSpecifiedException
      * @throws \ErrorException
      */
-    public function scopeWithAnyTags(Builder $query, $tags)
+    public function scopeWithAnyTags(Builder $query, $tags): Builder
     {
         /** @var TagService $service */
         $service = app(TagService::class);
@@ -232,11 +233,11 @@ trait Taggable
     /**
      * Query scope for models that have any tag.
      *
-     * @param \Illuminate\Database\Eloquent\Builder $query
+     * @param Builder $query
      *
-     * @return \Illuminate\Database\Eloquent\Builder
+     * @return Builder
      */
-    public function scopeIsTagged(Builder $query)
+    public function scopeIsTagged(Builder $query): Builder
     {
         return $this->prepareTableJoin($query, 'inner');
     }
@@ -244,14 +245,14 @@ trait Taggable
     /**
      * Query scope for models that do not have all of the given tags.
      *
-     * @param \Illuminate\Database\Eloquent\Builder $query
+     * @param Builder $query
      * @param string|array $tags
      * @param bool $includeUntagged
      *
-     * @return \Illuminate\Database\Eloquent\Builder
+     * @return Builder
      * @throws \ErrorException
      */
-    public function scopeWithoutAllTags(Builder $query, $tags, $includeUntagged = false)
+    public function scopeWithoutAllTags(Builder $query, $tags, bool $includeUntagged = false): Builder
     {
         /** @var TagService $service */
         $service = app(TagService::class);
@@ -275,14 +276,14 @@ trait Taggable
     /**
      * Query scope for models that do not have any of the given tags.
      *
-     * @param \Illuminate\Database\Eloquent\Builder $query
+     * @param Builder $query
      * @param string|array $tags
      * @param bool $includeUntagged
      *
-     * @return \Illuminate\Database\Eloquent\Builder
+     * @return Builder
      * @throws \ErrorException
      */
-    public function scopeWithoutAnyTags(Builder $query, $tags, $includeUntagged = false)
+    public function scopeWithoutAnyTags(Builder $query, $tags, bool $includeUntagged = false): Builder
     {
         /** @var TagService $service */
         $service = app(TagService::class);
@@ -305,11 +306,11 @@ trait Taggable
     /**
      * Query scope for models that does not have have any tags.
      *
-     * @param \Illuminate\Database\Eloquent\Builder $query
+     * @param Builder $query
      *
-     * @return \Illuminate\Database\Eloquent\Builder
+     * @return Builder
      */
-    public function scopeIsNotTagged(Builder $query)
+    public function scopeIsNotTagged(Builder $query): Builder
     {
         $morphForeignKeyName = $this->tags()->getQualifiedForeignKeyName();
 
@@ -318,12 +319,12 @@ trait Taggable
     }
 
     /**
-     * @param \Illuminate\Database\Eloquent\Builder $query
+     * @param Builder $query
      * @param string $joinType
      *
      * @return mixed
      */
-    private function prepareTableJoin(Builder $query, $joinType)
+    private function prepareTableJoin(Builder $query, string $joinType): Builder
     {
         $modelKeyName = $this->getQualifiedKeyName();
         $morphTable = $this->tags()->getTable();
@@ -348,7 +349,7 @@ trait Taggable
      *
      * @return Collection
      */
-    public static function allTagModels()
+    public static function allTagModels(): Collection
     {
         return app(TagService::class)->getAllTags(static::class);
     }
@@ -358,7 +359,7 @@ trait Taggable
      *
      * @return array
      */
-    public static function allTags()
+    public static function allTags(): array
     {
         /** @var \Illuminate\Database\Eloquent\Collection $tags */
         $tags = static::allTagModels();
@@ -371,7 +372,7 @@ trait Taggable
      *
      * @return string
      */
-    public static function allTagsList()
+    public static function allTagsList(): string
     {
         return app(TagService::class)->joinList(static::allTags());
     }
@@ -384,7 +385,7 @@ trait Taggable
      *
      * @return int
      */
-    public static function renameTag($oldTag, $newTag)
+    public static function renameTag(string $oldTag, string $newTag): int
     {
         return app(TagService::class)->renameTags($oldTag, $newTag, static::class);
     }
@@ -396,7 +397,7 @@ trait Taggable
      *
      * @return array
      */
-    public static function popularTags($limit = 10)
+    public static function popularTags(int $limit = 10): array
     {
         /** @var Collection $tags */
         $tags = app(TagService::class)->getPopularTags($limit, static::class);
@@ -411,7 +412,7 @@ trait Taggable
      *
      * @return array
      */
-    public static function popularTagsNormalized($limit = 10)
+    public static function popularTagsNormalized(int $limit = 10): array
     {
         /** @var Collection $tags */
         $tags = app(TagService::class)->getPopularTags($limit, static::class);

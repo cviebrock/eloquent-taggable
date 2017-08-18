@@ -1,9 +1,10 @@
 <?php namespace Cviebrock\EloquentTaggable\Services;
 
 use Cviebrock\EloquentTaggable\Models\Tag;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\MorphToMany;
-use Illuminate\Support\Collection;
+use Illuminate\Support\Collection as BaseCollection;
 
 
 /**
@@ -19,7 +20,7 @@ class TagService
      *
      * @return \Cviebrock\EloquentTaggable\Models\Tag|null
      */
-    public function find($tagName)
+    public function find(string $tagName)
     {
         return Tag::byName($tagName)->first();
     }
@@ -31,7 +32,7 @@ class TagService
      *
      * @return \Cviebrock\EloquentTaggable\Models\Tag
      */
-    public function findOrCreate($tagName)
+    public function findOrCreate(string $tagName): Tag
     {
         $tag = $this->find($tagName);
 
@@ -50,13 +51,13 @@ class TagService
      * @return array
      * @throws \ErrorException
      */
-    public function buildTagArray($tags)
+    public function buildTagArray($tags): array
     {
         if (is_array($tags)) {
             return $tags;
         }
 
-        if ($tags instanceof Collection) {
+        if ($tags instanceof BaseCollection) {
             return $this->buildTagArray($tags->all());
         }
 
@@ -83,7 +84,7 @@ class TagService
      * @return array
      * @throws \ErrorException
      */
-    public function buildTagArrayNormalized($tags)
+    public function buildTagArrayNormalized($tags): array
     {
         $tags = $this->buildTagArray($tags);
 
@@ -97,7 +98,7 @@ class TagService
      *
      * @return array
      */
-    public function getTagModelKeys(array $normalized = [])
+    public function getTagModelKeys(array $normalized = []): array
     {
         if (count($normalized) === 0) {
             return [];
@@ -116,7 +117,7 @@ class TagService
      *
      * @return string
      */
-    public function makeTagList(Model $model, $field = 'name')
+    public function makeTagList(Model $model, string $field = 'name'): string
     {
         $tags = $this->makeTagArray($model, $field);
 
@@ -130,7 +131,7 @@ class TagService
      *
      * @return string
      */
-    public function joinList(array $array)
+    public function joinList(array $array): string
     {
         return implode(config('taggable.glue'), $array);
     }
@@ -143,9 +144,9 @@ class TagService
      *
      * @return array
      */
-    public function makeTagArray(Model $model, $field = 'name')
+    public function makeTagArray(Model $model, string $field = 'name'): array
     {
-        /** @var \Illuminate\Database\Eloquent\Collection $tags */
+        /** @var Collection $tags */
         $tags = $model->tags;
 
         return $tags->pluck($field)->all();
@@ -156,9 +157,9 @@ class TagService
      *
      * @param string $string
      *
-     * @return mixed
+     * @return string
      */
-    public function normalize($string)
+    public function normalize(string $string): string
     {
         return call_user_func(config('taggable.normalizer'), $string);
     }
@@ -168,9 +169,9 @@ class TagService
      *
      * @param \Illuminate\Database\Eloquent\Model|string|null $class
      *
-     * @return \Illuminate\Database\Eloquent\Collection
+     * @return Collection
      */
-    public function getAllTags($class = null)
+    public function getAllTags($class = null): Collection
     {
         if ($class === null) {
             return Tag::all();
@@ -193,7 +194,7 @@ class TagService
      *
      * @return array
      */
-    public function getAllTagsArray($class = null)
+    public function getAllTagsArray($class = null): array
     {
         $tags = $this->getAllTags($class);
 
@@ -207,7 +208,7 @@ class TagService
      *
      * @return array
      */
-    public function getAllTagsArrayNormalized($class = null)
+    public function getAllTagsArrayNormalized($class = null): array
     {
         $tags = $this->getAllTags($class);
 
@@ -219,7 +220,7 @@ class TagService
      *
      * @return \Illuminate\Database\Eloquent\Collection
      */
-    public function getAllUnusedTags()
+    public function getAllUnusedTags(): Collection
     {
         $sql = 'SELECT t.* FROM taggable_tags t LEFT JOIN taggable_taggables tt ON tt.tag_id=t.tag_id ' .
             'WHERE tt.taggable_id IS NULL';
@@ -235,7 +236,7 @@ class TagService
      *
      * @return \Illuminate\Database\Eloquent\Collection
      */
-    public function getPopularTags($limit = 10, $class = null)
+    public function getPopularTags(int $limit = 10, $class = null): Collection
     {
         $sql = 'SELECT t.*, COUNT(t.tag_id) AS taggable_count FROM taggable_tags t LEFT JOIN taggable_taggables tt ON tt.tag_id=t.tag_id';
         $bindings = [];
@@ -252,13 +253,15 @@ class TagService
     }
 
     /**
+     * Rename tags, across all or only one model.
+     *
      * @param string $oldName
      * @param string $newName
      * @param \Illuminate\Database\Eloquent\Model|string|null $class
      *
      * @return int
      */
-    public function renameTags($oldName, $newName, $class = null)
+    public function renameTags(string $oldName, string $newName, $class = null): int
     {
         // If no class is specified, we can do the rename with a simple SQL update
         if ($class === null) {
