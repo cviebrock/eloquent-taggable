@@ -228,12 +228,12 @@ class TagService
     }
 
     /**
-     * Get the most popular models, optionally limited and/or filtered by class.
+     * Get the most popular tags, optionally limited and/or filtered by class.
      *
-     * @param int|null $limit
+     * @param int $limit
      * @param \Illuminate\Database\Eloquent\Model|string|null $class
      *
-     * @return mixed
+     * @return \Illuminate\Database\Eloquent\Collection
      */
     public function getPopularTags($limit = 10, $class = null)
     {
@@ -245,12 +245,8 @@ class TagService
             $bindings[] = ($class instanceof Model) ? get_class($class) : $class;
         }
 
-        $sql .= ' GROUP BY t.tag_id ORDER BY COUNT(t.tag_id) DESC';
-
-        if ($limit) {
-            $sql .= ' LIMIT ?';
-            $bindings[] = $limit;
-        }
+        $sql .= ' GROUP BY t.tag_id ORDER BY COUNT(t.tag_id) DESC LIMIT ?';
+        $bindings[] = $limit;
 
         return Tag::fromQuery($sql, $bindings);
     }
