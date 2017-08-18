@@ -322,7 +322,7 @@ trait Taggable
      * @param Builder $query
      * @param string $joinType
      *
-     * @return mixed
+     * @return Builder
      */
     private function prepareTableJoin(Builder $query, string $joinType): Builder
     {
