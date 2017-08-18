@@ -1,6 +1,6 @@
 # Changelog
 
-## 3.0.0 - 23-Jun-2017
+## 3.0.0 - 18-Aug-2017
 
 - refactor SQL queries to be more performant
 - add new and rename scope queries:
@@ -14,6 +14,10 @@
     - `allTagModels`
     - `allTags`
     - `allTagsList`
+- new/improved service methods:
+    - `getAllUnusedTags`
+    - `getPopularTags`
+    - `renameTags`
 - better test coverage
 
 

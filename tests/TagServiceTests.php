@@ -380,4 +380,51 @@ class TagServiceTests extends TestCase
 
         $this->assertEquals(0, $count);
     }
+
+    /**
+     * Test getting popular tags.
+     */
+    public function testPopularTags()
+    {
+        // Generate some models and tags
+        $this->newModel()->tag('Apple,Banana,Cherry');
+        $this->newModel()->tag('Apple,Banana,Cherry');
+        $this->newModel()->tag('Apple,Banana');
+        $this->newModel()->tag('Apple,Cherry');
+        $this->newModel()->tag('Apple,Cherry,Durian');
+        $this->newModel()->tag('Apple,Durian');
+
+        $this->newDummy()->tag('Apple,Cherry,Durian');
+        $this->newDummy()->tag('Cherry,Durian');
+        $this->newDummy()->tag('Durian');
+
+        // test all popular tags
+        $popular = $this->service->getPopularTags();
+
+        $this->assertCount(4, $popular);
+
+        $popularNames = implode(',', $popular->pluck('name')->toArray());
+        $this->assertEquals('Apple,Cherry,Durian,Banana', $popularNames);
+
+        // test just one model
+        $popular = $this->service->getPopularTags(null, TestDummy::class);
+        $popularNames = implode(',', $popular->pluck('name')->toArray());
+        $this->assertEquals('Durian,Cherry,Apple', $popularNames);
+
+        // test limit
+        $popular = $this->service->getPopularTags(2);
+
+        $this->assertCount(2, $popular);
+
+        $popularNames = implode(',', $popular->pluck('name')->toArray());
+        $this->assertEquals('Apple,Cherry', $popularNames);
+
+        // test limit and model
+        $popular = $this->service->getPopularTags(2, TestDummy::class);
+
+        $this->assertCount(2, $popular);
+
+        $popularNames = implode(',', $popular->pluck('name')->toArray());
+        $this->assertEquals('Durian,Cherry', $popularNames);
+    }
 }

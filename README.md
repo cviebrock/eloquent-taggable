@@ -309,6 +309,12 @@ $tagService->renameTags("Apple", "Apricot", \App\Model);
 
 $tagService->renameTags("Apple", "Apricot");
 
+// Get the most popular tags across all models, or for just one model:
+
+$tagService->getPopularTags();
+$tagService->getPopularTags($limit);
+$tagService->getPopularTags($limit, \App\Model);
+
 // Find all the tags that aren't used by any model:
 
 $tagService->getAllUnusedTags();

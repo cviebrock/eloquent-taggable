@@ -228,6 +228,34 @@ class TagService
     }
 
     /**
+     * Get the most popular models, optionally limited and/or filtered by class.
+     *
+     * @param int|null $limit
+     * @param \Illuminate\Database\Eloquent\Model|string|null $class
+     *
+     * @return mixed
+     */
+    public function getPopularTags($limit = 10, $class = null)
+    {
+        $sql = 'SELECT t.* FROM taggable_tags t LEFT JOIN taggable_taggables tt ON tt.tag_id=t.tag_id';
+        $bindings = [];
+
+        if ($class !== null) {
+            $sql .= ' WHERE tt.taggable_type IS ?';
+            $bindings[] = ($class instanceof Model) ? get_class($class) : $class;
+        }
+
+        $sql .= ' GROUP BY t.tag_id ORDER BY COUNT(t.tag_id) DESC';
+
+        if ($limit) {
+            $sql .= ' LIMIT ?';
+            $bindings[] = $limit;
+        }
+
+        return Tag::fromQuery($sql, $bindings);
+    }
+
+    /**
      * @param string $oldName
      * @param string $newName
      * @param \Illuminate\Database\Eloquent\Model|string|null $class
