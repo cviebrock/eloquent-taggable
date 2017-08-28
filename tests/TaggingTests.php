@@ -126,6 +126,20 @@ class TaggingTests extends TestCase
     }
 
     /**
+     * Test retagging a model that has no tags.
+     */
+    public function testRetaggingOnUntagged()
+    {
+        $this->testModel->tag('Etrog,Fig,Grape');
+
+        $this->assertCount(3, $this->testModel->tags);
+        $this->assertArrayValuesAreEqual(
+            ['Etrog', 'Fig', 'Grape'],
+            $this->testModel->getTagArrayAttribute()
+        );
+    }
+
+    /**
      * Test tag normalization.
      */
     public function testNormalization()
