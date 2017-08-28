@@ -393,13 +393,14 @@ trait Taggable
      * Get the most popular tags for the called class.
      *
      * @param int $limit
+     * @param int $minCount
      *
      * @return array
      */
-    public static function popularTags(int $limit = 10): array
+    public static function popularTags(int $limit = null, int $minCount = null): array
     {
         /** @var Collection $tags */
-        $tags = app(TagService::class)->getPopularTags($limit, static::class);
+        $tags = app(TagService::class)->getPopularTags($limit, static::class, $minCount);
 
         return $tags->pluck('taggable_count', 'name')->all();
     }
@@ -408,13 +409,14 @@ trait Taggable
      * Get the most popular tags for the called class.
      *
      * @param int $limit
+     * @param int $minCount
      *
      * @return array
      */
-    public static function popularTagsNormalized(int $limit = 10): array
+    public static function popularTagsNormalized(int $limit = null, int $minCount = null): array
     {
         /** @var Collection $tags */
-        $tags = app(TagService::class)->getPopularTags($limit, static::class);
+        $tags = app(TagService::class)->getPopularTags($limit, static::class, $minCount);
 
         return $tags->pluck('taggable_count', 'normalized')->all();
     }

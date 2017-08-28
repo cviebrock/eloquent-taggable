@@ -233,21 +233,33 @@ class TagService
      *
      * @param int $limit
      * @param \Illuminate\Database\Eloquent\Model|string|null $class
+     * @param int $minCount
      *
      * @return \Illuminate\Database\Eloquent\Collection
      */
-    public function getPopularTags(int $limit = 10, $class = null): Collection
+    public function getPopularTags(int $limit = null, $class = null, int $minCount = null): Collection
     {
         $sql = 'SELECT t.*, COUNT(t.tag_id) AS taggable_count FROM taggable_tags t LEFT JOIN taggable_taggables tt ON tt.tag_id=t.tag_id';
         $bindings = [];
 
-        if ($class !== null) {
+        if ($class) {
             $sql .= ' WHERE tt.taggable_type IS ?';
             $bindings[] = ($class instanceof Model) ? get_class($class) : $class;
         }
 
-        $sql .= ' GROUP BY t.tag_id ORDER BY taggable_count DESC LIMIT ?';
-        $bindings[] = $limit;
+        $sql .= ' GROUP BY t.tag_id';
+
+        if ($minCount) {
+            $sql .= ' HAVING taggable_count >= ?';
+            $bindings[] = $minCount;
+        }
+
+        $sql .= ' ORDER BY taggable_count DESC';
+
+        if ($limit) {
+            $sql .= ' LIMIT ?';
+            $bindings[] = $limit;
+        }
 
         return Tag::fromQuery($sql, $bindings);
     }

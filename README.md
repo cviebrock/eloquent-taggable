@@ -299,6 +299,12 @@ $tags = Model::popularTagsNormalized($limit);
 // ]
 ```
 
+You can also provide a minimum count (i.e., only return tags that have been used 3 or more times):
+
+```php
+$tags = Model::popularTags($limit, 3);
+```
+
 (Again, the above will limit the query to one particular model.  To get a list of
 popular tag across all models, see the example below under the [TagService Class](#the-tagservice-class).)
 
@@ -346,6 +352,7 @@ $tagService->renameTags("Apple", "Apricot");
 $tagService->getPopularTags();
 $tagService->getPopularTags($limit);
 $tagService->getPopularTags($limit, \App\Model);
+$tagService->getPopularTags($limit, \App\Model, $minimumCount);
 
 // Find all the tags that aren't used by any model:
 
