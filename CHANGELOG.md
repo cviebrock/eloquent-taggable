@@ -1,5 +1,10 @@
 # Changelog
 
+## 3.0.1 - 28-Aug-2017
+
+- minor tweaks
+
+
 ## 3.0.0 - 18-Aug-2017
 
 - refactor SQL queries to be more performant
