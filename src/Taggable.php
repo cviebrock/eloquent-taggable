@@ -6,6 +6,7 @@ use Cviebrock\EloquentTaggable\Services\TagService;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Relations\MorphToMany;
+use Illuminate\Database\Query\JoinClause;
 
 
 /**
@@ -331,11 +332,9 @@ trait Taggable
         $morphForeignKeyName = $this->tags()->getQualifiedForeignKeyName();
         $morphTypeName = $morphTable . '.' . $this->tags()->getMorphType();
 
-        $closure = function($join) use ($modelKeyName, $morphForeignKeyName, $morphTypeName) {
+        $closure = function(JoinClause $join) use ($modelKeyName, $morphForeignKeyName, $morphTypeName) {
             $join->on($modelKeyName, $morphForeignKeyName)
                 ->on($morphTypeName, static::class);
-
-            return $join;
         };
 
         return $query
