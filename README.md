@@ -29,10 +29,10 @@ Easily add the ability to tag your Eloquent models in Laravel 5.
 > **NOTE**: Depending on your version of Laravel, you should install a different
 > version of the package:
 > 
-> | Laravel Version | Taggable Version |
-> |:---------------:|:----------------:|
-> |       5.4       |       3.1†       |
-> |       5.5       |       3.2        |
+> | Laravel Version | Package Version |
+> |:---------------:|:---------------:|
+> |       5.4       |      3.1†       |
+> |       5.5       |      3.2        |
 >
 > † Version 3.1 of the package requires PHP 7.0 or later, even though Laravel 5.4 doesn't.
 >
