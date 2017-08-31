@@ -1,5 +1,11 @@
 # Changelog
 
+## 3.1.0 - 31-Aug-2017
+
+- fixed package requirements and constraints
+- restricted package to Laravel 5.4
+
+
 ## 3.0.1 - 28-Aug-2017
 
 - minor tweaks
