@@ -1,5 +1,10 @@
 # Changelog
 
+## 3.2.0 - 31-Aug-2017
+
+- Laravel 5.5 support
+
+
 ## 3.1.0 - 31-Aug-2017
 
 - fixed package requirements and constraints

@@ -191,7 +191,7 @@ trait Taggable
         }
 
         $morphTagKeyName = $this->tags()->getQualifiedRelatedKeyName();
-
+//return $this->table.'.'.$this->relatedKey;
         return $this->prepareTableJoin($query, 'inner')
             ->whereIn($morphTagKeyName, $tagKeys)
             ->havingRaw("COUNT({$morphTagKeyName}) = ?", [count($tagKeys)]);
