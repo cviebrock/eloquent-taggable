@@ -190,8 +190,8 @@ trait Taggable
             return $query->where(\DB::raw(1), 0);
         }
 
-        $morphTagKeyName = $this->tags()->getQualifiedRelatedKeyName();
-//return $this->table.'.'.$this->relatedKey;
+        $morphTagKeyName = $this->tags()->getQualifiedRelatedPivotKeyName();
+
         return $this->prepareTableJoin($query, 'inner')
             ->whereIn($morphTagKeyName, $tagKeys)
             ->havingRaw("COUNT({$morphTagKeyName}) = ?", [count($tagKeys)]);
@@ -225,7 +225,7 @@ trait Taggable
 
         $tagKeys = $service->getTagModelKeys($normalized);
 
-        $morphTagKeyName = $this->tags()->getQualifiedRelatedKeyName();
+        $morphTagKeyName = $this->tags()->getQualifiedRelatedPivotKeyName();
 
         return $this->prepareTableJoin($query, 'inner')
             ->whereIn($morphTagKeyName, $tagKeys);
@@ -261,7 +261,7 @@ trait Taggable
         $tagKeys = $service->getTagModelKeys($normalized);
         $tagKeyList = implode(',', $tagKeys);
 
-        $morphTagKeyName = $this->tags()->getQualifiedRelatedKeyName();
+        $morphTagKeyName = $this->tags()->getQualifiedRelatedPivotKeyName();
 
         $query = $this->prepareTableJoin($query, 'left')
             ->havingRaw("COUNT(DISTINCT CASE WHEN ({$morphTagKeyName} IN ({$tagKeyList})) THEN {$morphTagKeyName} ELSE NULL END) < ?",
@@ -292,7 +292,7 @@ trait Taggable
         $tagKeys = $service->getTagModelKeys($normalized);
         $tagKeyList = implode(',', $tagKeys);
 
-        $morphTagKeyName = $this->tags()->getQualifiedRelatedKeyName();
+        $morphTagKeyName = $this->tags()->getQualifiedRelatedPivotKeyName();
 
         $query = $this->prepareTableJoin($query, 'left')
             ->havingRaw("COUNT(DISTINCT CASE WHEN ({$morphTagKeyName} IN ({$tagKeyList})) THEN {$morphTagKeyName} ELSE NULL END) = 0");
@@ -313,7 +313,7 @@ trait Taggable
      */
     public function scopeIsNotTagged(Builder $query): Builder
     {
-        $morphForeignKeyName = $this->tags()->getQualifiedForeignKeyName();
+        $morphForeignKeyName = $this->tags()->getQualifiedForeignPivotKeyName();
 
         return $this->prepareTableJoin($query, 'left')
             ->havingRaw("COUNT(DISTINCT {$morphForeignKeyName}) = 0");
@@ -329,7 +329,7 @@ trait Taggable
     {
         $modelKeyName = $this->getQualifiedKeyName();
         $morphTable = $this->tags()->getTable();
-        $morphForeignKeyName = $this->tags()->getQualifiedForeignKeyName();
+        $morphForeignKeyName = $this->tags()->getQualifiedForeignPivotKeyName();
         $morphTypeName = $morphTable . '.' . $this->tags()->getMorphType();
 
         $closure = function(JoinClause $join) use ($modelKeyName, $morphForeignKeyName, $morphTypeName) {
