@@ -1,5 +1,10 @@
 # Changelog
 
+## 3.1.1 - 05-Sep-2017
+
+- fix SQL error when using popular tag methods
+
+
 ## 3.1.0 - 31-Aug-2017
 
 - fixed package requirements and constraints
