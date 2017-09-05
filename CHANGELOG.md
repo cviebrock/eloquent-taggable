@@ -1,8 +1,18 @@
 # Changelog
 
+## 3.2.1 - 05-Sep-2017
+
+- fix SQL error when using popular tag methods
+
+
 ## 3.2.0 - 31-Aug-2017
 
 - Laravel 5.5 support
+
+
+## 3.1.1 - 05-Sep-2017
+
+- fix SQL error when using popular tag methods
 
 
 ## 3.1.0 - 31-Aug-2017

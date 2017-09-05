@@ -243,7 +243,7 @@ class TagService
         $bindings = [];
 
         if ($class) {
-            $sql .= ' WHERE tt.taggable_type IS ?';
+            $sql .= ' WHERE tt.taggable_type = ?';
             $bindings[] = ($class instanceof Model) ? get_class($class) : $class;
         }
 

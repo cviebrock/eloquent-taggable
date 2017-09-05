@@ -37,7 +37,8 @@ Easily add the ability to tag your Eloquent models in Laravel 5.
 > † Version 3.1 of the package requires PHP 7.0 or later, even though Laravel 5.4 doesn't.
 >
 > Older versions of Laravel can use older versions of the package, although they are no 
-> longer supported or maintained.  See [CHANGELOG.md](CHANGELOG.md) for specifics.
+> longer supported or maintained.  See [CHANGELOG.md](CHANGELOG.md) and
+> [UPGRADING.md](UPGRADING.md) for specifics.
 
 
 1. Install the `cviebrock/eloquent-taggable` package via composer:
