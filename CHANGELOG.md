@@ -3,6 +3,10 @@
 ## 3.2.2 - 06-Sep-2017
 
 - fix SQL error when using popular tag methods
+
+
+## 3.2.1 - 05-Sep-2017
+
 - fix SQL error when preparing table join
 
 
