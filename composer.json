@@ -46,7 +46,6 @@
     },
     "scripts": {
         "test": [
-            "parallel-lint . --exclude vendor",
             "phpunit"
         ]
     },
