@@ -334,7 +334,7 @@ trait Taggable
 
         $closure = function(JoinClause $join) use ($modelKeyName, $morphForeignKeyName, $morphTypeName) {
             $join->on($modelKeyName, $morphForeignKeyName)
-                ->on($morphTypeName, static::class);
+                ->where($morphTypeName, static::class);
         };
 
         return $query
