@@ -1,8 +1,9 @@
 # Changelog
 
-## 3.2.1 - 05-Sep-2017
+## 3.2.2 - 06-Sep-2017
 
 - fix SQL error when using popular tag methods
+- fix SQL error when preparing table join
 
 
 ## 3.2.0 - 31-Aug-2017
