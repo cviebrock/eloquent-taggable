@@ -45,6 +45,10 @@
         }
     },
     "scripts": {
+        "fresh": [
+            "rm -rf vendor composer.lock",
+            "composer install"
+        ],
         "test": [
             "phpunit"
         ]
