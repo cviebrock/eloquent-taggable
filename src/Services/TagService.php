@@ -247,7 +247,8 @@ class TagService
             $bindings[] = ($class instanceof Model) ? get_class($class) : $class;
         }
 
-        $sql .= ' GROUP BY t.tag_id';
+        // group by everything to handle strict and non-strict mode in MySQL
+        $sql .= ' GROUP BY t.tag_id, t.name, t.normalized, t.created_at, t.updated_at';
 
         if ($minCount) {
             $sql .= ' HAVING taggable_count >= ?';
