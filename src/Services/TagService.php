@@ -237,7 +237,7 @@ class TagService
      *
      * @return \Illuminate\Database\Eloquent\Collection
      */
-    public function getPopularTags(int $limit = null, $class = null, int $minCount = null): Collection
+    public function getPopularTags(int $limit = null, $class = null, int $minCount = 1): Collection
     {
         $sql = 'SELECT t.*, COUNT(t.tag_id) AS taggable_count FROM taggable_tags t LEFT JOIN taggable_taggables tt ON tt.tag_id=t.tag_id';
         $bindings = [];
@@ -250,7 +250,7 @@ class TagService
         // group by everything to handle strict and non-strict mode in MySQL
         $sql .= ' GROUP BY t.tag_id, t.name, t.normalized, t.created_at, t.updated_at';
 
-        if ($minCount) {
+        if ($minCount > 1) {
             $sql .= ' HAVING taggable_count >= ?';
             $bindings[] = $minCount;
         }
