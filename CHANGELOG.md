@@ -1,5 +1,10 @@
 # Changelog
 
+## 3.2.3 - 01-Nov-2017
+
+- various bug fixes
+
+
 ## 3.2.2 - 06-Sep-2017
 
 - fix SQL error when using popular tag methods

@@ -397,7 +397,7 @@ trait Taggable
      *
      * @return array
      */
-    public static function popularTags(int $limit = null, int $minCount = null): array
+    public static function popularTags(int $limit = null, int $minCount = 1): array
     {
         /** @var Collection $tags */
         $tags = app(TagService::class)->getPopularTags($limit, static::class, $minCount);
@@ -413,7 +413,7 @@ trait Taggable
      *
      * @return array
      */
-    public static function popularTagsNormalized(int $limit = null, int $minCount = null): array
+    public static function popularTagsNormalized(int $limit = null, int $minCount = 1): array
     {
         /** @var Collection $tags */
         $tags = app(TagService::class)->getPopularTags($limit, static::class, $minCount);
