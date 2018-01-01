@@ -1,5 +1,11 @@
 # Changelog
 
+## 3.2.5 - 01-Jan-2018
+
+- fix when tagging with the same tag multiple times in one call
+- prettier PHPUnit output
+
+
 ## 3.2.4 - 28-Dec-2017
 
 - fix in migration connection

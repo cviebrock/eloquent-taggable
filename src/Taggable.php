@@ -17,6 +17,7 @@ use Illuminate\Database\Query\JoinClause;
 trait Taggable
 {
 
+
     /**
      * Get a collection of all tags the model has.
      *
@@ -41,9 +42,10 @@ trait Taggable
 
         foreach ($tags as $tagName) {
             $this->addOneTag($tagName);
+            $this->load('tags');
         }
 
-        return $this->load('tags');
+        return $this;
     }
 
     /**
@@ -96,9 +98,10 @@ trait Taggable
     protected function addOneTag(string $tagName)
     {
         $tag = app(TagService::class)->findOrCreate($tagName);
+        $tagKey = $tag->getKey();
 
-        if (!$this->tags->contains($tag->getKey())) {
-            $this->tags()->attach($tag->getKey());
+        if (!$this->tags->contains($tagKey)) {
+            $this->tags()->attach($tagKey);
         }
     }
 

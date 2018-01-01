@@ -167,4 +167,17 @@ class TaggingTests extends TestCase
         $this->assertEquals('string', gettype($tagAsString));
         $this->assertEquals('Apple', $tagAsString);
     }
+
+    /**
+     * Test that tagging a model with duplicate tags only
+     * tags the model once
+     */
+    public function testNonDuplicateTagging()
+    {
+        $this->testModel->tag('Apple, Apple');
+        $this->assertCount(1, $this->testModel->tags);
+
+        $this->testModel->tag(['Banana', 'banana', 'BaNaNa ']);
+        $this->assertCount(2, $this->testModel->tags);
+    }
 }

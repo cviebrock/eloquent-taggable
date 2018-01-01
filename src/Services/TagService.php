@@ -54,25 +54,26 @@ class TagService
     public function buildTagArray($tags): array
     {
         if (is_array($tags)) {
-            return $tags;
-        }
-
-        if ($tags instanceof BaseCollection) {
-            return $this->buildTagArray($tags->all());
-        }
-
-        if (is_string($tags)) {
-            return preg_split(
+            $array = $tags;
+        } elseif ($tags instanceof BaseCollection) {
+            $array = $this->buildTagArray($tags->all());
+        } elseif (is_string($tags)) {
+            $array = preg_split(
                 '#[' . preg_quote(config('taggable.delimiters'), '#') . ']#',
                 $tags,
                 null,
                 PREG_SPLIT_NO_EMPTY
             );
+        } else {
+
+            throw new \ErrorException(
+                __CLASS__ . '::' . __METHOD__ . ' expects parameter 1 to be string, array or Collection; ' .
+                gettype($tags) . ' given'
+            );
         }
 
-        throw new \ErrorException(
-            __CLASS__ . '::' . __METHOD__ . ' expects parameter 1 to be string, array or Collection; ' .
-            gettype($tags) . ' given'
+        return array_filter(
+            array_map('trim', $array)
         );
     }
 

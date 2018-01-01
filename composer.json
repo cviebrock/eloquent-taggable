@@ -27,6 +27,7 @@
         "illuminate/support": "~5.5.0"
     },
     "require-dev": {
+        "codedungeon/phpunit-result-printer": "^0.4.4",
         "friendsofphp/php-cs-fixer": "^1.11",
         "mockery/mockery": "^0.9.4",
         "orchestra/database": "~3.5.0",
