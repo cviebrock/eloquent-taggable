@@ -2,6 +2,9 @@
 
 Easily add the ability to tag your Eloquent models in Laravel 5.
 
+> **NOTE**: These instructions are for Laravel 5.6.  If you are using Laravel 5.5, please
+> see the [previous version docs](https://github.com/cviebrock/eloquent-taggable/tree/3.2).
+
 [![Build Status](https://travis-ci.org/cviebrock/eloquent-taggable.svg?branch=master&format=flat)](https://travis-ci.org/cviebrock/eloquent-taggable)
 [![Total Downloads](https://poser.pugx.org/cviebrock/eloquent-taggable/downloads?format=flat)](https://packagist.org/packages/cviebrock/eloquent-taggable)
 [![Latest Stable Version](https://poser.pugx.org/cviebrock/eloquent-taggable/v/stable?format=flat)](https://packagist.org/packages/cviebrock/eloquent-taggable)
@@ -31,14 +34,17 @@ Easily add the ability to tag your Eloquent models in Laravel 5.
 > 
 > | Laravel Version | Package Version |
 > |:---------------:|:---------------:|
-> |       5.4       |      3.1†       |
+> |       5.6       |      3.3        |
 > |       5.5       |      3.2        |
+> |       5.4       |      3.1†       |
 >
 > † Version 3.1 of the package requires PHP 7.0 or later, even though Laravel 5.4 doesn't.
 >
-> Older versions of Laravel can use older versions of the package, although they are no 
-> longer supported or maintained.  See [CHANGELOG.md](CHANGELOG.md) and
-> [UPGRADING.md](UPGRADING.md) for specifics.
+> Older versions of Laravel can use older versions of the package, although they 
+> are no longer supported or maintained.  See [CHANGELOG.md](CHANGELOG.md) and
+> [UPGRADING.md](UPGRADING.md) for specifics, and be sure that you are reading 
+> the correct README.md for your version (Github displays the version in 
+> the _master_ branch by default, which might not be what you want).
 
 
 1. Install the `cviebrock/eloquent-taggable` package via composer:

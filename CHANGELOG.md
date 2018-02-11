@@ -1,5 +1,10 @@
 # Changelog
 
+## 3.3.0 - 10-Feb-2018
+
+- Laravel 5.6 support
+
+
 ## 3.2.5 - 01-Jan-2018
 
 - fix when tagging with the same tag multiple times in one call
