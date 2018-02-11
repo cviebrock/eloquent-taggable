@@ -1,5 +1,11 @@
 # Changelog
 
+## 3.3.1 - 10-Feb-2018
+
+- support custom Tag classes
+- support custom polymorphic types via getMorphClass()
+
+
 ## 3.3.0 - 10-Feb-2018
 
 - Laravel 5.6 support

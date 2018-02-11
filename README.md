@@ -373,6 +373,7 @@ return [
     'connection'           => null,
     'throwEmptyExceptions' => false,
     'taggedModels'         => [],
+    'model'                => \Cviebrock\EloquentTaggable\Models\Tag::class,
 ];
 ```
 
@@ -479,6 +480,13 @@ $posts = Tag::findByName('Apple')->posts;
 ```
 
 This will return a collection of all the Posts that are tagged "Apple".
+
+### model
+
+By default, the package will use it's own model class for Tags.  If you want to
+use your own customized Tag model, then extend the package's class with 
+your own class, and update the configuration to reference your model. 
+
 
 
 ## Bugs, Suggestions and Contributions

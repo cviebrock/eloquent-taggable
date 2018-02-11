@@ -53,8 +53,11 @@ return [
      */
 
     'taggedModels' => [],
+
     /**
-     *	 Model to use to store the tags in the database
+     * The model used to store the tags in the database.  You can
+     * create your own class that extends the package's Tag model,
+     * then update the configuration below.
      */
     'model'  => \Cviebrock\EloquentTaggable\Models\Tag::class,
 ];

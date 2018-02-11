@@ -1,7 +1,6 @@
 <?php namespace Cviebrock\EloquentTaggable;
 
 use Cviebrock\EloquentTaggable\Exceptions\NoTagsSpecifiedException;
-use Cviebrock\EloquentTaggable\Models\Tag;
 use Cviebrock\EloquentTaggable\Services\TagService;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
@@ -16,7 +15,6 @@ use Illuminate\Database\Query\JoinClause;
  */
 trait Taggable
 {
-
 
     /**
      * Get a collection of all tags the model has.

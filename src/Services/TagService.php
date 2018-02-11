@@ -1,4 +1,5 @@
 <?php
+
 namespace Cviebrock\EloquentTaggable\Services;
 
 use Cviebrock\EloquentTaggable\Models\Tag;
@@ -13,17 +14,23 @@ use Illuminate\Support\Collection as BaseCollection;
  */
 class TagService
 {
+
+    /**
+     * @var Tag
+     */
     protected $tagModel;
+
     public function __construct()
     {
-        $this->tagModel = config('taggable.model');
+        $this->tagModel = config('taggable.model', Tag::class);
     }
+
     /**
      * Find an existing tag by name.
      *
      * @param string $tagName
      *
-     * @return \Cviebrock\EloquentTaggable\Models\Tag|null
+     * @return Tag|null
      */
     public function find(string $tagName)
     {
@@ -35,7 +42,7 @@ class TagService
      *
      * @param string $tagName
      *
-     * @return \Cviebrock\EloquentTaggable\Models\Tag
+     * @return Tag
      */
     public function findOrCreate(string $tagName): Tag
     {
@@ -268,7 +275,7 @@ class TagService
             $bindings[] = $limit;
         }
 
-        return Tag::fromQuery($sql, $bindings);
+        return $this->tagModel::fromQuery($sql, $bindings);
     }
 
     /**
