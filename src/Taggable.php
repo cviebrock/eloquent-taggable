@@ -334,10 +334,11 @@ trait Taggable
         $morphTable = $this->tags()->getTable();
         $morphForeignKeyName = $this->tags()->getQualifiedForeignPivotKeyName();
         $morphTypeName = $morphTable . '.' . $this->tags()->getMorphType();
+        $morphClass = $this->tags()->getMorphClass();
 
-        $closure = function(JoinClause $join) use ($modelKeyName, $morphForeignKeyName, $morphTypeName) {
+        $closure = function(JoinClause $join) use ($modelKeyName, $morphForeignKeyName, $morphTypeName, $morphClass) {
             $join->on($modelKeyName, $morphForeignKeyName)
-                ->where($morphTypeName, static::class);
+                ->where($morphTypeName, $morphClass);
         };
 
         return $query
