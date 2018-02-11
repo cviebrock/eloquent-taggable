@@ -2,6 +2,9 @@
 
 Easily add the ability to tag your Eloquent models in Laravel 5.
 
+> **NOTE**: These instructions are for Laravel 5.6.  If you are using Laravel 5.5, please
+> see the [previous version docs](https://github.com/cviebrock/eloquent-taggable/tree/3.2).
+
 [![Build Status](https://travis-ci.org/cviebrock/eloquent-taggable.svg?branch=master&format=flat)](https://travis-ci.org/cviebrock/eloquent-taggable)
 [![Total Downloads](https://poser.pugx.org/cviebrock/eloquent-taggable/downloads?format=flat)](https://packagist.org/packages/cviebrock/eloquent-taggable)
 [![Latest Stable Version](https://poser.pugx.org/cviebrock/eloquent-taggable/v/stable?format=flat)](https://packagist.org/packages/cviebrock/eloquent-taggable)
@@ -29,40 +32,36 @@ Easily add the ability to tag your Eloquent models in Laravel 5.
 > **NOTE**: Depending on your version of Laravel, you should install a different
 > version of the package:
 > 
-> | Laravel Version | Taggable Version |
-> |:---------------:|:----------------:|
-> |       4.2       |       1.0        |
-> |  5.1, 5.2, 5.3  |       2.0        |
-> |       5.4       |     2.1, 3.0†    |
-> |       5.5       |       3.0        |
+> | Laravel Version | Package Version |
+> |:---------------:|:---------------:|
+> |       5.6       |      3.3        |
+> |       5.5       |      3.2        |
+> |       5.4       |      3.1†       |
 >
-> † Version 3.0 of the package requires PHP 7.0 or later, even though Laravel 5.4 doesn't.
+> † Version 3.1 of the package requires PHP 7.0 or later, even though Laravel 5.4 doesn't.
+>
+> Older versions of Laravel can use older versions of the package, although they 
+> are no longer supported or maintained.  See [CHANGELOG.md](CHANGELOG.md) and
+> [UPGRADING.md](UPGRADING.md) for specifics, and be sure that you are reading 
+> the correct README.md for your version (Github displays the version in 
+> the _master_ branch by default, which might not be what you want).
 
 
 1. Install the `cviebrock/eloquent-taggable` package via composer:
 
-    ```shell
-    $ composer require cviebrock/eloquent-taggable:^3.0
+    ```sh
+    $ composer require cviebrock/eloquent-taggable
     ```
     
-2. Unless you are using Laravel 5.5 and it's package auto-discovery, you will
-need to add the service provider to `config/app.php`:
+    The package will automatically register itself.
 
-    ```php
-    # Add the service provider to the `providers` array
-    'providers' => [
-        ...
-        \Cviebrock\EloquentTaggable\ServiceProvider::class,
-    ]
-    ```
+2. Publish the configuration file and migrations:
 
-3. Publish the configuration file and migrations
-
-    ```shell
+    ```sh
     php artisan vendor:publish --provider="Cviebrock\EloquentTaggable\ServiceProvider"
     ```
 
-4. Finally, use artisan to run the migration to create the required tables.
+3. Finally, use artisan to run the migration to create the required tables:
 
     ```sh
     composer dump-autoload
@@ -271,6 +270,44 @@ Model::allTagModels();
 ```
 
 
+## Other Methods
+
+You can rename a tag for your model:
+
+```php
+Model::rename('Apple', 'Apricot');
+```
+
+This will only affect instances of `Model` that were tagged "Apple".  If another model was also tagged
+"Apple", those tags won't be renamed.  (To rename a tag across all models, see the example below under
+the [TagService Class](#the-tagservice-class).)
+
+You can also get a list of popular tags for your model (including the model count):
+
+```php
+$tags = Model::popularTags($limit);
+$tags = Model::popularTagsNormalized($limit);
+
+// Will return an array like:
+//
+// [
+//     'apple' => 5,
+//     'banana' => 3,
+//     'durian' => 3,
+//     'cherry' => 2,
+// ]
+```
+
+You can also provide a minimum count (i.e., only return tags that have been used 3 or more times):
+
+```php
+$tags = Model::popularTags($limit, 3);
+```
+
+(Again, the above will limit the query to one particular model.  To get a list of
+popular tag across all models, see the example below under the [TagService Class](#the-tagservice-class).)
+
+
 ## The Tag Model
 
 There are a few methods you can run on the Tag model itself.
@@ -308,6 +345,13 @@ $tagService->renameTags("Apple", "Apricot", \App\Model);
 // Rename all tags from "Apple" to "Apricot" across all models:
 
 $tagService->renameTags("Apple", "Apricot");
+
+// Get the most popular tags across all models, or for just one model:
+
+$tagService->getPopularTags();
+$tagService->getPopularTags($limit);
+$tagService->getPopularTags($limit, \App\Model);
+$tagService->getPopularTags($limit, \App\Model, $minimumCount);
 
 // Find all the tags that aren't used by any model:
 

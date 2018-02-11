@@ -380,4 +380,98 @@ class TagServiceTests extends TestCase
 
         $this->assertEquals(0, $count);
     }
+
+    /**
+     * Test getting popular tags.
+     */
+    public function preparePopularTags()
+    {
+        // Generate some models and tags
+        $this->newModel()->tag('Apple,Banana,Cherry');
+        $this->newModel()->tag('Apple,Banana,Cherry');
+        $this->newModel()->tag('Apple,Banana');
+        $this->newModel()->tag('Apple,Cherry');
+        $this->newModel()->tag('Apple,Cherry,Durian');
+        $this->newModel()->tag('Apple,Durian');
+
+        $this->newDummy()->tag('Apple,Cherry,Durian');
+        $this->newDummy()->tag('Cherry,Durian');
+        $this->newDummy()->tag('Durian');
+    }
+
+    /**
+     * Test getting popular tags.
+     */
+    public function testPopularTags()
+    {
+        $this->preparePopularTags();
+
+        // test all popular tags
+        $popular = $this->service->getPopularTags();
+
+        $this->assertCount(4, $popular);
+
+        $popularNames = implode(',', $popular->pluck('name')->toArray());
+        $this->assertEquals('Apple,Cherry,Durian,Banana', $popularNames);
+    }
+
+    /**
+     * Test getting popular tags with a limit.
+     */
+    public function testPopularTagsWithLimit()
+    {
+        $this->preparePopularTags();
+
+        $popular = $this->service->getPopularTags(2);
+
+        $this->assertCount(2, $popular);
+
+        $popularNames = implode(',', $popular->pluck('name')->toArray());
+        $this->assertEquals('Apple,Cherry', $popularNames);
+    }
+
+    /**
+     * Test getting popular tags with a limit and a model.
+     */
+    public function testPopularTagsWithLimitAndModel()
+    {
+        $this->preparePopularTags();
+
+        $popular = $this->service->getPopularTags(2, TestDummy::class);
+
+        $this->assertCount(2, $popular);
+
+        $popularNames = implode(',', $popular->pluck('name')->toArray());
+        $this->assertEquals('Durian,Cherry', $popularNames);
+    }
+
+    /**
+     * Test getting popular tags with a minimum count.
+     */
+    public function testPopularTagsWithMinimum()
+    {
+        $this->preparePopularTags();
+
+        $popular = $this->service->getPopularTags(10, null, 5);
+
+        $this->assertCount(3, $popular);
+
+        $popularNames = implode(',', $popular->pluck('name')->toArray());
+        $this->assertEquals('Apple,Cherry,Durian', $popularNames);
+    }
+
+    /**
+     * Test getting popular tags with a model minimum count.
+     */
+    public function testPopularTagsWithModelAndMinimum()
+    {
+        $this->preparePopularTags();
+
+        $popular = $this->service->getPopularTags(10, TestModel::class, 5);
+
+        $this->assertCount(1, $popular);
+
+        $popularNames = implode(',', $popular->pluck('name')->toArray());
+        $this->assertEquals('Apple', $popularNames);
+    }
 }

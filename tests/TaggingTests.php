@@ -126,6 +126,20 @@ class TaggingTests extends TestCase
     }
 
     /**
+     * Test retagging a model that has no tags.
+     */
+    public function testRetaggingOnUntagged()
+    {
+        $this->testModel->tag('Etrog,Fig,Grape');
+
+        $this->assertCount(3, $this->testModel->tags);
+        $this->assertArrayValuesAreEqual(
+            ['Etrog', 'Fig', 'Grape'],
+            $this->testModel->getTagArrayAttribute()
+        );
+    }
+
+    /**
      * Test tag normalization.
      */
     public function testNormalization()
@@ -152,5 +166,18 @@ class TaggingTests extends TestCase
 
         $this->assertEquals('string', gettype($tagAsString));
         $this->assertEquals('Apple', $tagAsString);
+    }
+
+    /**
+     * Test that tagging a model with duplicate tags only
+     * tags the model once
+     */
+    public function testNonDuplicateTagging()
+    {
+        $this->testModel->tag('Apple, Apple');
+        $this->assertCount(1, $this->testModel->tags);
+
+        $this->testModel->tag(['Banana', 'banana', 'BaNaNa ']);
+        $this->assertCount(2, $this->testModel->tags);
     }
 }

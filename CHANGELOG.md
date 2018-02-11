@@ -1,6 +1,58 @@
 # Changelog
 
-## 3.0.0 - 23-Jun-2017
+## 3.3.0 - 10-Feb-2018
+
+- Laravel 5.6 support
+
+
+## 3.2.5 - 01-Jan-2018
+
+- fix when tagging with the same tag multiple times in one call
+- prettier PHPUnit output
+
+
+## 3.2.4 - 28-Dec-2017
+
+- fix in migration connection
+
+
+## 3.2.3 - 01-Nov-2017
+
+- various bug fixes
+
+
+## 3.2.2 - 06-Sep-2017
+
+- fix SQL error when using popular tag methods
+
+
+## 3.2.1 - 05-Sep-2017
+
+- fix SQL error when preparing table join
+
+
+## 3.2.0 - 31-Aug-2017
+
+- Laravel 5.5 support
+
+
+## 3.1.1 - 05-Sep-2017
+
+- fix SQL error when using popular tag methods
+
+
+## 3.1.0 - 31-Aug-2017
+
+- fixed package requirements and constraints
+- restricted package to Laravel 5.4
+
+
+## 3.0.1 - 28-Aug-2017
+
+- minor tweaks
+
+
+## 3.0.0 - 18-Aug-2017
 
 - refactor SQL queries to be more performant
 - add new and rename scope queries:
@@ -14,6 +66,13 @@
     - `allTagModels`
     - `allTags`
     - `allTagsList`
+    - `renameTag`
+    - `popularTags`
+    - `popularTagsNormalized`
+- new/improved service methods:
+    - `getAllUnusedTags`
+    - `getPopularTags`
+    - `renameTags`
 - better test coverage
 
 

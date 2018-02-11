@@ -3,6 +3,7 @@
 use Cviebrock\EloquentTaggable\Services\TagService;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\MorphToMany;
 
 
 /**
@@ -61,7 +62,7 @@ class Tag extends Model
      *
      * @return \Illuminate\Database\Eloquent\Builder
      */
-    public function scopeByName(Builder $query, $value)
+    public function scopeByName(Builder $query, string $value): Builder
     {
         $normalized = app(TagService::class)->normalize($value);
 
@@ -98,7 +99,7 @@ class Tag extends Model
      *
      * @return \Illuminate\Database\Eloquent\Relations\MorphToMany
      */
-    protected function taggedModels($class)
+    protected function taggedModels(string $class): MorphToMany
     {
         return $this->morphedByMany($class, 'taggable', 'taggable_taggables', 'tag_id');
     }
@@ -110,7 +111,7 @@ class Tag extends Model
      *
      * @return static|null
      */
-    public static function findByName($value)
+    public static function findByName(string $value)
     {
         return app(TagService::class)->find($value);
     }
@@ -118,7 +119,7 @@ class Tag extends Model
     /**
      * @inheritdoc
      */
-    public function __toString()
+    public function __toString(): string
     {
         return (string) $this->getAttribute('name');
     }

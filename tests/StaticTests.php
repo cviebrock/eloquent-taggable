@@ -31,9 +31,10 @@ class StaticTests extends TestCase
         // build some test models
         $this->testModel = $this->newModel()->tag('Apple,Banana,Cherry');
         $this->testModel2 = $this->newModel()->tag('Apple,Cherry');
+        $this->testModel3 = $this->newModel()->tag('Apple');
 
         // build another model
-        $this->testDummy = $this->newDummy()->tag('Durian');
+        $this->testDummy = $this->newDummy()->tag('Apple,Durian');
     }
 
     /**
@@ -54,5 +55,81 @@ class StaticTests extends TestCase
         $tags = TestModel::allTagsList();
 
         $this->assertEquals('Apple,Banana,Cherry', $tags);
+    }
+
+    /**
+     * Test renaming the tags for a model.
+     */
+    public function testRenameTags()
+    {
+        TestModel::renameTag('Apple', 'Apricot');
+
+        $tags = TestModel::allTagsList();
+        $this->assertEquals('Apricot,Banana,Cherry', $tags);
+
+        // make sure the second model's tags didn't get renamed
+
+        $tags = TestDummy::allTagsList();
+        $this->assertEquals('Apple,Durian', $tags);
+    }
+
+    /**
+     * Test getting the popular tags for a model.
+     */
+    public function testPopularTags()
+    {
+        $tags = TestModel::popularTags();
+        $expected = [
+            'Apple'  => 3,
+            'Cherry' => 2,
+            'Banana' => 1,
+        ];
+
+        $this->assertArrayValuesAreEqual($expected, $tags);
+    }
+
+    /**
+     * Test getting the popular tags for a model, normalized.
+     */
+    public function testPopularTagsNormalized()
+    {
+        $tags = TestModel::popularTagsNormalized();
+        $expected = [
+            'apple'  => 3,
+            'cherry' => 2,
+            'banana' => 1,
+        ];
+
+        $this->assertArrayValuesAreEqual($expected, $tags);
+    }
+
+    /**
+     * Test getting the popular tags for a model, with a limit.
+     */
+    public function testPopularTagsLimited()
+    {
+        $tags = TestModel::popularTags(2);
+
+        $expected = [
+            'Apple'  => 3,
+            'Cherry' => 2,
+        ];
+
+        $this->assertArrayValuesAreEqual($expected, $tags);
+    }
+
+    /**
+     * Test getting the popular tags for a model, with a limit.
+     */
+    public function testPopularTagsLimitedNormalized()
+    {
+        $tags = TestModel::popularTagsNormalized(2);
+
+        $expected = [
+            'apple'  => 3,
+            'cherry' => 2,
+        ];
+
+        $this->assertArrayValuesAreEqual($expected, $tags);
     }
 }
