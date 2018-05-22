@@ -1,5 +1,10 @@
 # Changelog
 
+## 3.3.2 - 21-May-2018
+
+- bump dependency versions
+
+
 ## 3.3.1 - 10-Feb-2018
 
 - support custom Tag classes
