@@ -55,7 +55,7 @@ Easily add the ability to tag your Eloquent models in Laravel 5.
     
     The package will automatically register itself.
 
-2. Publish the configuration file and migrations:
+2. Publish the configuration file:
 
     ```sh
     php artisan vendor:publish --provider="Cviebrock\EloquentTaggable\ServiceProvider"
@@ -67,6 +67,8 @@ Easily add the ability to tag your Eloquent models in Laravel 5.
     composer dump-autoload
     php artisan migrate
     ```
+    
+   (Note that the migration file isn't published to your application, but will run anyway.)
 
 
 ## Updating your Eloquent Models
