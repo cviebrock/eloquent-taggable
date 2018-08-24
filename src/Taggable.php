@@ -17,6 +17,20 @@ trait Taggable
 {
 
     /**
+     * Boot the trait.
+     *
+     * Listen for the deleting event of a model, then remove the relation between it and tags
+     */
+    protected static function bootTaggable()
+    {
+        static::deleting(function ($model) {
+            if (!method_exists($model, 'runSoftDelete') || $model->isForceDeleting()) {
+                $model->detag();
+            }
+        });
+    }
+
+    /**
      * Get a collection of all tags the model has.
      *
      * @return \Illuminate\Database\Eloquent\Relations\MorphToMany
