@@ -2,8 +2,8 @@
 
 Easily add the ability to tag your Eloquent models in Laravel 5.
 
-> **NOTE**: These instructions are for Laravel 5.6.  If you are using Laravel 5.5, please
-> see the [previous version docs](https://github.com/cviebrock/eloquent-taggable/tree/3.2).
+> **NOTE**: These instructions are for Laravel 5.7.  If you are using Laravel 5.6, please
+> see the [previous version docs](https://github.com/cviebrock/eloquent-taggable/tree/3.3).
 
 [![Build Status](https://travis-ci.org/cviebrock/eloquent-taggable.svg?branch=master&format=flat)](https://travis-ci.org/cviebrock/eloquent-taggable)
 [![Total Downloads](https://poser.pugx.org/cviebrock/eloquent-taggable/downloads?format=flat)](https://packagist.org/packages/cviebrock/eloquent-taggable)
@@ -21,7 +21,7 @@ Easily add the ability to tag your Eloquent models in Laravel 5.
 * [The Tag Model](#the-tag-model)
 * [The TagService Class](#the-tagservice-class)
 * [Configuration](#configuration)
-* [Bugs, Suggestions and Contributions](#bugs-suggestions-and-contributions)
+* [Bugs, Suggestions, Contributions and Support](#bugs-suggestions-contributions-and-support)
 * [Copyright and License](#copyright-and-license)
 
 
@@ -34,9 +34,10 @@ Easily add the ability to tag your Eloquent models in Laravel 5.
 > 
 > | Laravel Version | Package Version |
 > |:---------------:|:---------------:|
-> |       5.6       |      3.3        |
-> |       5.5       |      3.2        |
-> |       5.4       |      3.1†       |
+> |       5.7       |     3.4.*       |
+> |       5.6       |     3.3.*       |
+> |       5.5       |     3.2.*       |
+> |       5.4       |     3.1.*†      |
 >
 > † Version 3.1 of the package requires PHP 7.0 or later, even though Laravel 5.4 doesn't.
 >
@@ -53,7 +54,7 @@ Easily add the ability to tag your Eloquent models in Laravel 5.
     $ composer require cviebrock/eloquent-taggable
     ```
     
-    The package will automatically register itself.
+    The package will automatically register its service provider.
 
 2. Publish the configuration file:
 
@@ -491,11 +492,17 @@ your own class, and update the configuration to reference your model.
 
 
 
-## Bugs, Suggestions and Contributions
+## Bugs, Suggestions, Contributions and Support
 
 Thanks to [everyone](https://github.com/cviebrock/eloquent-taggable/graphs/contributors)
 who has contributed to this project, with a big shout-out to 
-[Michael Riediger](https://stackoverflow.com/users/502502/riedsio) for help optimizing the SQL.
+[Michael Riediger](https://stackoverflow.com/users/502502/riedsio) for help optimizing the SQL. 
+
+Special thanks to 
+[JetBrains](https://www.jetbrains.com/?from=cviebrock/eloquent-sluggable) for their 
+Open Source License Program ... and the excellent PHPStorm IDE, of course!
+
+[![JetBrains](./.github/jetbrains.svg)](https://www.jetbrains.com/?from=cviebrock/eloquent-sluggable)
 
 Please use [Github](https://github.com/cviebrock/eloquent-taggable) for reporting bugs, 
 and making comments or suggestions.

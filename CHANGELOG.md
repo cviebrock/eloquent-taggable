@@ -1,5 +1,10 @@
 # Changelog
 
+## 3.4.0 - 04-Sep-2018
+
+- Laravel 5.7 support
+
+
 ## 3.3.2 - 21-May-2018
 
 - bump dependency versions
