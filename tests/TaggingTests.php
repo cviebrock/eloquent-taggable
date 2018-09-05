@@ -180,4 +180,23 @@ class TaggingTests extends TestCase
         $this->testModel->tag(['Banana', 'banana', 'BaNaNa ']);
         $this->assertCount(2, $this->testModel->tags);
     }
+
+    /**
+     * Test that a deleted model removes relation with tags
+     */
+    public function testDeleteModel()
+    {
+        $this->testModel->tag('Apple');
+        $this->testModel->delete(); // the model is now soft deleted
+        $this->assertCount(1, $this->testModel->tags);
+
+        $this->testModel->forceDelete();
+        $this->assertCount(0, $this->testModel->tags);
+
+        // the dummy has not soft delete logic
+        $dummy = $this->newDummy();
+        $dummy->tag('Apple');
+        $dummy->delete();
+        $this->assertCount(0, $dummy->tags);
+    }
 }
