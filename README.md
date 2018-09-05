@@ -499,10 +499,10 @@ who has contributed to this project, with a big shout-out to
 [Michael Riediger](https://stackoverflow.com/users/502502/riedsio) for help optimizing the SQL. 
 
 Special thanks to 
-[JetBrains](https://www.jetbrains.com/?from=cviebrock/eloquent-sluggable) for their 
+[JetBrains](https://www.jetbrains.com/?from=cviebrock/eloquent-taggable) for their 
 Open Source License Program ... and the excellent PHPStorm IDE, of course!
 
-[![JetBrains](./.github/jetbrains.svg)](https://www.jetbrains.com/?from=cviebrock/eloquent-sluggable)
+[![JetBrains](./.github/jetbrains.svg)](https://www.jetbrains.com/?from=cviebrock/eloquent-taggable)
 
 Please use [Github](https://github.com/cviebrock/eloquent-taggable) for reporting bugs, 
 and making comments or suggestions.
