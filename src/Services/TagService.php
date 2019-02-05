@@ -194,7 +194,7 @@ class TagService
             $class = get_class($class);
         }
 
-        $sql = 'SELECT DISTINCT t.* FROM taggable_taggables tt LEFT JOIN taggable_tags t ON tt.tag_id=t.tag_id' .
+        $sql = 'SELECT DISTINCT t.* FROM '.env('DB_TABLE_PREFIX', '').'taggable_taggables tt LEFT JOIN '.env('DB_TABLE_PREFIX', '').'taggable_tags t ON tt.tag_id=t.tag_id' .
             ' WHERE tt.taggable_type = ?';
 
         return $this->tagModel::fromQuery($sql, [$class]);
@@ -235,7 +235,7 @@ class TagService
      */
     public function getAllUnusedTags(): Collection
     {
-        $sql = 'SELECT t.* FROM taggable_tags t LEFT JOIN taggable_taggables tt ON tt.tag_id=t.tag_id ' .
+        $sql = 'SELECT t.* FROM '.env('DB_TABLE_PREFIX', '').'taggable_tags t LEFT JOIN '.env('DB_TABLE_PREFIX', '').'taggable_taggables tt ON tt.tag_id=t.tag_id ' .
             'WHERE tt.taggable_id IS NULL';
 
         return $this->tagModel::fromQuery($sql);
@@ -252,7 +252,7 @@ class TagService
      */
     public function getPopularTags(int $limit = null, $class = null, int $minCount = 1): Collection
     {
-        $sql = 'SELECT t.*, COUNT(t.tag_id) AS taggable_count FROM taggable_tags t LEFT JOIN taggable_taggables tt ON tt.tag_id=t.tag_id';
+        $sql = 'SELECT t.*, COUNT(t.tag_id) AS taggable_count FROM '.env('DB_TABLE_PREFIX', '').'taggable_tags t LEFT JOIN '.env('DB_TABLE_PREFIX', '').'taggable_taggables tt ON tt.tag_id=t.tag_id';
         $bindings = [];
 
         if ($class) {

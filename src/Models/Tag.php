@@ -101,7 +101,7 @@ class Tag extends Model
      */
     protected function taggedModels(string $class): MorphToMany
     {
-        return $this->morphedByMany($class, 'taggable', 'taggable_taggables', 'tag_id');
+        return $this->morphedByMany($class, 'taggable', env('DB_TABLE_PREFIX', '').'taggable_taggables', 'tag_id');
     }
 
     /**
