@@ -263,7 +263,12 @@ class TagService
      */
     public function getPopularTags(int $limit = null, $class = null, int $minCount = 1): Collection
     {
-        $sql = 'SELECT t.*, COUNT(t.tag_id) AS taggable_count FROM taggable_tags t LEFT JOIN taggable_taggables tt ON tt.tag_id=t.tag_id';
+        $tagTable = $this->getQualifiedTagTableName();
+        $pivotTable = $this->getQualifiedPivotTableName();
+
+        $sql = "SELECT t.*, COUNT(t.tag_id) AS taggable_count 
+            FROM {$tagTable} t 
+            LEFT JOIN {$pivotTable} tt ON tt.tag_id=t.tag_id";
         $bindings = [];
 
         if ($class) {

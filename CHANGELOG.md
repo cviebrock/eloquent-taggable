@@ -3,6 +3,8 @@
 ## 3.5.0 - 28-Feb-2018
 
 - Laravel 5.8 support
+- fix `getAllTags()`, `getUnusedTags()` and `getPopularTags()` 
+  when using a table prefix (#84, @tuxfamily)
 
 
 ## 3.4.1 - 04-Sep-2018

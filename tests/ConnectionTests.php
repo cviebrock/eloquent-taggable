@@ -99,12 +99,21 @@ class ConnectionTests extends TestCase
             $allTags
         );
 
+        // check the popular tags
+        $popularTags = $this->service->getPopularTags(1);
+        $this->assertCount(1, $popularTags);
+
+        $popularTag = $popularTags->first();
+        $this->assertEquals('Banana', $popularTag->name);
+        $this->assertEquals(2, $popularTag->taggable_count);
+
+        // check unused tags
         $this->testModel2->untag('Durian');
         $unusedTags = $this->service->getAllUnusedTags();
-
         $this->assertCount(1, $unusedTags);
-        $this->assertEquals('Durian',
-            $unusedTags->first()->name);
+
+        $unusedTag = $unusedTags->first();
+        $this->assertEquals('Durian',$unusedTag->name);
 
     }
 }
