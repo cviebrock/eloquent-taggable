@@ -346,17 +346,11 @@ class TagService
      */
     private function getQualifiedTagTableName(): string
     {
-        static $qualifiedTableName;
+        /** @var Tag $tag */
+        $tag = new $this->tagModel;
 
-        if (!$qualifiedTableName) {
-            /** @var Tag $tag */
-            $tag = new $this->tagModel;
-            $qualifiedTableName =
-                $tag->getConnection()->getTablePrefix() .
+        return $tag->getConnection()->getTablePrefix() .
                 $tag->getTable();
-        }
-
-        return $qualifiedTableName;
     }
 
     /**
@@ -368,17 +362,11 @@ class TagService
      */
     private function getQualifiedPivotTableName(string $class=null): string
     {
-        static $qualifiedPivotTableName;
+        /** @var \Cviebrock\EloquentTaggable\Taggable $instance */
+        $instance = $class ? new $class : new class extends Model { use Taggable; };
 
-        if (!$qualifiedPivotTableName) {
-            /** @var \Cviebrock\EloquentTaggable\Taggable $instance */
-            $instance = $class ? new $class : new class { use Taggable; };
-            $qualifiedPivotTableName =
-                $instance->tags()->getConnection()->getTablePrefix() .
+        return $instance->tags()->getConnection()->getTablePrefix() .
                 $instance->tags()->getTable();
-        }
-
-        return $qualifiedPivotTableName;
     }
 
 }
