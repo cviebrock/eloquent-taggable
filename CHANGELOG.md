@@ -1,5 +1,10 @@
 # Changelog
 
+## 3.5.0 - 28-Feb-2018
+
+- Laravel 5.8 support
+
+
 ## 3.4.1 - 04-Sep-2018
 
 - de-tag models when they are deleted, to help keep the 
