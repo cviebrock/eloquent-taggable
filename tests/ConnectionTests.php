@@ -50,6 +50,10 @@ class ConnectionTests extends TestCase
         // migration for the second database connection
         $this->artisan('migrate', ['--database' => 'test2']);
 
+        $this->beforeApplicationDestroyed(function() {
+            $this->artisan('migrate:rollback', ['--database' => 'test2']);
+        });
+
         // tag models
         $this->testModel->tag('Apple,Banana,Cherry');
         $this->testModel2->tag('Banana,Durian');

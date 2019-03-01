@@ -24,6 +24,11 @@ abstract class TestCase extends Orchestra
         });
     }
 
+    public function tearDown(): void
+    {
+        parent::tearDown();
+    }
+
     /**
      * @inheritdoc
      */
