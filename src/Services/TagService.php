@@ -3,6 +3,7 @@
 namespace Cviebrock\EloquentTaggable\Services;
 
 use Cviebrock\EloquentTaggable\Models\Tag;
+use Cviebrock\EloquentTaggable\Taggable;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\MorphToMany;
@@ -194,8 +195,13 @@ class TagService
             $class = get_class($class);
         }
 
-        $sql = 'SELECT DISTINCT t.* FROM taggable_taggables tt LEFT JOIN taggable_tags t ON tt.tag_id=t.tag_id' .
-            ' WHERE tt.taggable_type = ?';
+        $tagTable = $this->getQualifiedTagTableName();
+        $pivotTable = $this->getQualifiedPivotTableName($class);
+
+        $sql = "SELECT DISTINCT t.*
+              FROM {$pivotTable} tt 
+              LEFT JOIN {$tagTable} t ON tt.tag_id=t.tag_id
+              WHERE tt.taggable_type = ?";
 
         return $this->tagModel::fromQuery($sql, [$class]);
     }
@@ -235,8 +241,13 @@ class TagService
      */
     public function getAllUnusedTags(): Collection
     {
-        $sql = 'SELECT t.* FROM taggable_tags t LEFT JOIN taggable_taggables tt ON tt.tag_id=t.tag_id ' .
-            'WHERE tt.taggable_id IS NULL';
+        $tagTable = $this->getQualifiedTagTableName();
+        $pivotTable = $this->getQualifiedPivotTableName();
+
+        $sql = "SELECT t.*
+            FROM {$tagTable} t
+            LEFT JOIN {$pivotTable} tt ON tt.tag_id=t.tag_id
+            WHERE tt.taggable_id IS NULL";
 
         return $this->tagModel::fromQuery($sql);
     }
@@ -327,4 +338,47 @@ class TagService
                 $relatedKeyName => $newTag->getKey(),
             ]);
     }
+
+    /**
+     * Get the qualified table name for the Tag model.
+     *
+     * @return string
+     */
+    private function getQualifiedTagTableName(): string
+    {
+        static $qualifiedTableName;
+
+        if (!$qualifiedTableName) {
+            /** @var Tag $tag */
+            $tag = new $this->tagModel;
+            $qualifiedTableName =
+                $tag->getConnection()->getTablePrefix() .
+                $tag->getTable();
+        }
+
+        return $qualifiedTableName;
+    }
+
+    /**
+     * Get the qualified table name for the Tag model's pivot table.
+     *
+     * @param string $class
+     *
+     * @return string
+     */
+    private function getQualifiedPivotTableName(string $class=null): string
+    {
+        static $qualifiedPivotTableName;
+
+        if (!$qualifiedPivotTableName) {
+            /** @var \Cviebrock\EloquentTaggable\Taggable $instance */
+            $instance = $class ? new $class : new class { use Taggable; };
+            $qualifiedPivotTableName =
+                $instance->tags()->getConnection()->getTablePrefix() .
+                $instance->tags()->getTable();
+        }
+
+        return $qualifiedPivotTableName;
+    }
+
 }
