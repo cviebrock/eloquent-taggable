@@ -245,7 +245,7 @@ trait Taggable
         $alias = strtolower(__FUNCTION__);
         $morphTagKeyName = $this->getQualifiedRelatedPivotKeyNameWithAlias($alias);
 
-        return $this->prepareTableJoin($query, 'inner',$alias)
+        return $this->prepareTableJoin($query, 'inner', $alias)
             ->whereIn($morphTagKeyName, $tagKeys);
     }
 
@@ -259,7 +259,7 @@ trait Taggable
     public function scopeIsTagged(Builder $query): Builder
     {
         $alias = strtolower(__FUNCTION__);
-        return $this->prepareTableJoin($query, 'inner',$alias);
+        return $this->prepareTableJoin($query, 'inner', $alias);
     }
 
     /**
@@ -283,7 +283,7 @@ trait Taggable
         $alias = strtolower(__FUNCTION__);
         $morphTagKeyName = $this->getQualifiedRelatedPivotKeyNameWithAlias($alias);
 
-        $query = $this->prepareTableJoin($query, 'left',$alias)
+        $query = $this->prepareTableJoin($query, 'left', $alias)
             ->havingRaw("COUNT(DISTINCT CASE WHEN ({$morphTagKeyName} IN ({$tagKeyList})) THEN {$morphTagKeyName} ELSE NULL END) < ?",
                 [count($tagKeys)]);
 
@@ -315,7 +315,7 @@ trait Taggable
         $alias = strtolower(__FUNCTION__);
         $morphTagKeyName = $this->getQualifiedRelatedPivotKeyNameWithAlias($alias);
 
-        $query = $this->prepareTableJoin($query, 'left',$alias)
+        $query = $this->prepareTableJoin($query, 'left', $alias)
             ->havingRaw("COUNT(DISTINCT CASE WHEN ({$morphTagKeyName} IN ({$tagKeyList})) THEN {$morphTagKeyName} ELSE NULL END) = 0");
 
         if (!$includeUntagged) {
@@ -337,7 +337,7 @@ trait Taggable
         $alias = strtolower(__FUNCTION__);
         $morphForeignKeyName = $this->getQualifiedForeignPivotKeyNameWithAlias($alias);
 
-        return $this->prepareTableJoin($query, 'left',$alias)
+        return $this->prepareTableJoin($query, 'left', $alias)
             ->havingRaw("COUNT(DISTINCT {$morphForeignKeyName}) = 0");
     }
 
@@ -448,8 +448,8 @@ trait Taggable
     }
 
     /**
-     * Returns the Related Pivot Key Name with the table alias
-     * 
+     * Returns the Related Pivot Key Name with the table alias.
+     *
      * @param $alias
      *
      * @return string
@@ -461,7 +461,7 @@ trait Taggable
     }
 
     /**
-     * Returns the Foreign Pivot Key Name with the table alias
+     * Returns the Foreign Pivot Key Name with the table alias.
      *
      * @param $alias
      *
