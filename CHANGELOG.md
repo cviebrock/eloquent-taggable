@@ -3,6 +3,7 @@
 ## 3.5.1 - 16-Mar-2019
 
 - add `hasTag()` method (#87, suggestion by @MordiSacks)
+- add ability to combine scopes (#90, @devguar)
 - clean up method return value declarations
 
 

@@ -115,7 +115,7 @@ trait Taggable
         $tag = app(TagService::class)->findOrCreate($tagName);
         $tagKey = $tag->getKey();
 
-        if (!$this->tags->contains($tagKey)) {
+        if (!$this->getAttribute('tags')->contains($tagKey)) {
             $this->tags()->attach($tagKey);
         }
     }
@@ -470,29 +470,31 @@ trait Taggable
     /**
      * Returns the Related Pivot Key Name with the table alias.
      *
-     * @param $alias
+     * @param string $alias
      *
      * @return string
      */
-    private function getQualifiedRelatedPivotKeyNameWithAlias($alias)
+    private function getQualifiedRelatedPivotKeyNameWithAlias(string $alias): string
     {
-        $field = $this->tags()->getRelatedPivotKeyName();
-        $table = $this->tags()->getTable().'_'.$alias;
-        return $table.'.'.$field;
+        $morph = $this->tags();
+
+        return $morph->getTable() . '_' . $alias .
+            '.' . $morph->getRelatedPivotKeyName();
     }
 
     /**
      * Returns the Foreign Pivot Key Name with the table alias.
      *
-     * @param $alias
+     * @param string $alias
      *
      * @return string
      */
-    private function getQualifiedForeignPivotKeyNameWithAlias($alias)
+    private function getQualifiedForeignPivotKeyNameWithAlias(string $alias): string
     {
-        $field = $this->tags()->getForeignPivotKeyName();
-        $table = $this->tags()->getTable().'_'.$alias;
-        return $table.'.'.$field;
+        $morph = $this->tags();
+
+        return $morph->getTable() . '_' . $alias .
+            '.' . $morph->getForeignPivotKeyName();
     }
 
 }

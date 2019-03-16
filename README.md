@@ -184,6 +184,7 @@ var_dump($model->hasTag('Durian'));
 // bool(false)
 ```
 
+
 ## Query Scopes
 
 For reference, imagine the following models have been tagged:
@@ -272,7 +273,7 @@ Combining scopes:
 
 ```php
 // Find models with any one of the given tags
-// i.e. everything tagged "Apple OR Banana".
+// i.e. everything tagged "Apple OR Banana"
 // but without one of the given tags 
 // i.e. everything NOT tagged "Cherry".
 // (returns Ids: 2, 3, 6, 7, 8)
