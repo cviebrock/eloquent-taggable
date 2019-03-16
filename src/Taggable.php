@@ -1,6 +1,7 @@
 <?php namespace Cviebrock\EloquentTaggable;
 
 use Cviebrock\EloquentTaggable\Exceptions\NoTagsSpecifiedException;
+use Cviebrock\EloquentTaggable\Models\Tag;
 use Cviebrock\EloquentTaggable\Services\TagService;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
@@ -21,7 +22,7 @@ trait Taggable
      *
      * Listen for the deleting event of a model, then remove the relation between it and tags
      */
-    protected static function bootTaggable()
+    protected static function bootTaggable(): void
     {
         static::deleting(function ($model) {
             if (!method_exists($model, 'runSoftDelete') || $model->isForceDeleting()) {
@@ -47,9 +48,9 @@ trait Taggable
      *
      * @param string|array $tags
      *
-     * @return $this
+     * @return self
      */
-    public function tag($tags)
+    public function tag($tags): self
     {
         $tags = app(TagService::class)->buildTagArray($tags);
 
@@ -66,9 +67,9 @@ trait Taggable
      *
      * @param string|array $tags
      *
-     * @return $this
+     * @return self
      */
-    public function untag($tags)
+    public function untag($tags): self
     {
         $tags = app(TagService::class)->buildTagArray($tags);
 
@@ -84,9 +85,9 @@ trait Taggable
      *
      * @param string|array $tags
      *
-     * @return $this
+     * @return self
      */
-    public function retag($tags)
+    public function retag($tags): self
     {
         return $this->detag()->tag($tags);
     }
@@ -94,9 +95,9 @@ trait Taggable
     /**
      * Remove all tags from the model.
      *
-     * @return $this
+     * @return self
      */
-    public function detag()
+    public function detag(): self
     {
         $this->tags()->sync([]);
 
@@ -108,8 +109,9 @@ trait Taggable
      *
      * @param string $tagName
      */
-    protected function addOneTag(string $tagName)
+    protected function addOneTag(string $tagName): void
     {
+        /** @var Tag $tag */
         $tag = app(TagService::class)->findOrCreate($tagName);
         $tagKey = $tag->getKey();
 
@@ -123,7 +125,7 @@ trait Taggable
      *
      * @param string $tagName
      */
-    protected function removeOneTag(string $tagName)
+    protected function removeOneTag(string $tagName): void
     {
         $tag = app(TagService::class)->find($tagName);
 
@@ -170,6 +172,24 @@ trait Taggable
     public function getTagArrayNormalizedAttribute(): array
     {
         return app(TagService::class)->makeTagArray($this, 'normalized');
+    }
+
+    /**
+     * Determine if a given tag is attached to the model.
+     *
+     * @param Tag|string $tag
+     *
+     * @return bool
+     */
+    public function hasTag($tag): bool
+    {
+        if ($tag instanceof Tag) {
+            $normalized = $tag->getAttribute('normalized');
+        } else {
+            $normalized = app(TagService::class)->normalize($tag);
+        }
+
+        return in_array($normalized, $this->getTagArrayNormalizedAttribute(), true);
     }
 
     /**

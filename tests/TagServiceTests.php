@@ -48,7 +48,7 @@ class TagServiceTests extends TestCase
     /**
      * Test the service was instantiated.
      */
-    public function testServiceWasInstantiated()
+    public function testServiceWasInstantiated(): void
     {
         $this->assertEquals(TagService::class, get_class($this->service));
     }
@@ -56,7 +56,7 @@ class TagServiceTests extends TestCase
     /**
      * Test building a tag array from an array
      */
-    public function testBuildTagArrayFromArray()
+    public function testBuildTagArrayFromArray(): void
     {
         $tags = $this->service->buildTagArray($this->testArray);
 
@@ -70,7 +70,7 @@ class TagServiceTests extends TestCase
      * Test building a tag array from an object, which should
      * throw an exception.
      */
-    public function testBuildTagArrayFromObject()
+    public function testBuildTagArrayFromObject(): void
     {
         $object = new \stdClass;
 
@@ -82,7 +82,7 @@ class TagServiceTests extends TestCase
     /**
      * Test building a tag array from a Collection
      */
-    public function testBuildTagArrayFromCollection()
+    public function testBuildTagArrayFromCollection(): void
     {
         $tags = $this->service->buildTagArray(collect($this->testArray));
 
@@ -95,7 +95,7 @@ class TagServiceTests extends TestCase
     /**
      * Test building a tag array from a string
      */
-    public function testBuildTagArrayFromString()
+    public function testBuildTagArrayFromString(): void
     {
         $tags = $this->service->buildTagArray($this->testString);
 
@@ -108,7 +108,7 @@ class TagServiceTests extends TestCase
     /**
      * Test building a tag array from an array
      */
-    public function testBuildNormalizedTagArrayFromArray()
+    public function testBuildNormalizedTagArrayFromArray(): void
     {
         $tags = $this->service->buildTagArrayNormalized($this->testArray);
 
@@ -121,7 +121,7 @@ class TagServiceTests extends TestCase
     /**
      * Test building a tag array from a Collection
      */
-    public function testBuildNormalizedTagArrayFromCollection()
+    public function testBuildNormalizedTagArrayFromCollection(): void
     {
         $tags = $this->service->buildTagArrayNormalized(collect($this->testArray));
 
@@ -134,7 +134,7 @@ class TagServiceTests extends TestCase
     /**
      * Test building a tag array from a string
      */
-    public function testBuildNormalizedTagArrayFromString()
+    public function testBuildNormalizedTagArrayFromString(): void
     {
         $tags = $this->service->buildTagArrayNormalized($this->testString);
 
@@ -148,7 +148,7 @@ class TagServiceTests extends TestCase
      * Test getting the tag model keys from an array
      * of normalized tag names.
      */
-    public function testGettingTagModelKeys()
+    public function testGettingTagModelKeys(): void
     {
         // Create a model and generate some Tags
         $model = $this->newModel();
@@ -167,7 +167,7 @@ class TagServiceTests extends TestCase
     /**
      * Test getting the tag model keys from an empty array.
      */
-    public function testGettingTagModelKeysFromEmptyArray()
+    public function testGettingTagModelKeysFromEmptyArray(): void
     {
         $keys = $this->service->getTagModelKeys();
 
@@ -177,7 +177,7 @@ class TagServiceTests extends TestCase
     /**
      * Test getting all tag models.
      */
-    public function testGettingAllTags()
+    public function testGettingAllTags(): void
     {
         // Create a model and generate some Tags
         $model = $this->newModel();
@@ -242,7 +242,7 @@ class TagServiceTests extends TestCase
     /**
      * Test finding all unused tags.
      */
-    public function testGettingAllUnusedTags()
+    public function testGettingAllUnusedTags(): void
     {
         // Create a model and generate some tags
         $model = $this->newModel();
@@ -265,7 +265,7 @@ class TagServiceTests extends TestCase
     /**
      * Test renaming a tag.
      */
-    public function testRenamingTag()
+    public function testRenamingTag(): void
     {
         // Create a model and generate some tags
         $model = $this->newModel();
@@ -316,7 +316,7 @@ class TagServiceTests extends TestCase
     /**
      * Test renaming a tag across all models.
      */
-    public function testRenamingTagAllModels()
+    public function testRenamingTagAllModels(): void
     {
         // Create a model and generate some Tags
         $model = $this->newModel();
@@ -367,7 +367,7 @@ class TagServiceTests extends TestCase
     /**
      * Test renaming a non-existent tag.
      */
-    public function testRenamingNonExistingTag()
+    public function testRenamingNonExistingTag(): void
     {
         // Create a model and generate some Tags
         $model = $this->newModel();
@@ -384,7 +384,7 @@ class TagServiceTests extends TestCase
     /**
      * Test getting popular tags.
      */
-    public function preparePopularTags()
+    public function preparePopularTags(): void
     {
         // Generate some models and tags
         $this->newModel()->tag('Apple,Banana,Cherry');
@@ -402,7 +402,7 @@ class TagServiceTests extends TestCase
     /**
      * Test getting popular tags.
      */
-    public function testPopularTags()
+    public function testPopularTags(): void
     {
         $this->preparePopularTags();
 
@@ -418,7 +418,7 @@ class TagServiceTests extends TestCase
     /**
      * Test getting popular tags with a limit.
      */
-    public function testPopularTagsWithLimit()
+    public function testPopularTagsWithLimit(): void
     {
         $this->preparePopularTags();
 
@@ -433,7 +433,7 @@ class TagServiceTests extends TestCase
     /**
      * Test getting popular tags with a limit and a model.
      */
-    public function testPopularTagsWithLimitAndModel()
+    public function testPopularTagsWithLimitAndModel(): void
     {
         $this->preparePopularTags();
 
@@ -448,7 +448,7 @@ class TagServiceTests extends TestCase
     /**
      * Test getting popular tags with a minimum count.
      */
-    public function testPopularTagsWithMinimum()
+    public function testPopularTagsWithMinimum(): void
     {
         $this->preparePopularTags();
 
@@ -463,7 +463,7 @@ class TagServiceTests extends TestCase
     /**
      * Test getting popular tags with a model minimum count.
      */
-    public function testPopularTagsWithModelAndMinimum()
+    public function testPopularTagsWithModelAndMinimum(): void
     {
         $this->preparePopularTags();
 

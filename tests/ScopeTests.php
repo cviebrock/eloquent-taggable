@@ -90,7 +90,7 @@ class ScopeTests extends TestCase
     /**
      * Test searching by all tags.
      */
-    public function testWithAllTags()
+    public function testWithAllTags(): void
     {
         /** @var Collection $models */
         $models = TestModel::withAllTags('Apple,Banana')->get();
@@ -109,7 +109,7 @@ class ScopeTests extends TestCase
     /**
      * Test searching by all tags, but passing no tags.
      */
-    public function testWithAllTagsEmpty()
+    public function testWithAllTagsEmpty(): void
     {
         /** @var Collection $models */
         $models = TestModel::withAllTags('')->get();
@@ -120,7 +120,7 @@ class ScopeTests extends TestCase
     /**
      * Test searching by all tags, some of which don't exists.
      */
-    public function testWithAllNonExistentTags()
+    public function testWithAllNonExistentTags(): void
     {
         /** @var Collection $models */
         $models = TestModel::withAllTags('Apple,Kumquat')->get();
@@ -131,7 +131,7 @@ class ScopeTests extends TestCase
     /**
      * Test searching by any tags.
      */
-    public function testWithAnyTags()
+    public function testWithAnyTags(): void
     {
         /** @var Collection $models */
         $models = TestModel::withAnyTags('Apple,Banana')->get();
@@ -153,7 +153,7 @@ class ScopeTests extends TestCase
     /**
      * Test searching by any tags, but passing no tags.
      */
-    public function testWithAnyTagsEmpty()
+    public function testWithAnyTagsEmpty(): void
     {
         /** @var Collection $models */
         $models = TestModel::withAnyTags('')->get();
@@ -164,7 +164,7 @@ class ScopeTests extends TestCase
     /**
      * Test searching by any tags, some of which don't exists.
      */
-    public function testWithAnyNonExistentTags()
+    public function testWithAnyNonExistentTags(): void
     {
         /** @var Collection $models */
         $models = TestModel::withAnyTags('Apple,Kumquat')->get();
@@ -185,7 +185,7 @@ class ScopeTests extends TestCase
     /**
      * Test searching for a model with any tags (i.e. at least one tag).
      */
-    public function testIsTagged()
+    public function testIsTagged(): void
     {
         $models = TestModel::isTagged()->get();
         $keys = $models->modelKeys();
@@ -208,7 +208,7 @@ class ScopeTests extends TestCase
      * Test searching for models without all of the given tags,
      * not including models with no tags (default behaviour).
      */
-    public function testWithoutAllTags()
+    public function testWithoutAllTags(): void
     {
         /** @var Collection $models */
         $models = TestModel::withoutAllTags('Apple,Banana')->get();
@@ -229,7 +229,7 @@ class ScopeTests extends TestCase
      * Test searching for models without any of the given tags,
      * including models with no tags.
      */
-    public function testWithoutAllTagsIncludingUntagged()
+    public function testWithoutAllTagsIncludingUntagged(): void
     {
         /** @var Collection $models */
         $models = TestModel::withoutAllTags('Apple,Banana', true)->get();
@@ -251,7 +251,7 @@ class ScopeTests extends TestCase
      * Test searching for models without any of the given tags,
      * not including models with no tags (default behaviour).
      */
-    public function testWithoutAnyTags()
+    public function testWithoutAnyTags(): void
     {
         /** @var Collection $models */
         $models = TestModel::withoutAnyTags('Apple,Banana')->get();
@@ -269,7 +269,7 @@ class ScopeTests extends TestCase
      * Test searching for models without any of the given tags.
      * including models with no tags.
      */
-    public function testWithoutAnyTagsIncludingUntagged()
+    public function testWithoutAnyTagsIncludingUntagged(): void
     {
         /** @var Collection $models */
         $models = TestModel::withoutAnyTags('Apple,Banana', true)->get();
@@ -287,7 +287,7 @@ class ScopeTests extends TestCase
     /**
      * Test searching for models that have no tags at all.
      */
-    public function testIsNotTagged()
+    public function testIsNotTagged(): void
     {
         /** @var Collection $models */
         $models = TestModel::isNotTagged()->get();

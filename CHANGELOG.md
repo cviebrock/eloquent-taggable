@@ -1,6 +1,12 @@
 # Changelog
 
-## 3.5.0 - 28-Feb-2018
+## 3.5.1 - 16-Mar-2019
+
+- add `hasTag()` method (#87, suggestion by @MordiSacks)
+- clean up method return value declarations
+
+
+## 3.5.0 - 28-Feb-2019
 
 - Laravel 5.8 support
 - fix `getAllTags()`, `getUnusedTags()` and `getPopularTags()` 

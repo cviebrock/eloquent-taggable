@@ -50,7 +50,7 @@ class StaticTests extends TestCase
     /**
      * Test finding all the tags for a model, in a list.
      */
-    public function testAllTagsList()
+    public function testAllTagsList(): void
     {
         $tags = TestModel::allTagsList();
 
@@ -60,7 +60,7 @@ class StaticTests extends TestCase
     /**
      * Test renaming the tags for a model.
      */
-    public function testRenameTags()
+    public function testRenameTags(): void
     {
         TestModel::renameTag('Apple', 'Apricot');
 
@@ -76,7 +76,7 @@ class StaticTests extends TestCase
     /**
      * Test getting the popular tags for a model.
      */
-    public function testPopularTags()
+    public function testPopularTags(): void
     {
         $tags = TestModel::popularTags();
         $expected = [
@@ -91,7 +91,7 @@ class StaticTests extends TestCase
     /**
      * Test getting the popular tags for a model, normalized.
      */
-    public function testPopularTagsNormalized()
+    public function testPopularTagsNormalized(): void
     {
         $tags = TestModel::popularTagsNormalized();
         $expected = [
@@ -106,7 +106,7 @@ class StaticTests extends TestCase
     /**
      * Test getting the popular tags for a model, with a limit.
      */
-    public function testPopularTagsLimited()
+    public function testPopularTagsLimited(): void
     {
         $tags = TestModel::popularTags(2);
 
@@ -121,7 +121,7 @@ class StaticTests extends TestCase
     /**
      * Test getting the popular tags for a model, with a limit.
      */
-    public function testPopularTagsLimitedNormalized()
+    public function testPopularTagsLimitedNormalized(): void
     {
         $tags = TestModel::popularTagsNormalized(2);
 

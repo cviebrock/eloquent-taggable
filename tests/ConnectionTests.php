@@ -65,7 +65,7 @@ class ConnectionTests extends TestCase
     /**
      * Test basic tagging still works
      */
-    public function testTagging()
+    public function testTagging(): void
     {
         $this->assertCount(3, $this->testModel->tags);
         $this->assertArrayValuesAreEqual(
@@ -78,7 +78,7 @@ class ConnectionTests extends TestCase
      * Test that the test model uses the default connection,
      * but the Tag model uses the second connection and the table prefix.
      */
-    public function testModelConnection()
+    public function testModelConnection(): void
     {
         $this->assertEquals('test', $this->testModel->getConnectionName());
 
@@ -92,7 +92,7 @@ class ConnectionTests extends TestCase
     /**
      * Test that the tag table prefix is used for getAllTags()
      */
-    public function testPrefixWhenGettingAllTags()
+    public function testPrefixWhenGettingAllTags(): void
     {
         // check the test model
         $allTags = $this->service->getAllTagsArray(TestModel::class);

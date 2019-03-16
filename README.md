@@ -170,6 +170,19 @@ var_dump($model->tagList);
 // string 'Apple' (length=5)
 ```
 
+You can also see if a model has a certain tag:
+
+```php
+$model->tag('Apple,Banana,Cherry');
+
+// tests use the normalized tag name
+
+var_dump($model->hasTag('apple'));
+// bool(true)
+
+var_dump($model->hasTag('Durian'));
+// bool(false)
+```
 
 ## Query Scopes
 

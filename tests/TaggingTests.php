@@ -24,7 +24,7 @@ class TaggingTests extends TestCase
     /**
      * Test basic tagging.
      */
-    public function testTagging()
+    public function testTagging(): void
     {
         $this->testModel->tag('Apple,Banana,Cherry');
 
@@ -38,7 +38,7 @@ class TaggingTests extends TestCase
     /**
      * Test adding tags from an array.
      */
-    public function testTaggingFromArray()
+    public function testTaggingFromArray(): void
     {
         $this->testModel->tag(['Apple', 'Banana', 'Cherry']);
 
@@ -52,7 +52,7 @@ class TaggingTests extends TestCase
     /**
      * Test tagging with an alternate delimiter.
      */
-    public function testTaggingWithDelimiters()
+    public function testTaggingWithDelimiters(): void
     {
         $this->testModel->tag('Apple;Banana;Cherry');
 
@@ -66,7 +66,7 @@ class TaggingTests extends TestCase
     /**
      * Test adding additional tags.
      */
-    public function testTaggingAgain()
+    public function testTaggingAgain(): void
     {
         $this->testModel->tag('Apple,Banana,Cherry');
         $this->testModel->tag('Durian');
@@ -81,7 +81,7 @@ class TaggingTests extends TestCase
     /**
      * Test removing tags.
      */
-    public function testUntagging()
+    public function testUntagging(): void
     {
         $this->testModel->tag('Apple,Banana,Cherry');
         $this->testModel->untag('Banana');
@@ -96,7 +96,7 @@ class TaggingTests extends TestCase
     /**
      * Test removing all tags.
      */
-    public function testRemovingAllTags()
+    public function testRemovingAllTags(): void
     {
         $this->testModel->tag('Apple,Banana,Cherry');
 
@@ -113,7 +113,7 @@ class TaggingTests extends TestCase
     /**
      * Test retagging tags.
      */
-    public function testRetagging()
+    public function testRetagging(): void
     {
         $this->testModel->tag('Apple,Banana,Cherry');
         $this->testModel->retag('Etrog,Fig,Grape');
@@ -128,7 +128,7 @@ class TaggingTests extends TestCase
     /**
      * Test retagging a model that has no tags.
      */
-    public function testRetaggingOnUntagged()
+    public function testRetaggingOnUntagged(): void
     {
         $this->testModel->tag('Etrog,Fig,Grape');
 
@@ -142,7 +142,7 @@ class TaggingTests extends TestCase
     /**
      * Test tag normalization.
      */
-    public function testNormalization()
+    public function testNormalization(): void
     {
         $this->testModel->tag('Apple');
         $this->testModel->tag('apple');
@@ -157,7 +157,7 @@ class TaggingTests extends TestCase
     /**
      * Test casting Tag to a string works
      */
-    public function testTagToString()
+    public function testTagToString(): void
     {
         $this->testModel->tag('Apple');
 
@@ -172,7 +172,7 @@ class TaggingTests extends TestCase
      * Test that tagging a model with duplicate tags only
      * tags the model once
      */
-    public function testNonDuplicateTagging()
+    public function testNonDuplicateTagging(): void
     {
         $this->testModel->tag('Apple, Apple');
         $this->assertCount(1, $this->testModel->tags);
@@ -184,7 +184,7 @@ class TaggingTests extends TestCase
     /**
      * Test that a deleted model removes relation with tags
      */
-    public function testDeleteModel()
+    public function testDeleteModel(): void
     {
         $this->testModel->tag('Apple');
         $this->testModel->delete(); // the model is now soft deleted
@@ -198,5 +198,18 @@ class TaggingTests extends TestCase
         $dummy->tag('Apple');
         $dummy->delete();
         $this->assertCount(0, $dummy->tags);
+    }
+
+    /**
+     * Test the hasTags method
+     */
+    public function testHasTags(): void
+    {
+        $this->testModel->tag('Apple,Banana,Cherry');
+
+        $this->assertTrue($this->testModel->hasTag('Apple'));
+        $this->assertTrue($this->testModel->hasTag('Banana'));
+        $this->assertTrue($this->testModel->hasTag('Cherry'));
+        $this->assertFalse($this->testModel->hasTag('Durian'));
     }
 }

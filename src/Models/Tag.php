@@ -4,6 +4,7 @@ use Cviebrock\EloquentTaggable\Services\TagService;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\MorphToMany;
+use Illuminate\Support\Arr;
 
 
 /**
@@ -80,7 +81,7 @@ class Tag extends Model
         }
 
         // Check if the relation is defined via configuration
-        $relatedClass = array_get(config('taggable.taggedModels'), $key);
+        $relatedClass = Arr::get(config('taggable.taggedModels'), $key);
 
         if ($relatedClass) {
             $relation = $this->taggedModels($relatedClass);

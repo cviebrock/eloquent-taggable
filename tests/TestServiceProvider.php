@@ -17,7 +17,7 @@ class TestServiceProvider extends LaravelServiceProvider
     /**
      * Bootstrap the application events.
      */
-    public function boot()
+    public function boot(): void
     {
         $this->loadMigrationsFrom(
             __DIR__ . '/database/migrations'

@@ -27,7 +27,7 @@ class CollectionTests extends TestCase
     /**
      * Test adding tags.
      */
-    public function testIsCollection()
+    public function testIsCollection(): void
     {
         $tags = $this->testModel->tags;
 
@@ -37,7 +37,7 @@ class CollectionTests extends TestCase
     /**
      * Test getting the tag list.
      */
-    public function testTagList()
+    public function testTagList(): void
     {
         $tagList = $this->testModel->tagList;
 
@@ -47,7 +47,7 @@ class CollectionTests extends TestCase
     /**
      * Test getting the normalized tag list.
      */
-    public function testTagListNormalized()
+    public function testTagListNormalized(): void
     {
         $tagListNormalized = $this->testModel->tagListNormalized;
 
@@ -57,7 +57,7 @@ class CollectionTests extends TestCase
     /**
      * Test getting the tag array.
      */
-    public function testTagArray()
+    public function testTagArray(): void
     {
         $tagArray = $this->testModel->tagArray;
 
@@ -67,7 +67,7 @@ class CollectionTests extends TestCase
     /**
      * Test getting the normalized tag array.
      */
-    public function testTagArrayNormalized()
+    public function testTagArrayNormalized(): void
     {
         $tagArrayNormalized = $this->testModel->tagArrayNormalized;
 
