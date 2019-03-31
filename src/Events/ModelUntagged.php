@@ -26,27 +26,11 @@ class ModelUntagged
     }
 
     /**
-     * @param mixed $model
-     */
-    public function setModel($model): void
-    {
-        $this->model = $model;
-    }
-
-    /**
      * @return mixed
      */
     public function getTags()
     {
         return $this->tags;
-    }
-
-    /**
-     * @param mixed $tags
-     */
-    public function setTags($tags): void
-    {
-        $this->tags = $tags;
     }
 
     /**
