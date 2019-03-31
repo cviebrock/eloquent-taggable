@@ -80,7 +80,7 @@ trait Taggable
             $this->removeOneTag($tagName);
         }
 
-        event(new ModelUntagged($this,$tags));
+        event(new ModelUntagged($this, $tags));
 
         return $this->load('tags');
     }
