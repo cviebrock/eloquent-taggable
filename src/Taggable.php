@@ -60,7 +60,7 @@ trait Taggable
             $this->load('tags');
         }
 
-        event(new ModelTagged($this,$tags));
+        event(new ModelTagged($this, $tags));
 
         return $this;
     }
