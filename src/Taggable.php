@@ -1,5 +1,7 @@
 <?php namespace Cviebrock\EloquentTaggable;
 
+use Cviebrock\EloquentTaggable\Events\ModelTagged;
+use Cviebrock\EloquentTaggable\Events\ModelUntagged;
 use Cviebrock\EloquentTaggable\Exceptions\NoTagsSpecifiedException;
 use Cviebrock\EloquentTaggable\Models\Tag;
 use Cviebrock\EloquentTaggable\Services\TagService;
@@ -59,6 +61,8 @@ trait Taggable
             $this->load('tags');
         }
 
+        event(new ModelTagged($this, $tags));
+
         return $this;
     }
 
@@ -76,6 +80,8 @@ trait Taggable
         foreach ($tags as $tagName) {
             $this->removeOneTag($tagName);
         }
+
+        event(new ModelUntagged($this, $tags));
 
         return $this->load('tags');
     }
