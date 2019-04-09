@@ -2,8 +2,8 @@
 
 ## Before 1.0.0 Release:
 
-- [ ] Better docblock commenting
-- [ ] Write tests
+- [x] Better docblock commenting
+- [x] Write tests
 
 ## Post-1.0.0:
 

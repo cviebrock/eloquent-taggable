@@ -28,8 +28,8 @@
     },
     "require-dev": {
         "limedeck/phpunit-detailed-printer": "^4.1",
-        "orchestra/database": "3.8.x-dev",
-        "orchestra/testbench": "v3.8.*",
+        "orchestra/database": "3.8.*",
+        "orchestra/testbench": "3.8.*",
         "phpunit/phpunit": "^7.0"
     },
     "autoload": {

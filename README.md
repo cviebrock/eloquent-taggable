@@ -310,21 +310,23 @@ Model::allTagModels();
 ## Events
 
 You can create a listener to handle when a model is Tagged:
+
 ```php
-//in your EventServiceProvider 
+// in your EventServiceProvider 
 
 use Cviebrock\EloquentTaggable\Events\ModelTagged;
 ...
 protected $listen = [
     ...
     ModelTagged::class => [
-        ReactModelTagged::class //Your Listener class
+        ReactModelTagged::class  // your Listener class
     ]
     ...
 ];
 ```
 
-The listener receives the event (ModelTagged) with the model and tags:
+The listener receives the `Cviebrock\EloquentTaggable\Events\ModelTagged` event
+with the model and tags:
 
 ```php
 namespace App\Listeners;
@@ -341,12 +343,13 @@ class ReactModelTagged
      */
     public function handle(ModelTagged $event)
     {
-        dd($event->getModel(),$event->getTags());
+        dd($event->getModel(), $event->getTags());
     }
 }
- 
 ```
-You can use also the event ModelUntagged to use when a tag is removed.
+
+You can use also listen for the `Cviebrock\EloquentTaggable\Events\ModelUntagged` event
+which is fired when a tag is removed.
 
 
 ## Other Methods
