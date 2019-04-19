@@ -273,6 +273,13 @@ Model::withAnyTags('Apple,Banana')::withoutAnyTags('Cherry')->get();
 // (returns models with Ids: 2)
 
 Model::withoutAllTags('Apple,Banana')::withoutAnyTags('Cherry,Durian')->get();
+
+// Find models with any one of the given tags
+// i.e. everything tagged "Apple OR Banana".
+// AND tagged "Cherry OR Durian".
+// (returns Ids: 4, 6, 7, 8)
+
+Model::withAnyTags('Apple,Banana')::withAnyTags('Cherry,Durian')->get();
 ```
 
 Finally, you can easily find all the tags used across all instances of a model:
