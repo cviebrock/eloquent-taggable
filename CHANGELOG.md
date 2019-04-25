@@ -1,5 +1,10 @@
 # Changelog
 
+## 3.5.3 - 24-Apr-2019
+
+- add ability to chain scopes (#97, @devguar)
+
+
 ## 3.5.2 - 08-Apr-2019
 
 - add `ModelTagged` and `ModelUntagged` events (#95, @devguar)

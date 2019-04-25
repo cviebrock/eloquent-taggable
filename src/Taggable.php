@@ -516,7 +516,7 @@ trait Taggable
      * 
      * @return string
      */
-    private function taggableCreateNewAlias(string $scope)
+    private function taggableCreateNewAlias(string $scope): string
     {
         $this->taggableAliasSequence++;
         $alias = strtolower($scope) . '_' . $this->taggableAliasSequence;
