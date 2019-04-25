@@ -322,7 +322,6 @@ class ScopeTests extends TestCase
         );
     }
 
-
     /**
      * Test searching without all tags and without any tags.
      */
@@ -335,6 +334,26 @@ class ScopeTests extends TestCase
         $this->assertArrayValuesAreEqual(
             [
                 $this->testModel2->getKey()
+            ],
+            $keys
+        );
+    }
+
+    /**
+     * Test searching by any tags and and after by any tags again.
+     */
+    public function testWithAnyTagsAndWithAnyTagsAgain()
+    {
+        /** @var Collection $models */
+        $models = TestModel::withAnyTags('Apple,Banana')->withAnyTags('Cherry,Durian')->get();
+        $keys = $models->modelKeys();
+
+        $this->assertArrayValuesAreEqual(
+            [
+                $this->testModel4->getKey(), //Apple, Banana, Cherry
+                $this->testModel6->getKey(), //Apple, Durian
+                $this->testModel7->getKey(), //Banana, Durian
+                $this->testModel8->getKey(), //Apple, Banana, Durian
             ],
             $keys
         );
