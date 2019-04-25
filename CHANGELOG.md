@@ -1,6 +1,6 @@
 # Changelog
 
-## 3.6.0 - 08-Apr-2019
+## 3.5.2 - 08-Apr-2019
 
 - add `ModelTagged` and `ModelUntagged` events (#95, @devguar)
 
