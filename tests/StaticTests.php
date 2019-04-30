@@ -1,5 +1,8 @@
 <?php namespace Cviebrock\EloquentTaggable\Test;
 
+use Cviebrock\EloquentTaggable\Services\TagService;
+
+
 /**
  * Class StaticTests
  */
@@ -128,6 +131,23 @@ class StaticTests extends TestCase
         $expected = [
             'apple'  => 3,
             'cherry' => 2,
+        ];
+
+        $this->assertArrayValuesAreEqual($expected, $tags);
+    }
+
+    public function testAllTagsWithCount()
+    {
+        $tags = app(TagService::class)
+            ->getPopularTags(null, null, 0)
+            ->pluck('taggable_count', 'normalized')
+            ->toArray();
+
+        $expected = [
+            'apple'  => 4,
+            'cherry' => 2,
+            'banana' => 1,
+            'durian' => 1,
         ];
 
         $this->assertArrayValuesAreEqual($expected, $tags);
