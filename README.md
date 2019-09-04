@@ -29,25 +29,26 @@ Easily add the ability to tag your Eloquent models in Laravel 6.
 
 ## Installation
 
-> **NOTE**: Depending on your version of Laravel, you should install a different
-> version of the package:
->
-> | Laravel Version | Package Version |
-> |:---------------:|:---------------:|
-> |       6.0       |     6.0.*       |
-> |       5.8       |     3.5.*       |
-> |       5.7       |     3.4.*       |
-> |       5.6       |     3.3.*       |
-> |       5.5       |     3.2.*       |
-> |       5.4       |     3.1.*†      |
->
-> † Version 3.1 of the package requires PHP 7.0 or later, even though Laravel 5.4 doesn't.
->
-> Older versions of Laravel can use older versions of the package, although they
-> are no longer supported or maintained.  See [CHANGELOG.md](CHANGELOG.md) and
-> [UPGRADING.md](UPGRADING.md) for specifics, and be sure that you are reading
-> the correct README.md for your version (Github displays the version in
-> the _master_ branch by default, which might not be what you want).
+Depending on your version of Laravel, you should install a different
+version of the package.  **NOTE**: As of version 6.0, the package's 
+version should match the Laravel version.
+
+| Laravel Version | Package Version |
+|:---------------:|:---------------:|
+|       6.0       |     6.0.*       |
+|       5.8       |     3.5.*       |
+|       5.7       |     3.4.*       |
+|       5.6       |     3.3.*       |
+|       5.5       |     3.2.*       |
+|       5.4       |     3.1.*†      |
+
+† Version 3.1 of the package requires PHP 7.0 or later, even though Laravel 5.4 doesn't.
+
+Older versions of Laravel can use older versions of the package, although they
+are no longer supported or maintained.  See [CHANGELOG.md](CHANGELOG.md) and
+[UPGRADING.md](UPGRADING.md) for specifics, and be sure that you are reading
+the correct README.md for your version (Github displays the version in
+the _master_ branch by default, which might not be what you want).
 
 
 1. Install the `cviebrock/eloquent-taggable` package via composer:
