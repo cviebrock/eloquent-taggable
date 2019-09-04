@@ -1,5 +1,10 @@
 # Changelog
 
+## 6.0.0 - 03-Sep-2019
+
+- Laravel 6.0 support (note the package version will now follow the Laravel version)
+
+
 ## 3.5.3 - 24-Apr-2019
 
 - add ability to chain scopes (#97, @devguar)
