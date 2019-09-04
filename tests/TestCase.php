@@ -62,10 +62,10 @@ abstract class TestCase extends Orchestra
      * @param array $expected
      * @param array $actual
      */
-    protected function assertArrayValuesAreEqual(array $expected, array $actual)
+    protected function assertArrayValuesAreEqual(array $expected, array $actual): void
     {
-        $this->assertEquals(count($expected), count($actual));
-        $this->assertEquals($expected, $actual, '', 0.0, 10, true);
+        $this->assertCount(count($expected), $actual);
+        $this->assertEqualsCanonicalizing($expected, $actual);
     }
 
     /**
@@ -75,7 +75,7 @@ abstract class TestCase extends Orchestra
      *
      * @return \Cviebrock\EloquentTaggable\Test\TestModel
      */
-    protected function newModel(array $data = ['title' => 'test'])
+    protected function newModel(array $data = ['title' => 'test']): TestModel
     {
         return TestModel::create($data);
     }
@@ -87,7 +87,7 @@ abstract class TestCase extends Orchestra
      *
      * @return \Cviebrock\EloquentTaggable\Test\TestDummy
      */
-    protected function newDummy(array $data = ['title' => 'dummy'])
+    protected function newDummy(array $data = ['title' => 'dummy']): TestDummy
     {
         return TestDummy::create($data);
     }

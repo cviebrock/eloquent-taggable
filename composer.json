@@ -21,16 +21,16 @@
         }
     ],
     "require": {
-        "php": "^7.1",
-        "illuminate/config": "~5.8.0",
-        "illuminate/database": "~5.8.0",
-        "illuminate/support": "~5.8.0"
+        "php": "^7.2",
+        "illuminate/config": "~6.0.0",
+        "illuminate/database": "~6.0.0",
+        "illuminate/support": "~6.0.0"
     },
     "require-dev": {
-        "limedeck/phpunit-detailed-printer": "^4.1",
-        "orchestra/database": "3.8.*",
-        "orchestra/testbench": "3.8.*",
-        "phpunit/phpunit": "^7.0"
+        "limedeck/phpunit-detailed-printer": "^5.0",
+        "orchestra/database": "4.*",
+        "orchestra/testbench": "4.*",
+        "phpunit/phpunit": "^8.0"
     },
     "autoload": {
         "psr-4": {
