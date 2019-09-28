@@ -37,7 +37,6 @@ class CreateTaggableTable extends Migration
 
                 $table->index(['tag_id', 'taggable_id'], 'i_taggable_fwd');
                 $table->index(['taggable_id', 'tag_id'], 'i_taggable_rev');
-                $table->index('taggable_type', 'i_taggable_type');
             });
         }
     }
