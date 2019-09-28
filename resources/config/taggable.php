@@ -60,4 +60,14 @@ return [
      * then update the configuration below.
      */
     'model'  => \Cviebrock\EloquentTaggable\Models\Tag::class,
+
+    /**
+     * The tables used to store the tags in the database. You can publish
+     * this migrations and use custom names if you want.
+     */
+    'tables' => [
+        'taggable_tags'      => 'taggable_tags',
+        'taggable_taggables' => 'taggable_taggables',
+        ''
+    ]
 ];
