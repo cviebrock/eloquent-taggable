@@ -16,7 +16,7 @@ class Tag extends Model
     /**
      * @inheritdoc
      */
-    protected $table = 'taggable_tags';
+    protected $table;
 
     /**
      * @inheritdoc
@@ -39,6 +39,8 @@ class Tag extends Model
         if ($connection = config('taggable.connection')) {
             $this->setConnection($connection);
         }
+
+        $this->setTable(config('taggable.tables.taggables_tags'));
 
         parent::__construct($attributes);
     }
