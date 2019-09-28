@@ -22,7 +22,7 @@ class CreateTaggableTable extends Migration
         if (!Schema::connection($connection)->hasTable($taggable_tags)) {
             Schema::connection($connection)->create($taggable_tags, function(Blueprint $table) {
                 $table->bigIncrements('tag_id');
-                $table->string('name');
+                $table->string('name')->unique();
                 $table->string('normalized')->unique();
                 $table->timestamps();
 
