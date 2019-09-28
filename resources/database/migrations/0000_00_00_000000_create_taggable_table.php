@@ -30,7 +30,7 @@ class CreateTaggableTable extends Migration
             });
         }
 
-        $taggable_taggables = config('taggable.tables.taggable_taggables') ?? 'taggable_tags';
+        $taggable_taggables = config('taggable.tables.taggable_taggables') ?? 'taggable_taggables';
 
         if (!Schema::connection($connection)->hasTable($taggable_taggables)) {
             Schema::connection($connection)->create($taggable_taggables, function(Blueprint $table) use ($taggable_tags) {
