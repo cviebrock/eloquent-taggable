@@ -21,7 +21,7 @@ class CreateTaggableTable extends Migration
 
         if (!Schema::connection($connection)->hasTable($taggable_tags)) {
             Schema::connection($connection)->create($taggable_tags, function(Blueprint $table) {
-                $table->bigIncrements('tag_id');
+                $table->bigIncrements('id');
                 $table->string('name')->unique();
                 $table->string('normalized')->unique();
                 $table->timestamps();
@@ -43,7 +43,7 @@ class CreateTaggableTable extends Migration
                 $table->index(['taggable_id', 'tag_id'], 'i_taggable_rev');
 
                 $table->foreign('tag_id')
-                    ->references('tag_id')
+                    ->references('id')
                     ->on($taggable_tags)
                     ->onDelete('cascade');
             });

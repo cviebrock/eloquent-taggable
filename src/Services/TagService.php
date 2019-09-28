@@ -119,7 +119,7 @@ class TagService
         }
 
         return $this->tagModel::whereIn('normalized', $normalized)
-            ->pluck('tag_id')
+            ->pluck('id')
             ->toArray();
     }
 
@@ -200,7 +200,7 @@ class TagService
 
         $sql = "SELECT DISTINCT t.*
               FROM {$pivotTable} tt 
-              LEFT JOIN {$tagTable} t ON tt.tag_id=t.tag_id
+              LEFT JOIN {$tagTable} t ON tt.tag_id=t.id
               WHERE tt.taggable_type = ?";
 
         return $this->tagModel::fromQuery($sql, [$class]);
@@ -246,7 +246,7 @@ class TagService
 
         $sql = "SELECT t.*
             FROM {$tagTable} t
-            LEFT JOIN {$pivotTable} tt ON tt.tag_id=t.tag_id
+            LEFT JOIN {$pivotTable} tt ON tt.tag_id=t.id
             WHERE tt.taggable_id IS NULL";
 
         return $this->tagModel::fromQuery($sql);
@@ -266,9 +266,9 @@ class TagService
         $tagTable = $this->getQualifiedTagTableName();
         $pivotTable = $this->getQualifiedPivotTableName();
 
-        $sql = "SELECT t.*, COUNT(t.tag_id) AS taggable_count 
+        $sql = "SELECT t.*, COUNT(t.id) AS taggable_count 
             FROM {$tagTable} t 
-            LEFT JOIN {$pivotTable} tt ON tt.tag_id=t.tag_id";
+            LEFT JOIN {$pivotTable} tt ON tt.tag_id=t.id";
         $bindings = [];
 
         if ($class) {
@@ -277,7 +277,7 @@ class TagService
         }
 
         // group by everything to handle strict and non-strict mode in MySQL
-        $sql .= ' GROUP BY t.tag_id, t.name, t.normalized, t.created_at, t.updated_at';
+        $sql .= ' GROUP BY t.id, t.name, t.normalized, t.created_at, t.updated_at';
 
         if ($minCount > 1) {
             $sql .= ' HAVING taggable_count >= ?';

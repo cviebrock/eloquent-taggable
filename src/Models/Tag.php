@@ -21,11 +21,6 @@ class Tag extends Model
     /**
      * @inheritdoc
      */
-    protected $primaryKey = 'tag_id';
-
-    /**
-     * @inheritdoc
-     */
     protected $fillable = [
         'name',
         'normalized',
