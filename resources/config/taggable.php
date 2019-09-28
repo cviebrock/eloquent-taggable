@@ -68,6 +68,11 @@ return [
     'tables' => [
         'taggable_tags'      => 'taggable_tags',
         'taggable_taggables' => 'taggable_taggables',
-        ''
-    ]
+    ],
+
+    /**
+     * If you want to publish this package migrations and modify them, just change this
+     * flag to true and run php artisan vendor:publish --tag=eloquent-taggable-migrations
+     */
+    'custom_migrations' => false,
 ];
