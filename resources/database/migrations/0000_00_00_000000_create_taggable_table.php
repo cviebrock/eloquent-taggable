@@ -44,7 +44,8 @@ class CreateTaggableTable extends Migration
 
                 $table->foreign('tag_id')
                     ->references('tag_id')
-                    ->on($taggable_tags);
+                    ->on($taggable_tags)
+                    ->onDelete('cascade');
             });
         }
     }
