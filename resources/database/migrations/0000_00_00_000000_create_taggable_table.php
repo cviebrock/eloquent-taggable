@@ -34,7 +34,7 @@ class CreateTaggableTable extends Migration
                 $table->unsignedBigInteger('taggable_id');
                 $table->string('taggable_type');
                 $table->timestamps();
-
+                $table->unique(['tag_id', 'taggable_id', 'taggable_type']);
                 $table->index(['tag_id', 'taggable_id'], 'i_taggable_fwd');
                 $table->index(['taggable_id', 'tag_id'], 'i_taggable_rev');
             });
