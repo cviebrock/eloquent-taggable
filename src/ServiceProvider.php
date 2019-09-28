@@ -26,9 +26,19 @@ class ServiceProvider extends LaravelServiceProvider
             __DIR__ . '/../resources/config/taggable.php' => config_path('taggable.php'),
         ], 'config');
 
-        $this->loadMigrationsFrom(
-            __DIR__.'/../resources/database/migrations'
-        );
+        $this->publishes([
+            __DIR__.'/../resources/database/migrations',
+        ], 'eloquent-taggable-migrations');
+
+        $custom_migrations = config('taggable.custom_migrations') ?? false;
+        if ($custom_migrations) {
+            $this->loadMigrationsFrom(database_path('migrations'));
+        } else {
+            $this->loadMigrationsFrom(
+                __DIR__.'/../resources/database/migrations'
+            );
+        }
+
     }
 
     /**
