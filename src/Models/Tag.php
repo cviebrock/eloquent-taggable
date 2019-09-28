@@ -40,7 +40,7 @@ class Tag extends Model
             $this->setConnection($connection);
         }
 
-        $this->setTable(config('taggable.tables.taggables_tags'));
+        $this->setTable(config('taggable.tables.taggable_tags'));
 
         parent::__construct($attributes);
     }
