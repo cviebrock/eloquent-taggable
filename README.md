@@ -24,7 +24,6 @@ Easily add the ability to tag your Eloquent models in Laravel 6.
 * [Bugs, Suggestions, Contributions and Support](#bugs-suggestions-contributions-and-support)
 * [Copyright and License](#copyright-and-license)
 
-
 ---
 
 ## Installation
@@ -65,7 +64,11 @@ the _master_ branch by default, which might not be what you want).
     php artisan vendor:publish --provider="Cviebrock\EloquentTaggable\ServiceProvider"
     ```
 
-3. Finally, use artisan to run the migration to create the required tables:
+3. You can use custom migrations by changing the `custom_migrations` flag to `true` within the `config/taggable.php`
+file. You can add more fields, but can't remove the existing ones.
+
+
+4. Finally, use artisan to run the migration to create the required tables:
 
     ```sh
     composer dump-autoload
