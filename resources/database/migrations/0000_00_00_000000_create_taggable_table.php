@@ -20,7 +20,7 @@ class CreateTaggableTable extends Migration
         $taggable_tags = config('taggable.tables.taggable_tags') ?? 'taggable_tags';
 
         if (!Schema::connection($connection)->hasTable($taggable_tags)) {
-            Schema::connection($connection)->create($taggable_tags, function(Blueprint $table) {
+            Schema::connection($connection)->create($taggable_tags, function (Blueprint $table) {
                 $table->bigIncrements('id');
                 $table->string('name')->unique();
                 $table->string('normalized')->unique();
@@ -33,7 +33,7 @@ class CreateTaggableTable extends Migration
         $taggable_taggables = config('taggable.tables.taggable_taggables') ?? 'taggable_taggables';
 
         if (!Schema::connection($connection)->hasTable($taggable_taggables)) {
-            Schema::connection($connection)->create($taggable_taggables, function(Blueprint $table) use ($taggable_tags) {
+            Schema::connection($connection)->create($taggable_taggables, function (Blueprint $table) use ($taggable_tags) {
                 $table->unsignedBigInteger('tag_id');
                 $table->unsignedBigInteger('taggable_id');
                 $table->string('taggable_type');
