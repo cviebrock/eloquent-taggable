@@ -59,7 +59,7 @@ class CreateTaggableTable extends Migration
     {
         $connection = config('taggable.connection');
         $taggable_tags = config('taggable.tables.taggable_tags') ?? 'taggable_tags';
-        $taggable_taggables = config('taggable.tables.taggable_taggables') ?? 'taggable_tags';
+        $taggable_taggables = config('taggable.tables.taggable_taggables') ?? 'taggable_taggables';
 
         if (Schema::connection($connection)->hasTable($taggable_tags)) {
             Schema::connection($connection)->drop($taggable_tags);

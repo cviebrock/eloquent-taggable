@@ -35,7 +35,7 @@ class Tag extends Model
             $this->setConnection($connection);
         }
 
-        $this->setTable(config('taggable.tables.taggable_tags'));
+        $this->setTable(config('taggable.tables.taggable_tags', 'taggable_tags'));
 
         parent::__construct($attributes);
     }
@@ -99,7 +99,8 @@ class Tag extends Model
      */
     protected function taggedModels(string $class): MorphToMany
     {
-        return $this->morphedByMany($class, 'taggable', 'taggable_taggables', 'tag_id');
+        $table = config('taggable.tables.taggable_taggables', 'taggable_taggables');
+        return $this->morphedByMany($class, 'taggable', $table, 'tag_id');
     }
 
     /**

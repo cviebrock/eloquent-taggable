@@ -30,8 +30,7 @@ class ServiceProvider extends LaravelServiceProvider
             __DIR__.'/../resources/database/migrations/' => database_path('migrations'),
         ], 'eloquent-taggable-migrations');
 
-        $custom_migrations = config('taggable.custom_migrations') ?? false;
-        if ($custom_migrations) {
+        if (config('taggable.custom_migrations', false)) {
             $this->loadMigrationsFrom(database_path('migrations'));
         } else {
             $this->loadMigrationsFrom(
