@@ -64,9 +64,11 @@ the _master_ branch by default, which might not be what you want).
     php artisan vendor:publish --provider="Cviebrock\EloquentTaggable\ServiceProvider"
     ```
 
-3. You can use custom migrations by changing the `custom_migrations` flag to `true` within the `config/taggable.php`
-file. You can add more fields, but can't remove the existing ones.
-
+3. You can publish this package migrations using the `vendor:publish` artisan command:
+```bash
+   php artisan vendor:publish --tag eloquent-taggable-migrations
+```
+> If you modify the provided migrations, keep in mind that you can add more fields, but can't remove the existing ones.
 
 4. Finally, use artisan to run the migration to create the required tables:
 
