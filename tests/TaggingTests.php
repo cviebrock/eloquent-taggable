@@ -1,5 +1,10 @@
 <?php namespace Cviebrock\EloquentTaggable\Test;
 
+use Cviebrock\EloquentTaggable\Models\Tag;
+use Cviebrock\EloquentTaggable\Services\TagService;
+use Illuminate\Support\Facades\DB;
+
+
 /**
  * Class TaggingTests
  */
@@ -179,6 +184,14 @@ class TaggingTests extends TestCase
 
         $this->testModel->tag(['Banana', 'banana', 'BaNaNa ']);
         $this->assertCount(2, $this->testModel->tags);
+
+        $this->testModel->tag('Cherry');
+        $this->testModel->tag('CHERRY');
+        $this->assertCount(3, $this->testModel->tags);
+
+        /** @var TagService $service */
+        $service = app(TagService::class);
+        $this->assertCount(3, $service->getAllTags());
     }
 
     /**
