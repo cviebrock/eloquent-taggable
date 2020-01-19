@@ -62,10 +62,22 @@ the _master_ branch by default, which might not be what you want).
 2. Publish the configuration file:
 
     ```sh
-    php artisan vendor:publish --provider="Cviebrock\EloquentTaggable\ServiceProvider"
+    php artisan vendor:publish --provider="Cviebrock\EloquentTaggable\ServiceProvider" --tag "config"
     ```
 
-3. Finally, use artisan to run the migration to create the required tables:
+3. Publish the migrations:
+
+    ```sh
+    php artisan vendor:publish --provider="Cviebrock\EloquentTaggable\ServiceProvider" --tag "migrations"
+    ```
+
+If you modify the migrations, keep in mind that you can add more fields,
+but shouldn't remove any existing ones.
+
+Also note that if you want to change the table names used for the package, this
+should be done in the configuration file (under the `tables` key).
+
+4. Finally, use artisan to run the migration to create the required tables:
 
     ```sh
     composer dump-autoload
@@ -465,6 +477,10 @@ return [
     'throwEmptyExceptions' => false,
     'taggedModels'         => [],
     'model'                => \Cviebrock\EloquentTaggable\Models\Tag::class,
+    'tables' => [
+        'taggable_tags'      => 'taggable_tags',
+        'taggable_taggables' => 'taggable_taggables',
+    ],
 ];
 ```
 
@@ -577,6 +593,12 @@ This will return a collection of all the Posts that are tagged "Apple".
 By default, the package will use it's own model class for Tags.  If you want to
 use your own customized Tag model, then extend the package's class with
 your own class, and update the configuration to reference your model.
+
+### tables
+
+By default, the package will create two tables to store the tag information.
+If you want to use different table names, then change these two values.  The 
+model, service, and migration classes will all read the configuration values.
 
 
 

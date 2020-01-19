@@ -1,5 +1,13 @@
 # Changelog
 
+## 6.0.2 - 19-Jan-2020
+
+- several improvements from #99 & #104
+  - make migrations publishable
+  - use bigUnsignedIntegers for key columns
+  - make table names customizable
+  
+
 ## 6.0.1 - 13-Sep-2019
 
 - fix for semantic versioning

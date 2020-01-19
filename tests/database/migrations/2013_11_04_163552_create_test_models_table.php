@@ -13,16 +13,22 @@ class CreateTestModelsTable extends Migration
      */
     public function up()
     {
-        Schema::create('test_models', function(Blueprint $table) {
-            $table->increments('id');
-            $table->string('title');
-            $table->softDeletes();
-        });
+        $connection = config('taggable.connection');
 
-        Schema::create('test_dummies', function(Blueprint $table) {
-            $table->increments('id');
-            $table->string('title');
-        });
+        if (!Schema::connection($connection)->hasTable('test_models')) {
+            Schema::create('test_models', function(Blueprint $table) {
+                $table->increments('id');
+                $table->string('title');
+                $table->softDeletes();
+            });
+        }
+
+        if (!Schema::connection($connection)->hasTable('test_dummies')) {
+            Schema::create('test_dummies', function(Blueprint $table) {
+                $table->increments('id');
+                $table->string('title');
+            });
+        }
     }
 
     /**
@@ -30,7 +36,7 @@ class CreateTestModelsTable extends Migration
      */
     public function down()
     {
-        Schema::drop('test_models');
-        Schema::drop('test_dummies');
+        Schema::dropIfExists('test_models');
+        Schema::dropIfExists('test_dummies');
     }
 }

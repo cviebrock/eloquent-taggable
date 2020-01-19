@@ -47,7 +47,8 @@ trait Taggable
     public function tags(): MorphToMany
     {
         $model = config('taggable.model');
-        return $this->morphToMany($model, 'taggable', 'taggable_taggables', 'taggable_id', 'tag_id')
+        $table = config('taggable.tables.taggable_taggables', 'taggable_taggables');
+        return $this->morphToMany($model, 'taggable', $table, 'taggable_id', 'tag_id')
             ->withTimestamps();
     }
 
