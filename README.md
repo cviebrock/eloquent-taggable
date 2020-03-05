@@ -35,6 +35,7 @@ version should match the Laravel version.
 
 | Laravel Version | Package Version |
 |:---------------:|:---------------:|
+|       7.0       |     7.0.*       |
 |       6.0       |     6.0.*       |
 |       5.8       |     3.5.*       |
 |       5.7       |     3.4.*       |

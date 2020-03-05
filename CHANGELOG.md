@@ -1,5 +1,10 @@
 # Changelog
 
+## 7.0.0 - 04-Mar-2020
+
+- Laravel 7.0 support
+
+
 ## 6.0.2 - 19-Jan-2020
 
 - several improvements from #99 & #104
