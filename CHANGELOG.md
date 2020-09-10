@@ -1,5 +1,10 @@
 # Changelog
 
+## 8.0.0 - 09-Sep-2020
+
+- Laravel 8.0 support
+
+
 ## 7.0.0 - 04-Mar-2020
 
 - Laravel 7.0 support
