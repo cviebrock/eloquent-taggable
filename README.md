@@ -1,9 +1,10 @@
 # Eloquent-Taggable
 
-Easily add the ability to tag your Eloquent models in Laravel 6.
+Easily add the ability to tag your Eloquent models in Laravel.
 
-> **NOTE**: These instructions are for Laravel 6.0.  If you are using Laravel 5.8, please
-> see the [previous version's docs](https://github.com/cviebrock/eloquent-taggable/tree/3.5).
+> **NOTE**: These instructions are for the latest version of Laravel.  
+> If you are using an older version, please install a version of the package
+> that [correlates to your Laravel version](#installation).
 
 [![Build Status](https://travis-ci.org/cviebrock/eloquent-taggable.svg?branch=master&format=flat)](https://travis-ci.org/cviebrock/eloquent-taggable)
 [![Total Downloads](https://poser.pugx.org/cviebrock/eloquent-taggable/downloads?format=flat)](https://packagist.org/packages/cviebrock/eloquent-taggable)
@@ -35,9 +36,9 @@ version should match the Laravel version.
 
 | Laravel Version | Package Version |
 |:---------------:|:---------------:|
-|       8.0       |     8.0.*       |
-|       7.0       |     7.0.*       |
-|       6.0       |     6.0.*       |
+|       8.0       |     ^8.0        |
+|       7.0       |     ^7.0        |
+|       6.0       |     ^6.0        |
 |       5.8       |     3.5.*       |
 |       5.7       |     3.4.*       |
 |       5.6       |     3.3.*       |
