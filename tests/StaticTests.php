@@ -43,7 +43,7 @@ class StaticTests extends TestCase
     /**
      * Test finding all the tags for a model.
      */
-    public function testAllTags()
+    public function testAllTags(): void
     {
         $tags = TestModel::allTags();
 
@@ -136,7 +136,10 @@ class StaticTests extends TestCase
         $this->assertArrayValuesAreEqual($expected, $tags);
     }
 
-    public function testAllTagsWithCount()
+    /**
+     * Test getting the count of popular tags.
+     */
+    public function testPopularTagsWithCount(): void
     {
         $tags = app(TagService::class)
             ->getPopularTags(null, null, 0)

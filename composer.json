@@ -47,7 +47,7 @@
             "rm -rf vendor composer.lock",
             "composer install"
         ],
-        "test": [
+        "tests": [
             "php vendor/bin/phpunit"
         ]
     },

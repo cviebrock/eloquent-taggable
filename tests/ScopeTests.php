@@ -304,7 +304,7 @@ class ScopeTests extends TestCase
     /**
      * Test searching by any tags and without any tags.
      */
-    public function testWithAnyTagsAndWithoutAnyTags()
+    public function testWithAnyTagsAndWithoutAnyTags(): void
     {
         /** @var Collection $models */
         $models = TestModel::withAnyTags('Apple,Banana')->withoutAnyTags('Cherry')->get();
@@ -325,7 +325,7 @@ class ScopeTests extends TestCase
     /**
      * Test searching without all tags and without any tags.
      */
-    public function testWithoutAllTagsAndWithoutAnyTags()
+    public function testWithoutAllTagsAndWithoutAnyTags(): void
     {
         /** @var Collection $models */
         $models = TestModel::withoutAllTags('Apple,Banana')->withoutAnyTags('Cherry,Durian')->get();
@@ -342,7 +342,7 @@ class ScopeTests extends TestCase
     /**
      * Test searching by any tags and and after by any tags again.
      */
-    public function testWithAnyTagsAndWithAnyTagsAgain()
+    public function testWithAnyTagsAndWithAnyTagsAgain(): void
     {
         /** @var Collection $models */
         $models = TestModel::withAnyTags('Apple,Banana')->withAnyTags('Cherry,Durian')->get();
@@ -357,5 +357,14 @@ class ScopeTests extends TestCase
             ],
             $keys
         );
+    }
+
+    public function testWithAllTagsPaginated(): void
+    {
+        /** @var \Illuminate\Pagination\LengthAwarePaginator $models */
+        $models = TestModel::withAllTags('Apple,Banana')->paginate(2);
+
+        $this->assertCount(2, $models->items());
+        $this->assertEquals(3, $models->total());
     }
 }
