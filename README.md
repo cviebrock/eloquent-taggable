@@ -6,13 +6,13 @@ Easily add the ability to tag your Eloquent models in Laravel.
 > If you are using an older version, please install a version of the package
 > that [correlates to your Laravel version](#installation).
 
-[![Build Status](https://travis-ci.org/cviebrock/eloquent-taggable.svg?branch=master&format=flat)](https://travis-ci.org/cviebrock/eloquent-taggable)
+[![Build Status](https://github.com/cviebrock/eloquent-taggable/workflows/tests/badge.svg?branch=master)](https://github.com/cviebrock/eloquent-taggable/actions)
 [![Total Downloads](https://poser.pugx.org/cviebrock/eloquent-taggable/downloads?format=flat)](https://packagist.org/packages/cviebrock/eloquent-taggable)
 [![Latest Stable Version](https://poser.pugx.org/cviebrock/eloquent-taggable/v/stable?format=flat)](https://packagist.org/packages/cviebrock/eloquent-taggable)
 [![Latest Unstable Version](https://poser.pugx.org/cviebrock/eloquent-taggable/v/unstable?format=flat)](https://packagist.org/packages/cviebrock/eloquent-taggable)
-[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/cviebrock/eloquent-taggable/badges/quality-score.png?format=flat)](https://scrutinizer-ci.com/g/cviebrock/eloquent-taggable)
 [![SensioLabsInsight](https://insight.sensiolabs.com/projects/9e1bb86e-2659-4123-9b6f-89370ef1483d/mini.png)](https://insight.sensiolabs.com/projects/9e1bb86e-2659-4123-9b6f-89370ef1483d)
-[![Software License](https://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat-square)](LICENSE.md)
+[![Software License](https://img.shields.io/github/license/cviebrock/eloquent-taggable)](LICENSE.md)
+[![License](https://img.shields.io/packagist/l/cviebrock/eloquent-taggable)](LICENSE.md)
 
 
 * [Installation](#installation)
