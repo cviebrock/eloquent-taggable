@@ -1,5 +1,12 @@
 # Changelog
 
+## 8.0.1 - 02-Dec-2020
+
+- support PHP 8.0
+- move automated testing from travis-ci to Github actions
+- clean up some third-party tools and badges
+
+
 ## 8.0.0 - 10-Sep-2020
 
 - Laravel 8.0 support
