@@ -11,7 +11,6 @@ Easily add the ability to tag your Eloquent models in Laravel.
 [![Latest Stable Version](https://poser.pugx.org/cviebrock/eloquent-taggable/v/stable?format=flat)](https://packagist.org/packages/cviebrock/eloquent-taggable)
 [![Latest Unstable Version](https://poser.pugx.org/cviebrock/eloquent-taggable/v/unstable?format=flat)](https://packagist.org/packages/cviebrock/eloquent-taggable)
 [![SensioLabsInsight](https://insight.sensiolabs.com/projects/9e1bb86e-2659-4123-9b6f-89370ef1483d/mini.png)](https://insight.sensiolabs.com/projects/9e1bb86e-2659-4123-9b6f-89370ef1483d)
-[![Software License](https://img.shields.io/github/license/cviebrock/eloquent-taggable)](LICENSE.md)
 [![License](https://img.shields.io/packagist/l/cviebrock/eloquent-taggable)](LICENSE.md)
 
 
