@@ -102,6 +102,8 @@ class MyModel extends Eloquent
 }
 ```
 
+> **NOTE**: Make sure your model doesn't have an attribute and/or column in its database table called `tags`; the trait will add that attribute for you.)
+
 That's it ... your model is now "taggable"!
 
 
