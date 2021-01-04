@@ -1,8 +1,6 @@
 <?php namespace Cviebrock\EloquentTaggable\Test;
 
-use Cviebrock\EloquentTaggable\Models\Tag;
 use Cviebrock\EloquentTaggable\Services\TagService;
-use Illuminate\Support\Facades\DB;
 
 
 /**
@@ -17,6 +15,11 @@ class TaggingTests extends TestCase
     protected $testModel;
 
     /**
+     * @var TagService
+     */
+    protected $service;
+
+    /**
      * @inheritdoc
      */
     public function setUp(): void
@@ -24,6 +27,7 @@ class TaggingTests extends TestCase
         parent::setUp();
 
         $this->testModel = $this->newModel();
+        $this->service = app(TagService::class);
     }
 
     /**
@@ -33,8 +37,8 @@ class TaggingTests extends TestCase
     {
         $this->testModel->tag('Apple,Banana,Cherry');
 
-        $this->assertCount(3, $this->testModel->tags);
-        $this->assertArrayValuesAreEqual(
+        self::assertCount(3, $this->testModel->tags);
+        self::assertArrayValuesAreEqual(
             ['Apple', 'Banana', 'Cherry'],
             $this->testModel->getTagArrayAttribute()
         );
@@ -47,8 +51,8 @@ class TaggingTests extends TestCase
     {
         $this->testModel->tag(['Apple', 'Banana', 'Cherry']);
 
-        $this->assertCount(3, $this->testModel->tags);
-        $this->assertArrayValuesAreEqual(
+        self::assertCount(3, $this->testModel->tags);
+        self::assertArrayValuesAreEqual(
             ['Apple', 'Banana', 'Cherry'],
             $this->testModel->getTagArrayAttribute()
         );
@@ -61,8 +65,8 @@ class TaggingTests extends TestCase
     {
         $this->testModel->tag('Apple;Banana;Cherry');
 
-        $this->assertCount(3, $this->testModel->tags);
-        $this->assertArrayValuesAreEqual(
+        self::assertCount(3, $this->testModel->tags);
+        self::assertArrayValuesAreEqual(
             ['Apple', 'Banana', 'Cherry'],
             $this->testModel->getTagArrayAttribute()
         );
@@ -76,8 +80,8 @@ class TaggingTests extends TestCase
         $this->testModel->tag('Apple,Banana,Cherry');
         $this->testModel->tag('Durian');
 
-        $this->assertCount(4, $this->testModel->tags);
-        $this->assertArrayValuesAreEqual(
+        self::assertCount(4, $this->testModel->tags);
+        self::assertArrayValuesAreEqual(
             ['Apple', 'Banana', 'Cherry', 'Durian'],
             $this->testModel->getTagArrayAttribute()
         );
@@ -91,8 +95,8 @@ class TaggingTests extends TestCase
         $this->testModel->tag('Apple,Banana,Cherry');
         $this->testModel->untag('Banana');
 
-        $this->assertCount(2, $this->testModel->tags);
-        $this->assertArrayValuesAreEqual(
+        self::assertCount(2, $this->testModel->tags);
+        self::assertArrayValuesAreEqual(
             ['Apple', 'Cherry'],
             $this->testModel->getTagArrayAttribute()
         );
@@ -105,14 +109,14 @@ class TaggingTests extends TestCase
     {
         $this->testModel->tag('Apple,Banana,Cherry');
 
-        $this->assertCount(3, $this->testModel->tags);
-        $this->assertArrayValuesAreEqual(
+        self::assertCount(3, $this->testModel->tags);
+        self::assertArrayValuesAreEqual(
             ['Apple', 'Banana', 'Cherry'],
             $this->testModel->getTagArrayAttribute()
         );
 
         $this->testModel->detag();
-        $this->assertCount(0, $this->testModel->tags);
+        self::assertCount(0, $this->testModel->tags);
     }
 
     /**
@@ -123,8 +127,8 @@ class TaggingTests extends TestCase
         $this->testModel->tag('Apple,Banana,Cherry');
         $this->testModel->retag('Etrog,Fig,Grape');
 
-        $this->assertCount(3, $this->testModel->tags);
-        $this->assertArrayValuesAreEqual(
+        self::assertCount(3, $this->testModel->tags);
+        self::assertArrayValuesAreEqual(
             ['Etrog', 'Fig', 'Grape'],
             $this->testModel->getTagArrayAttribute()
         );
@@ -137,8 +141,8 @@ class TaggingTests extends TestCase
     {
         $this->testModel->tag('Etrog,Fig,Grape');
 
-        $this->assertCount(3, $this->testModel->tags);
-        $this->assertArrayValuesAreEqual(
+        self::assertCount(3, $this->testModel->tags);
+        self::assertArrayValuesAreEqual(
             ['Etrog', 'Fig', 'Grape'],
             $this->testModel->getTagArrayAttribute()
         );
@@ -153,7 +157,7 @@ class TaggingTests extends TestCase
         $this->testModel->tag('apple');
         $this->testModel->tag('APPLE');
 
-        $this->assertArrayValuesAreEqual(
+        self::assertArrayValuesAreEqual(
             ['Apple'],
             $this->testModel->getTagArrayAttribute()
         );
@@ -169,8 +173,8 @@ class TaggingTests extends TestCase
         $tag = $this->testModel->tags->first();
         $tagAsString = (string) $tag;
 
-        $this->assertEquals('string', gettype($tagAsString));
-        $this->assertEquals('Apple', $tagAsString);
+        self::assertEquals('string', gettype($tagAsString));
+        self::assertEquals('Apple', $tagAsString);
     }
 
     /**
@@ -180,18 +184,16 @@ class TaggingTests extends TestCase
     public function testNonDuplicateTagging(): void
     {
         $this->testModel->tag('Apple, Apple');
-        $this->assertCount(1, $this->testModel->tags);
+        self::assertCount(1, $this->testModel->tags);
 
         $this->testModel->tag(['Banana', 'banana', 'BaNaNa ']);
-        $this->assertCount(2, $this->testModel->tags);
+        self::assertCount(2, $this->testModel->tags);
 
         $this->testModel->tag('Cherry');
         $this->testModel->tag('CHERRY');
-        $this->assertCount(3, $this->testModel->tags);
+        self::assertCount(3, $this->testModel->tags);
 
-        /** @var TagService $service */
-        $service = app(TagService::class);
-        $this->assertCount(3, $service->getAllTags());
+        self::assertCount(3, $this->service->getAllTags());
     }
 
     /**
@@ -201,16 +203,16 @@ class TaggingTests extends TestCase
     {
         $this->testModel->tag('Apple');
         $this->testModel->delete(); // the model is now soft deleted
-        $this->assertCount(1, $this->testModel->tags);
+        self::assertCount(1, $this->testModel->tags);
 
         $this->testModel->forceDelete();
-        $this->assertCount(0, $this->testModel->tags);
+        self::assertCount(0, $this->testModel->tags);
 
         // the dummy has not soft delete logic
         $dummy = $this->newDummy();
         $dummy->tag('Apple');
         $dummy->delete();
-        $this->assertCount(0, $dummy->tags);
+        self::assertCount(0, $dummy->tags);
     }
 
     /**
@@ -220,9 +222,81 @@ class TaggingTests extends TestCase
     {
         $this->testModel->tag('Apple,Banana,Cherry');
 
-        $this->assertTrue($this->testModel->hasTag('Apple'));
-        $this->assertTrue($this->testModel->hasTag('Banana'));
-        $this->assertTrue($this->testModel->hasTag('Cherry'));
-        $this->assertFalse($this->testModel->hasTag('Durian'));
+        self::assertTrue($this->testModel->hasTag('Apple'));
+        self::assertTrue($this->testModel->hasTag('Banana'));
+        self::assertTrue($this->testModel->hasTag('Cherry'));
+        self::assertFalse($this->testModel->hasTag('Durian'));
+    }
+
+    /**
+     * Test tagging a model using Tag IDs
+     */
+    public function testTagById(): void
+    {
+        // initialize some tags
+        $this->testModel->tag('Apple,Banana,Cherry,Durian');
+
+        $apple = $this->service->find('apple');
+        $banana = $this->service->find('banana');
+
+        // create a new model and tag it by ID
+        $newModel = $this->newModel();
+        $newModel->tagById([
+            $apple->getKey(),
+            $banana->getKey(),
+        ]);
+
+        self::assertArrayValuesAreEqual(
+            ['Apple', 'Banana'],
+            $newModel->getTagArrayAttribute()
+        );
+    }
+
+    /**
+     * Test untagging a model using Tag IDs
+     */
+    public function testUntagById(): void
+    {
+        // initialize some tags
+        $this->testModel->tag('Apple,Banana,Cherry,Durian');
+
+        // grab some of them
+        $apple = $this->service->find('Apple');
+        $banana = $this->service->find('Banana');
+
+        // untag by ID
+        $this->testModel->untagById([
+            $apple->getKey(),
+            $banana->getKey(),
+        ]);
+
+        self::assertArrayValuesAreEqual(
+            ['Cherry', 'Durian'],
+            $this->testModel->getTagArrayAttribute()
+        );
+    }
+
+    /**
+     * Test retagging a model using Tag IDs
+     */
+    public function testRetagById(): void
+    {
+        // initialize some tags
+        $this->testModel->tag('Apple,Banana,Cherry,Durian');
+
+        // grab some of them
+        $apple = $this->service->find('Apple');
+        $cherry = $this->service->find('Cherry');
+
+        // retag by ID
+        $this->testModel->retagById([
+            $apple->getKey(),
+            $cherry->getKey(),
+        ]);
+
+        self::assertArrayValuesAreEqual(
+            ['Apple', 'Cherry'],
+            $this->testModel->getTagArrayAttribute()
+        );
     }
 }

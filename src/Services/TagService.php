@@ -39,6 +39,19 @@ class TagService
     }
 
     /**
+     * Find existing tags by their IDs.
+     *
+     * @param int|int[] $ids
+     *
+     * @return \Illuminate\Database\Eloquent\Collection
+     */
+    public function findByIds($ids): Collection
+    {
+        $ids = (array) $ids;
+        return $this->tagModel::find($ids);
+    }
+
+    /**
      * Find an existing tag (or create a new one) by name.
      *
      * @param string $tagName

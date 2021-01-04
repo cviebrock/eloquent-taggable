@@ -74,6 +74,22 @@ trait Taggable
     }
 
     /**
+     * Attach one or more existing tags to a model,
+     * identified by the tag's IDs.
+     *
+     * @param int|int[] $ids
+     *
+     * @return $this
+     */
+    public function tagById($ids): self
+    {
+        $tags = app(TagService::class)->findByIds($ids);
+        $names = $tags->pluck('name')->all();
+
+        return $this->tag($names);
+    }
+
+    /**
      * Detach one or multiple tags from the model.
      *
      * @param string|array $tags
@@ -94,6 +110,22 @@ trait Taggable
     }
 
     /**
+     * Detach one or more existing tags to a model,
+     * identified by the tag's IDs.
+     *
+     * @param int|int[] $ids
+     *
+     * @return $this
+     */
+    public function untagById($ids): self
+    {
+        $tags = app(TagService::class)->findByIds($ids);
+        $names = $tags->pluck('name')->all();
+
+        return $this->untag($names);
+    }
+
+    /**
      * Remove all tags from the model and assign the given ones.
      *
      * @param string|array $tags
@@ -103,6 +135,18 @@ trait Taggable
     public function retag($tags): self
     {
         return $this->detag()->tag($tags);
+    }
+
+    /**
+     * Remove all tags from the model and assign the given ones by ID.
+     *
+     * @param int|int[] $ids
+     *
+     * @return self
+     */
+    public function retagById($ids): self
+    {
+        return $this->detag()->tagById($ids);
     }
 
     /**
