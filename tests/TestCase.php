@@ -33,21 +33,6 @@ abstract class TestCase extends Orchestra
     /**
      * @inheritdoc
      */
-    protected function getEnvironmentSetUp($app)
-    {
-        // set up database configuration
-        $app['config']->set('database.default', 'test');
-
-        $app['config']->set('database.connections.test', [
-            'driver'   => 'sqlite',
-            'database' => ':memory:',
-            'prefix'   => '',
-        ]);
-    }
-
-    /**
-     * @inheritdoc
-     */
     protected function getPackageProviders($app)
     {
         return [

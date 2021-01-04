@@ -80,7 +80,8 @@ class ConnectionTests extends TestCase
      */
     public function testModelConnection(): void
     {
-        self::assertEquals('test', $this->testModel->getConnectionName());
+        $defaultConnection = $this->app['config']->get('database.default');
+        self::assertEquals($defaultConnection, $this->testModel->getConnectionName());
 
         /** @var Tag $tag */
         $tag = $this->testModel->tags->first();
