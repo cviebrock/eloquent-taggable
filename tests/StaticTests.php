@@ -20,6 +20,11 @@ class StaticTests extends TestCase
     protected $testModel2;
 
     /**
+     * @var TestModel
+     */
+    protected $testModel3;
+
+    /**
      * @var TestDummy
      */
     protected $testDummy;
@@ -47,7 +52,7 @@ class StaticTests extends TestCase
     {
         $tags = TestModel::allTags();
 
-        $this->assertArrayValuesAreEqual(['Apple', 'Banana', 'Cherry'], $tags);
+        self::assertArrayValuesAreEqual(['Apple', 'Banana', 'Cherry'], $tags);
     }
 
     /**
@@ -57,7 +62,7 @@ class StaticTests extends TestCase
     {
         $tags = TestModel::allTagsList();
 
-        $this->assertEquals('Apple,Banana,Cherry', $tags);
+        self::assertEquals('Apple,Banana,Cherry', $tags);
     }
 
     /**
@@ -68,12 +73,12 @@ class StaticTests extends TestCase
         TestModel::renameTag('Apple', 'Apricot');
 
         $tags = TestModel::allTagsList();
-        $this->assertEquals('Apricot,Banana,Cherry', $tags);
+        self::assertEquals('Apricot,Banana,Cherry', $tags);
 
         // make sure the second model's tags didn't get renamed
 
         $tags = TestDummy::allTagsList();
-        $this->assertEquals('Apple,Durian', $tags);
+        self::assertEquals('Apple,Durian', $tags);
     }
 
     /**
@@ -88,7 +93,7 @@ class StaticTests extends TestCase
             'Banana' => 1,
         ];
 
-        $this->assertArrayValuesAreEqual($expected, $tags);
+        self::assertArrayValuesAreEqual($expected, $tags);
     }
 
     /**
@@ -103,7 +108,7 @@ class StaticTests extends TestCase
             'banana' => 1,
         ];
 
-        $this->assertArrayValuesAreEqual($expected, $tags);
+        self::assertArrayValuesAreEqual($expected, $tags);
     }
 
     /**
@@ -118,7 +123,7 @@ class StaticTests extends TestCase
             'Cherry' => 2,
         ];
 
-        $this->assertArrayValuesAreEqual($expected, $tags);
+        self::assertArrayValuesAreEqual($expected, $tags);
     }
 
     /**
@@ -133,7 +138,7 @@ class StaticTests extends TestCase
             'cherry' => 2,
         ];
 
-        $this->assertArrayValuesAreEqual($expected, $tags);
+        self::assertArrayValuesAreEqual($expected, $tags);
     }
 
     /**
@@ -153,6 +158,6 @@ class StaticTests extends TestCase
             'durian' => 1,
         ];
 
-        $this->assertArrayValuesAreEqual($expected, $tags);
+        self::assertArrayValuesAreEqual($expected, $tags);
     }
 }

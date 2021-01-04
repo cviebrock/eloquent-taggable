@@ -63,10 +63,10 @@ abstract class TestCase extends Orchestra
      * @param array $expected
      * @param array $actual
      */
-    protected function assertArrayValuesAreEqual(array $expected, array $actual): void
+    protected static function assertArrayValuesAreEqual(array $expected, array $actual): void
     {
-        $this->assertCount(count($expected), $actual);
-        $this->assertEqualsCanonicalizing($expected, $actual);
+        self::assertCount(count($expected), $actual);
+        self::assertEqualsCanonicalizing($expected, $actual);
     }
 
     /**

@@ -31,7 +31,7 @@ class CollectionTests extends TestCase
     {
         $tags = $this->testModel->tags;
 
-        $this->assertEquals(Collection::class, get_class($tags));
+        self::assertEquals(Collection::class, get_class($tags));
     }
 
     /**
@@ -41,7 +41,7 @@ class CollectionTests extends TestCase
     {
         $tagList = $this->testModel->tagList;
 
-        $this->assertEquals('Apple,Banana,Cherry', $tagList);
+        self::assertEquals('Apple,Banana,Cherry', $tagList);
     }
 
     /**
@@ -51,7 +51,7 @@ class CollectionTests extends TestCase
     {
         $tagListNormalized = $this->testModel->tagListNormalized;
 
-        $this->assertEquals('apple,banana,cherry', $tagListNormalized);
+        self::assertEquals('apple,banana,cherry', $tagListNormalized);
     }
 
     /**
@@ -61,7 +61,7 @@ class CollectionTests extends TestCase
     {
         $tagArray = $this->testModel->tagArray;
 
-        $this->assertArrayValuesAreEqual(['Apple', 'Banana', 'Cherry'], $tagArray);
+        self::assertArrayValuesAreEqual(['Apple', 'Banana', 'Cherry'], $tagArray);
     }
 
     /**
@@ -71,6 +71,6 @@ class CollectionTests extends TestCase
     {
         $tagArrayNormalized = $this->testModel->tagArrayNormalized;
 
-        $this->assertArrayValuesAreEqual(['apple', 'banana', 'cherry'], $tagArrayNormalized);
+        self::assertArrayValuesAreEqual(['apple', 'banana', 'cherry'], $tagArrayNormalized);
     }
 }

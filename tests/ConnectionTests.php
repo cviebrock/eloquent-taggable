@@ -67,8 +67,8 @@ class ConnectionTests extends TestCase
      */
     public function testTagging(): void
     {
-        $this->assertCount(3, $this->testModel->tags);
-        $this->assertArrayValuesAreEqual(
+        self::assertCount(3, $this->testModel->tags);
+        self::assertArrayValuesAreEqual(
             ['Apple', 'Banana', 'Cherry'],
             $this->testModel->getTagArrayAttribute()
         );
@@ -80,13 +80,13 @@ class ConnectionTests extends TestCase
      */
     public function testModelConnection(): void
     {
-        $this->assertEquals('test', $this->testModel->getConnectionName());
+        self::assertEquals('test', $this->testModel->getConnectionName());
 
         /** @var Tag $tag */
         $tag = $this->testModel->tags->first();
 
-        $this->assertEquals('test2', $tag->getConnectionName());
-        $this->assertEquals('test2', $tag->getConnection()->getTablePrefix());
+        self::assertEquals('test2', $tag->getConnectionName());
+        self::assertEquals('test2', $tag->getConnection()->getTablePrefix());
     }
 
     /**
@@ -97,27 +97,27 @@ class ConnectionTests extends TestCase
         // check the test model
         $allTags = $this->service->getAllTagsArray(TestModel::class);
 
-        $this->assertCount(4, $allTags);
-        $this->assertArrayValuesAreEqual(
+        self::assertCount(4, $allTags);
+        self::assertArrayValuesAreEqual(
             ['Apple','Banana','Cherry','Durian'],
             $allTags
         );
 
         // check the popular tags
         $popularTags = $this->service->getPopularTags(1);
-        $this->assertCount(1, $popularTags);
+        self::assertCount(1, $popularTags);
 
         $popularTag = $popularTags->first();
-        $this->assertEquals('Banana', $popularTag->name);
-        $this->assertEquals(2, $popularTag->taggable_count);
+        self::assertEquals('Banana', $popularTag->name);
+        self::assertEquals(2, $popularTag->taggable_count);
 
         // check unused tags
         $this->testModel2->untag('Durian');
         $unusedTags = $this->service->getAllUnusedTags();
-        $this->assertCount(1, $unusedTags);
+        self::assertCount(1, $unusedTags);
 
         $unusedTag = $unusedTags->first();
-        $this->assertEquals('Durian',$unusedTag->name);
+        self::assertEquals('Durian',$unusedTag->name);
 
     }
 }

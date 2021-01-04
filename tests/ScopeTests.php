@@ -96,7 +96,7 @@ class ScopeTests extends TestCase
         $models = TestModel::withAllTags('Apple,Banana')->get();
         $keys = $models->modelKeys();
 
-        $this->assertArrayValuesAreEqual(
+        self::assertArrayValuesAreEqual(
             [
                 $this->testModel3->getKey(),
                 $this->testModel4->getKey(),
@@ -114,7 +114,7 @@ class ScopeTests extends TestCase
         /** @var Collection $models */
         $models = TestModel::withAllTags('')->get();
 
-        $this->assertEmpty($models);
+        self::assertEmpty($models);
     }
 
     /**
@@ -125,7 +125,7 @@ class ScopeTests extends TestCase
         /** @var Collection $models */
         $models = TestModel::withAllTags('Apple,Kumquat')->get();
 
-        $this->assertEmpty($models);
+        self::assertEmpty($models);
     }
 
     /**
@@ -137,7 +137,7 @@ class ScopeTests extends TestCase
         $models = TestModel::withAnyTags('Apple,Banana')->get();
         $keys = $models->modelKeys();
 
-        $this->assertArrayValuesAreEqual(
+        self::assertArrayValuesAreEqual(
             [
                 $this->testModel2->getKey(),
                 $this->testModel3->getKey(),
@@ -158,7 +158,7 @@ class ScopeTests extends TestCase
         /** @var Collection $models */
         $models = TestModel::withAnyTags('')->get();
 
-        $this->assertEmpty($models);
+        self::assertEmpty($models);
     }
 
     /**
@@ -170,7 +170,7 @@ class ScopeTests extends TestCase
         $models = TestModel::withAnyTags('Apple,Kumquat')->get();
         $keys = $models->modelKeys();
 
-        $this->assertArrayValuesAreEqual(
+        self::assertArrayValuesAreEqual(
             [
                 $this->testModel2->getKey(),
                 $this->testModel3->getKey(),
@@ -190,7 +190,7 @@ class ScopeTests extends TestCase
         $models = TestModel::isTagged()->get();
         $keys = $models->modelKeys();
 
-        $this->assertArrayValuesAreEqual(
+        self::assertArrayValuesAreEqual(
             [
                 $this->testModel2->getKey(),
                 $this->testModel3->getKey(),
@@ -214,7 +214,7 @@ class ScopeTests extends TestCase
         $models = TestModel::withoutAllTags('Apple,Banana')->get();
         $keys = $models->modelKeys();
 
-        $this->assertArrayValuesAreEqual(
+        self::assertArrayValuesAreEqual(
             [
                 $this->testModel2->getKey(),
                 $this->testModel5->getKey(),
@@ -235,7 +235,7 @@ class ScopeTests extends TestCase
         $models = TestModel::withoutAllTags('Apple,Banana', true)->get();
         $keys = $models->modelKeys();
 
-        $this->assertArrayValuesAreEqual(
+        self::assertArrayValuesAreEqual(
             [
                 $this->testModel1->getKey(),
                 $this->testModel2->getKey(),
@@ -257,7 +257,7 @@ class ScopeTests extends TestCase
         $models = TestModel::withoutAnyTags('Apple,Banana')->get();
         $keys = $models->modelKeys();
 
-        $this->assertArrayValuesAreEqual(
+        self::assertArrayValuesAreEqual(
             [
                 $this->testModel5->getKey(),
             ],
@@ -275,7 +275,7 @@ class ScopeTests extends TestCase
         $models = TestModel::withoutAnyTags('Apple,Banana', true)->get();
         $keys = $models->modelKeys();
 
-        $this->assertArrayValuesAreEqual(
+        self::assertArrayValuesAreEqual(
             [
                 $this->testModel1->getKey(),
                 $this->testModel5->getKey(),
@@ -293,7 +293,7 @@ class ScopeTests extends TestCase
         $models = TestModel::isNotTagged()->get();
         $keys = $models->modelKeys();
 
-        $this->assertArrayValuesAreEqual(
+        self::assertArrayValuesAreEqual(
             [
                 $this->testModel1->getKey(),
             ],
@@ -310,7 +310,7 @@ class ScopeTests extends TestCase
         $models = TestModel::withAnyTags('Apple,Banana')->withoutAnyTags('Cherry')->get();
         $keys = $models->modelKeys();
 
-        $this->assertArrayValuesAreEqual(
+        self::assertArrayValuesAreEqual(
             [
                 $this->testModel2->getKey(),
                 $this->testModel3->getKey(),
@@ -331,7 +331,7 @@ class ScopeTests extends TestCase
         $models = TestModel::withoutAllTags('Apple,Banana')->withoutAnyTags('Cherry,Durian')->get();
         $keys = $models->modelKeys();
 
-        $this->assertArrayValuesAreEqual(
+        self::assertArrayValuesAreEqual(
             [
                 $this->testModel2->getKey()
             ],
@@ -348,7 +348,7 @@ class ScopeTests extends TestCase
         $models = TestModel::withAnyTags('Apple,Banana')->withAnyTags('Cherry,Durian')->get();
         $keys = $models->modelKeys();
 
-        $this->assertArrayValuesAreEqual(
+        self::assertArrayValuesAreEqual(
             [
                 $this->testModel4->getKey(), //Apple, Banana, Cherry
                 $this->testModel6->getKey(), //Apple, Durian
@@ -364,7 +364,7 @@ class ScopeTests extends TestCase
         /** @var \Illuminate\Pagination\LengthAwarePaginator $models */
         $models = TestModel::withAllTags('Apple,Banana')->paginate(2);
 
-        $this->assertCount(2, $models->items());
-        $this->assertEquals(3, $models->total());
+        self::assertCount(2, $models->items());
+        self::assertEquals(3, $models->total());
     }
 }

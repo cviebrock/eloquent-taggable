@@ -113,7 +113,7 @@ class InverseTests extends TestCase
         $models = $tag->test_models;
         $keys = $models->modelKeys();
 
-        $this->assertArrayValuesAreEqual(
+        self::assertArrayValuesAreEqual(
             [
                 $this->testModel3->getKey(),
                 $this->testModel4->getKey(),
@@ -127,7 +127,7 @@ class InverseTests extends TestCase
         $models = $tag->test_dummies;
         $keys = $models->modelKeys();
 
-        $this->assertArrayValuesAreEqual(
+        self::assertArrayValuesAreEqual(
             [
                 $this->testDummy1->getKey(),
                 $this->testModel2->getKey(),
@@ -151,6 +151,6 @@ class InverseTests extends TestCase
         // Check the test models
         $models = $tag->test_models;
 
-        $this->assertEmpty($models);
+        self::assertEmpty($models);
     }
 }

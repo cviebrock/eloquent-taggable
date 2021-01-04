@@ -7,7 +7,7 @@ use Cviebrock\EloquentTaggable\Events\ModelUntagged;
 /**
  * Class EventTests
  */
-class eventTests extends TestCase
+class EventTests extends TestCase
 {
 
     /**

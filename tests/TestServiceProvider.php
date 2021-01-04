@@ -10,11 +10,6 @@ class TestServiceProvider extends LaravelServiceProvider
 {
 
     /**
-     * @inheritdoc
-     */
-    protected $defer = false;
-
-    /**
      * Bootstrap the application events.
      */
     public function boot(): void

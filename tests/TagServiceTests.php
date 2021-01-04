@@ -50,7 +50,7 @@ class TagServiceTests extends TestCase
      */
     public function testServiceWasInstantiated(): void
     {
-        $this->assertEquals(TagService::class, get_class($this->service));
+        self::assertEquals(TagService::class, get_class($this->service));
     }
 
     /**
@@ -60,7 +60,7 @@ class TagServiceTests extends TestCase
     {
         $tags = $this->service->buildTagArray($this->testArray);
 
-        $this->assertArrayValuesAreEqual(
+        self::assertArrayValuesAreEqual(
             $this->testArray,
             $tags
         );
@@ -86,7 +86,7 @@ class TagServiceTests extends TestCase
     {
         $tags = $this->service->buildTagArray(collect($this->testArray));
 
-        $this->assertArrayValuesAreEqual(
+        self::assertArrayValuesAreEqual(
             $this->testArray,
             $tags
         );
@@ -99,7 +99,7 @@ class TagServiceTests extends TestCase
     {
         $tags = $this->service->buildTagArray($this->testString);
 
-        $this->assertArrayValuesAreEqual(
+        self::assertArrayValuesAreEqual(
             $this->testArray,
             $tags
         );
@@ -112,7 +112,7 @@ class TagServiceTests extends TestCase
     {
         $tags = $this->service->buildTagArrayNormalized($this->testArray);
 
-        $this->assertArrayValuesAreEqual(
+        self::assertArrayValuesAreEqual(
             $this->testArrayNormalized,
             $tags
         );
@@ -125,7 +125,7 @@ class TagServiceTests extends TestCase
     {
         $tags = $this->service->buildTagArrayNormalized(collect($this->testArray));
 
-        $this->assertArrayValuesAreEqual(
+        self::assertArrayValuesAreEqual(
             $this->testArrayNormalized,
             $tags
         );
@@ -138,7 +138,7 @@ class TagServiceTests extends TestCase
     {
         $tags = $this->service->buildTagArrayNormalized($this->testString);
 
-        $this->assertArrayValuesAreEqual(
+        self::assertArrayValuesAreEqual(
             $this->testArrayNormalized,
             $tags
         );
@@ -158,7 +158,7 @@ class TagServiceTests extends TestCase
 
         $keys = $this->service->getTagModelKeys(['apple', 'cherry']);
 
-        $this->assertArrayValuesAreEqual(
+        self::assertArrayValuesAreEqual(
             [1, 3],
             $keys
         );
@@ -171,7 +171,7 @@ class TagServiceTests extends TestCase
     {
         $keys = $this->service->getTagModelKeys();
 
-        $this->assertEmpty($keys);
+        self::assertEmpty($keys);
     }
 
     /**
@@ -193,15 +193,15 @@ class TagServiceTests extends TestCase
         // check the test model
         $allTags = $this->service->getAllTagsArray(TestModel::class);
 
-        $this->assertCount(3, $allTags);
-        $this->assertArrayValuesAreEqual(
+        self::assertCount(3, $allTags);
+        self::assertArrayValuesAreEqual(
             $this->testArray,
             $allTags
         );
 
         $allTagsNormalized = $this->service->getAllTagsArrayNormalized(TestModel::class);
-        $this->assertCount(3, $allTagsNormalized);
-        $this->assertArrayValuesAreEqual(
+        self::assertCount(3, $allTagsNormalized);
+        self::assertArrayValuesAreEqual(
             $this->testArrayNormalized,
             $allTagsNormalized
         );
@@ -209,15 +209,15 @@ class TagServiceTests extends TestCase
         // check the dummy model
         $allTags = $this->service->getAllTagsArray($dummy);
 
-        $this->assertCount(2, $allTags);
-        $this->assertArrayValuesAreEqual(
+        self::assertCount(2, $allTags);
+        self::assertArrayValuesAreEqual(
             ['Apple', 'Durian'],
             $allTags
         );
 
         $allTagsNormalized = $this->service->getAllTagsArrayNormalized($dummy);
-        $this->assertCount(2, $allTagsNormalized);
-        $this->assertArrayValuesAreEqual(
+        self::assertCount(2, $allTagsNormalized);
+        self::assertArrayValuesAreEqual(
             ['apple', 'durian'],
             $allTagsNormalized
         );
@@ -225,15 +225,15 @@ class TagServiceTests extends TestCase
         // check all models
         $allTags = $this->service->getAllTagsArray();
 
-        $this->assertCount(4, $allTags);
-        $this->assertArrayValuesAreEqual(
+        self::assertCount(4, $allTags);
+        self::assertArrayValuesAreEqual(
             ['Apple', 'Banana', 'Cherry', 'Durian'],
             $allTags
         );
 
         $allTagsNormalized = $this->service->getAllTagsArrayNormalized();
-        $this->assertCount(4, $allTagsNormalized);
-        $this->assertArrayValuesAreEqual(
+        self::assertCount(4, $allTagsNormalized);
+        self::assertArrayValuesAreEqual(
             ['apple', 'banana', 'cherry', 'durian'],
             $allTagsNormalized
         );
@@ -255,8 +255,8 @@ class TagServiceTests extends TestCase
 
         $unusedTags = $this->service->getAllUnusedTags();
 
-        $this->assertCount(2, $unusedTags);
-        $this->assertArrayValuesAreEqual(
+        self::assertCount(2, $unusedTags);
+        self::assertArrayValuesAreEqual(
             ['Apple', 'Banana'],
             $unusedTags->pluck('name')->toArray()
         );
@@ -281,14 +281,14 @@ class TagServiceTests extends TestCase
         // Rename the tags just for one model class
         $count = $this->service->renameTags('Apple', 'Apricot', TestModel::class);
 
-        $this->assertEquals(1, $count);
+        self::assertEquals(1, $count);
 
         // Check the test model's tags were renamed
         $model->load('tags');
         $testTags = $model->getTagArrayAttribute();
 
-        $this->assertCount(3, $testTags);
-        $this->assertArrayValuesAreEqual(
+        self::assertCount(3, $testTags);
+        self::assertArrayValuesAreEqual(
             ['Apricot', 'Banana', 'Cherry'],
             $testTags
         );
@@ -297,8 +297,8 @@ class TagServiceTests extends TestCase
         $dummy->load('tags');
         $dummyTags = $dummy->getTagArrayAttribute();
 
-        $this->assertCount(2, $dummyTags);
-        $this->assertArrayValuesAreEqual(
+        self::assertCount(2, $dummyTags);
+        self::assertArrayValuesAreEqual(
             ['Apple', 'Durian'],
             $dummyTags
         );
@@ -306,8 +306,8 @@ class TagServiceTests extends TestCase
         // Confirm the list of all tags
         $allTags = $this->service->getAllTagsArray();
 
-        $this->assertCount(5, $allTags);
-        $this->assertArrayValuesAreEqual(
+        self::assertCount(5, $allTags);
+        self::assertArrayValuesAreEqual(
             ['Apricot', 'Apple', 'Banana', 'Cherry', 'Durian'],
             $allTags
         );
@@ -332,14 +332,14 @@ class TagServiceTests extends TestCase
         // Rename the tags just for all model classes
         $count = $this->service->renameTags('Apple', 'Apricot');
 
-        $this->assertEquals(1, $count);
+        self::assertEquals(1, $count);
 
         // Check the test model's tags were renamed
         $model->load('tags');
         $testTags = $model->getTagArrayAttribute();
 
-        $this->assertCount(3, $testTags);
-        $this->assertArrayValuesAreEqual(
+        self::assertCount(3, $testTags);
+        self::assertArrayValuesAreEqual(
             ['Apricot', 'Banana', 'Cherry'],
             $testTags
         );
@@ -348,8 +348,8 @@ class TagServiceTests extends TestCase
         $dummy->load('tags');
         $dummyTags = $dummy->getTagArrayAttribute();
 
-        $this->assertCount(2, $dummyTags);
-        $this->assertArrayValuesAreEqual(
+        self::assertCount(2, $dummyTags);
+        self::assertArrayValuesAreEqual(
             ['Apricot', 'Durian'],
             $dummyTags
         );
@@ -357,8 +357,8 @@ class TagServiceTests extends TestCase
         // Confirm the list of all tags
         $allTags = $this->service->getAllTagsArray();
 
-        $this->assertCount(4, $allTags);
-        $this->assertArrayValuesAreEqual(
+        self::assertCount(4, $allTags);
+        self::assertArrayValuesAreEqual(
             ['Apricot', 'Banana', 'Cherry', 'Durian'],
             $allTags
         );
@@ -378,7 +378,7 @@ class TagServiceTests extends TestCase
         // Rename the tags just for one model class
         $count = $this->service->renameTags('Durian', 'Date', TestModel::class);
 
-        $this->assertEquals(0, $count);
+        self::assertEquals(0, $count);
     }
 
     /**
@@ -409,10 +409,10 @@ class TagServiceTests extends TestCase
         // test all popular tags
         $popular = $this->service->getPopularTags();
 
-        $this->assertCount(4, $popular);
+        self::assertCount(4, $popular);
 
         $popularNames = implode(',', $popular->pluck('name')->toArray());
-        $this->assertEquals('Apple,Cherry,Durian,Banana', $popularNames);
+        self::assertEquals('Apple,Cherry,Durian,Banana', $popularNames);
     }
 
     /**
@@ -424,10 +424,10 @@ class TagServiceTests extends TestCase
 
         $popular = $this->service->getPopularTags(2);
 
-        $this->assertCount(2, $popular);
+        self::assertCount(2, $popular);
 
         $popularNames = implode(',', $popular->pluck('name')->toArray());
-        $this->assertEquals('Apple,Cherry', $popularNames);
+        self::assertEquals('Apple,Cherry', $popularNames);
     }
 
     /**
@@ -439,10 +439,10 @@ class TagServiceTests extends TestCase
 
         $popular = $this->service->getPopularTags(2, TestDummy::class);
 
-        $this->assertCount(2, $popular);
+        self::assertCount(2, $popular);
 
         $popularNames = implode(',', $popular->pluck('name')->toArray());
-        $this->assertEquals('Durian,Cherry', $popularNames);
+        self::assertEquals('Durian,Cherry', $popularNames);
     }
 
     /**
@@ -454,10 +454,10 @@ class TagServiceTests extends TestCase
 
         $popular = $this->service->getPopularTags(10, null, 5);
 
-        $this->assertCount(3, $popular);
+        self::assertCount(3, $popular);
 
         $popularNames = implode(',', $popular->pluck('name')->toArray());
-        $this->assertEquals('Apple,Cherry,Durian', $popularNames);
+        self::assertEquals('Apple,Cherry,Durian', $popularNames);
     }
 
     /**
@@ -469,9 +469,9 @@ class TagServiceTests extends TestCase
 
         $popular = $this->service->getPopularTags(10, TestModel::class, 5);
 
-        $this->assertCount(1, $popular);
+        self::assertCount(1, $popular);
 
         $popularNames = implode(',', $popular->pluck('name')->toArray());
-        $this->assertEquals('Apple', $popularNames);
+        self::assertEquals('Apple', $popularNames);
     }
 }
