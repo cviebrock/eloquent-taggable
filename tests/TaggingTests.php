@@ -299,4 +299,16 @@ class TaggingTests extends TestCase
             $this->testModel->getTagArrayAttribute()
         );
     }
+
+    public function testNormalizedAccents(): void
+    {
+        $this->testModel->tag('Péché');
+        $this->testModel->tag('Peche');
+        $this->testModel->tag('péché');
+
+        $this->assertArrayValuesAreEqual(
+            ['Péché', 'Peche'],
+            $this->testModel->getTagArrayAttribute()
+        );
+    }
 }
