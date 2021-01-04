@@ -109,6 +109,8 @@ That's it ... your model is now "taggable"!
 
 ## Usage
 
+### Adding and Removing Tags from a Model
+
 Tag your models with the `tag()` method:
 
 ```php
@@ -149,6 +151,51 @@ $model->retag('Etrog,Fig,Grape');
 
 // $model is now just tagged with "Etrog", "Fig", and "Grape"
 ```
+
+If you have an array of Tag model IDs (primary keys) already, 
+you can tag a model using those IDs instead of the tag names:
+
+```php
+// assuming no other tags exist yet ...
+$model->tag('Apple','Banana','Cherry','Durian');
+
+$newModel->tagById([1,3]);
+// ... $newModel is tagged with "Apple" and "Cherry"
+```
+
+Similarly, you can untag by ID as well:
+
+```php
+// assuming no other tags exist yet ...
+$model->tag('Apple','Banana','Cherry','Durian');
+
+$model->untagById([1,3]);
+// ... $model is now only tagged with "Banana" and "Durian"
+```
+
+Tagging/untagging/retagging by ID is useful if you have, for instance, a
+form with a multi-select dropdown or a list of checkboxes of all tags, e.g.:
+
+```html
+<select name="tags" multiple>
+  <option value="1">Apple</option>
+  <option value="2">Banana</option>
+  <option value="3">Cherry</option>
+  ... etc.
+</select>
+```
+
+When the form submits, the data sent to your controller is an array
+of all the selected tag IDs.  It is then easy to update the model 
+accordingly with the selected tags:
+
+```php
+$tags = $request->input('tags');
+$model->retagById($tags);
+```
+
+
+### Working with a Model's Tags
 
 You can get the array of all tags (technically, an Eloquent Collection):
 
@@ -332,9 +379,10 @@ Model::allTagsList();
 Model::allTagModels();
 ```
 
+
 ## Events
 
-You can create a listener to handle when a model is Tagged:
+You can create a listener to handle when a model is tagged:
 
 ```php
 // in your EventServiceProvider 

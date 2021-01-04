@@ -1,5 +1,11 @@
 # Changelog
 
+## 8.0.X - 04-Jan-2021
+
+- add `tagById()`, `untagById()`, and `retagById()` methods (suggested by #110)
+- update test internals to use static assertions
+
+
 ## 8.0.1 - 02-Dec-2020
 
 - support PHP 8.0
