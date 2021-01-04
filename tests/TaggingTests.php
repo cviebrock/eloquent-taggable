@@ -233,7 +233,7 @@ class TaggingTests extends TestCase
         $this->testModel->tag('péché');
 
         $this->assertArrayValuesAreEqual(
-            ['Péché','Peche'],
+            ['Péché', 'Peche'],
             $this->testModel->getTagArrayAttribute()
         );
     }
