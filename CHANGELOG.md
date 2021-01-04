@@ -1,9 +1,11 @@
 # Changelog
 
-## 8.0.X - 04-Jan-2021
+## 8.0.2 - 04-Jan-2021
 
 - add `tagById()`, `untagById()`, and `retagById()` methods (suggested by #110)
+- fix for handling accented characters in normalized column (#116, thanks @pierrocknroll)
 - update test internals to use static assertions
+- update automated testing to use MySQL instead of sqlite (to catch issues like #116)
 
 
 ## 8.0.1 - 02-Dec-2020
