@@ -293,11 +293,11 @@ class TagService
         $sql .= ' GROUP BY t.tag_id, t.name, t.normalized, t.created_at, t.updated_at';
 
         if ($minCount > 1) {
-            $sql .= ' HAVING taggable_count >= ?';
+            $sql .= ' HAVING COUNT(t.tag_id) >= ?';
             $bindings[] = $minCount;
         }
 
-        $sql .= ' ORDER BY taggable_count DESC';
+        $sql .= ' ORDER BY COUNT(t.tag_id) DESC';
 
         if ($limit) {
             $sql .= ' LIMIT ?';
