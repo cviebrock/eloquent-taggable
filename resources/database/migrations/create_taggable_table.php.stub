@@ -18,7 +18,17 @@ class CreateTaggableTable extends Migration
         $taggableTaggablesTable = config('taggable.tables.taggable_taggables', 'taggable_taggables');
 
         $charset = Schema::connection($connection)->getConnection()->getConfig('charset') ?? 'utf8mb4';
-        $collation = $charset .'_bin';
+        $driver = Schema::connection($connection)->getConnection()->getConfig('driver');
+
+        switch ($driver) {
+            case 'pgsql':
+                $collation = null;
+                break;
+            case 'sqlite':
+            case 'sqlsrv':
+            default:
+                $collation = $charset .'_bin';
+        }
 
         if (!Schema::connection($connection)->hasTable($taggableTagsTable)) {
             Schema::connection($connection)->create($taggableTagsTable, static function(Blueprint $table) use ($collation) {
