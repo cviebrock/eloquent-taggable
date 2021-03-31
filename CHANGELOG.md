@@ -1,5 +1,10 @@
 # Changelog
 
+## 8.0.3 - 30-Mar-2021
+
+- fixes for Postgres(#123 and #124, thanks @0528Makoto)
+
+
 ## 8.0.2 - 04-Jan-2021
 
 - add `tagById()`, `untagById()`, and `retagById()` methods (suggested by #110)
