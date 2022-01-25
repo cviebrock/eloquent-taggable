@@ -29,7 +29,7 @@
     "require-dev": {
         "limedeck/phpunit-detailed-printer": "^6.0",
         "orchestra/database": "^6.0",
-        "orchestra/testbench": "^6.5",
+        "orchestra/testbench": "^6.18",
         "phpunit/phpunit": "^9.4"
     },
     "autoload": {
@@ -49,6 +49,9 @@
         ],
         "tests": [
             "php vendor/bin/phpunit"
+        ],
+        "post-autoload-dump": [
+            "@php ./vendor/bin/testbench package:discover --ansi"
         ]
     },
     "extra": {
@@ -58,6 +61,6 @@
             ]
         }
     },
-    "minimum-stability": "dev",
+    "minimum-stability": "stable",
     "prefer-stable": true
 }

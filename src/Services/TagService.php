@@ -72,7 +72,7 @@ class TagService
     /**
      * Convert a delimited string into an array of tag strings.
      *
-     * @param string|array|\Illuminate\Support\Collection $tags
+     * @param string|array|\Cviebrock\EloquentTaggable\Models\Tag|\Illuminate\Support\Collection $tags
      *
      * @return array
      * @throws \ErrorException
@@ -81,6 +81,8 @@ class TagService
     {
         if (is_array($tags)) {
             $array = $tags;
+        } elseif ($tags instanceof Tag) {
+            $array = [$tags->normalized];
         } elseif ($tags instanceof BaseCollection) {
             $array = $this->buildTagArray($tags->all());
         } elseif (is_string($tags)) {
@@ -93,7 +95,7 @@ class TagService
         } else {
 
             throw new \ErrorException(
-                __CLASS__ . '::' . __METHOD__ . ' expects parameter 1 to be string, array or Collection; ' .
+                __CLASS__ . '::' . __METHOD__ . ' expects parameter 1 to be string, array, Tag or Collection; ' .
                 gettype($tags) . ' given'
             );
         }
@@ -106,7 +108,7 @@ class TagService
     /**
      * Convert a delimited string into an array of normalized tag strings.
      *
-     * @param string|array|\Illuminate\Support\Collection $tags
+     * @param string|array|\Cviebrock\EloquentTaggable\Models\Tag|\Illuminate\Support\Collection $tags
      *
      * @return array
      * @throws \ErrorException
