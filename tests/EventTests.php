@@ -2,7 +2,7 @@
 
 use Cviebrock\EloquentTaggable\Events\ModelTagged;
 use Cviebrock\EloquentTaggable\Events\ModelUntagged;
-
+use Illuminate\Support\Facades\Event;
 
 /**
  * Class EventTests
@@ -22,7 +22,10 @@ class EventTests extends TestCase
     {
         parent::setUp();
 
+        Event::fake();
+
         $this->testModel = $this->newModel();
+        $this->testModel->tag('Apple');
     }
 
     /**
@@ -30,9 +33,7 @@ class EventTests extends TestCase
      */
     public function testModelTaggedEvent(): void
     {
-        $this->expectsEvents(ModelTagged::class);
-
-        $this->testModel->tag('Apple');
+        Event::assertDispatched(ModelTagged::class);
     }
 
     /**
@@ -40,11 +41,9 @@ class EventTests extends TestCase
      */
     public function testModelUntaggedEvent(): void
     {
-        $this->testModel->tag('Apple');
-
-        $this->expectsEvents(ModelUntagged::class);
-
         $this->testModel->untag('Apple');
+
+        Event::assertDispatched(ModelUntagged::class);
     }
 
 }
