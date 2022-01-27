@@ -35,13 +35,14 @@ version should match the Laravel version.
 
 | Laravel Version | Package Version |
 |:---------------:|:---------------:|
-|       8.0       |     ^8.0        |
-|       7.0       |     ^7.0        |
-|       6.0       |     ^6.0        |
-|       5.8       |     3.5.*       |
-|       5.7       |     3.4.*       |
-|       5.6       |     3.3.*       |
-|       5.5       |     3.2.*       |
+|       9.0       |      ^9.0       |
+|       8.0       |      ^8.0       |
+|       7.0       |      ^7.0       |
+|       6.0       |      ^6.0       |
+|       5.8       |      3.5.*      |
+|       5.7       |      3.4.*      |
+|       5.6       |      3.3.*      |
+|       5.5       |      3.2.*      |
 |       5.4       |     3.1.*†      |
 
 † Version 3.1 of the package requires PHP 7.0 or later, even though Laravel 5.4 doesn't.
@@ -49,7 +50,7 @@ version should match the Laravel version.
 Older versions of Laravel can use older versions of the package, although they
 are no longer supported or maintained.  See [CHANGELOG.md](CHANGELOG.md) and
 [UPGRADING.md](UPGRADING.md) for specifics, and be sure that you are reading
-the correct README.md for your version (Github displays the version in
+the correct README.md for your version (GitHub displays the version in
 the _master_ branch by default, which might not be what you want).
 
 
@@ -102,7 +103,7 @@ class MyModel extends Eloquent
 }
 ```
 
-> **NOTE**: Make sure your model doesn't have an attribute and/or column in its database table called `tags`; the trait will add that attribute for you.)
+> **NOTE**: Make sure your model doesn't have an attribute and/or column in its database table called `tags`; the trait will add that attribute for you.
 
 That's it ... your model is now "taggable"!
 
@@ -256,20 +257,20 @@ For reference, imagine the following models have been tagged:
 
 | Model Id | Tags                  |
 |:--------:|-----------------------|
-|     1    | - no tags -           |
-|     2    | apple                 |
-|     3    | apple, banana         |
-|     4    | apple, banana, cherry |
-|     5    | cherry                |
-|     6    | apple, durian         |
-|     7    | banana, durian        |
-|     8    | apple, banana, durian |
+|    1     | - no tags -           |
+|    2     | apple                 |
+|    3     | apple, banana         |
+|    4     | apple, banana, cherry |
+|    5     | cherry                |
+|    6     | apple, durian         |
+|    7     | banana, durian        |
+|    8     | apple, banana, durian |
 
 
 You can easily find models with tags through some query scopes:
 
 ```php
-// Find models that are tagged with all of the given tags
+// Find models that are tagged with all the given tags
 // i.e. everything tagged "Apple AND Banana".
 // (returns models with Ids: 3, 4, 8)
 
@@ -290,7 +291,7 @@ Model::isTagged()->get();
 And the inverse:
 
 ```php
-// Find models that are not tagged with all of the given tags,
+// Find models that are not tagged with all the given tags,
 // i.e. everything not tagged "Apple AND Banana".
 // (returns models with Ids: 2, 5, 6, 7)
 
@@ -345,7 +346,7 @@ Combining scopes:
 
 Model::withAnyTags('Apple,Banana')::withoutAnyTags('Cherry')->get();
 
-// Find models that are not tagged with all of the given tags,
+// Find models that are not tagged with all the given tags,
 // i.e. everything not tagged "Apple AND Banana".
 // and models without any one of the given tags
 // i.e. everything not tagged "Cherry OR Durian".
@@ -541,7 +542,7 @@ return [
 These are the single-character strings that can delimit the list of tags passed to the `tag()` method.
 By default, it's just the comma, but you can change it to another character, or use multiple characters.
 
-For example, if __delimiters__ is set to ";,/", the this will work as expected:
+For example, if __delimiters__ is set to ";,/", then this will work as expected:
 
 ```php
 $model->tag('Apple/Banana;Cherry,Durian');
@@ -611,7 +612,7 @@ Passing empty strings or arrays to any of the scope methods is an interesting si
 Logically, you can't get a list of models that have all or any of a list of tags ... if the list is empty!
 
 By default, the `throwEmptyExceptions` is set to false.  Passing an empty value to a query scope
-will "short-circuit" the query and return no models.  This makes your application code cleaner
+will "short-circuit" the query and return no models.  This makes your application code cleaner,
 so you don't need to check for empty values before calling the scope.
 
 However, if `throwEmptyExceptions` is set to true, then passing an empty value to the scope will
@@ -622,8 +623,8 @@ You can then catch the exception in your application code and handle it however 
 
 If you want to be able to find all the models that share a tag, you will need
 to define the inverse relations here.  The array keys are the relation names
-you would use to access them (e.g. "posts") and the values are the qualified
-class names of the models that are taggable (e.g. "\App\Post).  e.g. with
+you would use to access them (e.g. `posts`) and the values are the qualified
+class names of the models that are taggable (e.g. `\App\Post`).  e.g. with
 the following configuration:
 
 ```php
@@ -642,7 +643,7 @@ This will return a collection of all the Posts that are tagged "Apple".
 
 ### model
 
-By default, the package will use it's own model class for Tags.  If you want to
+By default, the package will use its own model class for Tags.  If you want to
 use your own customized Tag model, then extend the package's class with
 your own class, and update the configuration to reference your model.
 
@@ -658,7 +659,7 @@ model, service, and migration classes will all read the configuration values.
 
 Thanks to [everyone](https://github.com/cviebrock/eloquent-taggable/graphs/contributors)
 who has contributed to this project, with a big shout-out to
-[Michael Riediger](https://stackoverflow.com/users/502502/riedsio) for help optimizing the SQL.
+[Michael Riediger](https://stackoverflow.com/users/502502/riedsio) for helping optimize the SQL.
 
 Special thanks to
 [JetBrains](https://www.jetbrains.com/?from=cviebrock/eloquent-taggable) for their
@@ -666,7 +667,7 @@ Open Source License Program ... and the excellent PHPStorm IDE, of course!
 
 [![JetBrains](./.github/jetbrains.svg)](https://www.jetbrains.com/?from=cviebrock/eloquent-taggable)
 
-Please use [Github](https://github.com/cviebrock/eloquent-taggable) for reporting bugs,
+Please use [GitHub](https://github.com/cviebrock/eloquent-taggable) for reporting bugs,
 and making comments or suggestions.
 
 See [CONTRIBUTING.md](CONTRIBUTING.md) for how to contribute changes.

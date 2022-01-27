@@ -1,6 +1,6 @@
 # Changelog
 
-## 9.0.0 - 24-Jan-2022
+## 9.0.0 - 27-Jan-2022
 
 - Laravel 9.0 support
 
