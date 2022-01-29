@@ -74,7 +74,7 @@ class TagService
      *
      * @param string|array|\Cviebrock\EloquentTaggable\Models\Tag|\Illuminate\Support\Collection $tags
      *
-     * @return array
+     * @return array|Collection
      * @throws \ErrorException
      */
     public function buildTagArray($tags): array
@@ -84,7 +84,7 @@ class TagService
         } elseif ($tags instanceof Tag) {
             $array = [$tags->normalized];
         } elseif ($tags instanceof BaseCollection) {
-            $array = $this->buildTagArray($tags->all());
+            $array = $tags->all();
         } elseif (is_string($tags)) {
             $array = preg_split(
                 '#[' . preg_quote(config('taggable.delimiters'), '#') . ']#',
