@@ -55,7 +55,7 @@ trait Taggable
     /**
      * Attach one or multiple tags to the model.
      *
-     * @param string|array $tags
+     * @param string|array|Collection $tags
      *
      * @return self
      */
