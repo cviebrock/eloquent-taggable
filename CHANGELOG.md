@@ -1,5 +1,11 @@
 # Changelog
 
+## 10.0.0 - 17-Feb-2023
+
+- Laravel 10.0 support
+- switch to using Pest instead of PHPUnit for tests
+
+
 ## 9.0.1 - 17-Feb-2023
 
 - fixes for `taggedModels` not working
