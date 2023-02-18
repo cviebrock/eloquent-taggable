@@ -661,12 +661,6 @@ Thanks to [everyone](https://github.com/cviebrock/eloquent-taggable/graphs/contr
 who has contributed to this project, with a big shout-out to
 [Michael Riediger](https://stackoverflow.com/users/502502/riedsio) for helping optimize the SQL.
 
-Special thanks to
-[JetBrains](https://www.jetbrains.com/?from=cviebrock/eloquent-taggable) for their
-Open Source License Program ... and the excellent PHPStorm IDE, of course!
-
-[![JetBrains](./.github/jetbrains.svg)](https://www.jetbrains.com/?from=cviebrock/eloquent-taggable)
-
 Please use [GitHub](https://github.com/cviebrock/eloquent-taggable) for reporting bugs,
 and making comments or suggestions.
 
