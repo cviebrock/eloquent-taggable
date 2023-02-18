@@ -76,10 +76,10 @@ class Tag extends Model
     /**
      * @inheritdoc
      */
-    public function getRelationValue($key)
+    public function isRelation($key)
     {
         // Check for regular relation first
-        if ($return = parent::getRelationValue($key)) {
+        if ($return = parent::isRelation($key)) {
             return $return;
         }
 

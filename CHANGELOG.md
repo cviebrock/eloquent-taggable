@@ -1,5 +1,10 @@
 # Changelog
 
+## 9.0.1 - 17-Feb-2023
+
+- fixes for `taggedModels` not working
+
+
 ## 9.0.0 - 27-Jan-2022
 
 - Laravel 9.0 support
