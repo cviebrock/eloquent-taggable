@@ -7,6 +7,7 @@ use Cviebrock\EloquentTaggable\Taggable;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\MorphToMany;
+use Illuminate\Database\Eloquent\Relations\Pivot;
 use Illuminate\Support\Collection as BaseCollection;
 
 
@@ -388,7 +389,7 @@ class TagService
             : new class extends Model {
                 use Taggable;
                 function getMorphClass() {
-                    return 'taggable-anonymous'; // any value will work, to keep Relation::enforceMorphMap() happy
+                    return Pivot::class;
                 }
             };
 
