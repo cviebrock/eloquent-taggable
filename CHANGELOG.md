@@ -1,5 +1,10 @@
 # Changelog
 
+## 10.0.1 - 06-Jan-2024
+
+- fixes for morph relations (#140, thanks @anaxamaxan)
+
+
 ## 10.0.0 - 17-Feb-2023
 
 - Laravel 10.0 support
