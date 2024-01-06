@@ -7,6 +7,7 @@ use Cviebrock\EloquentTaggable\Taggable;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\MorphToMany;
+use Illuminate\Database\Eloquent\Relations\Pivot;
 use Illuminate\Support\Collection as BaseCollection;
 
 
@@ -218,7 +219,7 @@ class TagService
               LEFT JOIN {$tagTable} t ON tt.tag_id=t.tag_id
               WHERE tt.taggable_type = ?";
 
-        return $this->tagModel::fromQuery($sql, [$class]);
+        return $this->tagModel::fromQuery($sql, [$this->getClassTaggableType($class)]);
     }
 
     /**
@@ -288,7 +289,7 @@ class TagService
 
         if ($class) {
             $sql .= ' WHERE tt.taggable_type = ?';
-            $bindings[] = ($class instanceof Model) ? get_class($class) : $class;
+            $bindings[] = $this->getClassTaggableType($class);
         }
 
         // group by everything to handle strict and non-strict mode in MySQL
@@ -383,10 +384,23 @@ class TagService
     private function getQualifiedPivotTableName(string $class=null): string
     {
         /** @var \Cviebrock\EloquentTaggable\Taggable $instance */
-        $instance = $class ? new $class : new class extends Model { use Taggable; };
+        $instance = $class
+            ? new $class
+            : new class extends Model {
+                use Taggable;
+                function getMorphClass() {
+                    return Pivot::class;
+                }
+            };
 
         return $instance->tags()->getConnection()->getTablePrefix() .
                 $instance->tags()->getTable();
     }
 
+    private function getClassTaggableType($class): string
+    {
+        return $class instanceof Model
+            ? $class->getMorphClass()
+            : (new $class)->getMorphClass();
+    }
 }
