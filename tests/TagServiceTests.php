@@ -314,6 +314,32 @@ class TagServiceTests extends TestCase
     }
 
     /**
+     * Test renaming a tag.
+     */
+    public function testRenamingTagWithCustomMorphClass(): void
+    {
+        // Create a model with a custom morph class key
+        $morphModel = new class extends TestModel {
+            protected $attributes = [
+                'title' => 'testing morph model'
+            ];
+            public function getMorphClass()
+            {
+                return 'test-morph-model'; // can any custom key that is different from the class name
+            }
+        };
+        $morphModel->save();
+
+        $morphModel->tag('Apple');
+        $morphModel->tag('Banana');
+        $morphModel->tag('Cherry');
+
+        // Rename the tags just for one model class
+        $count = $this->service->renameTags('Apple', 'Apricot', $morphModel);
+        $this->assertEquals(1, $count);
+    }
+
+    /**
      * Test renaming a tag across all models.
      */
     public function testRenamingTagAllModels(): void

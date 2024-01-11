@@ -354,7 +354,7 @@ class TagService
 
         return $pivot
             ->where($relatedKeyName, $oldTag->getKey())
-            ->where($relatedMorphType, get_class($class))
+            ->where($relatedMorphType, $class->getMorphClass())
             ->update([
                 $relatedKeyName => $newTag->getKey(),
             ]);
