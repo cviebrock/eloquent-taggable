@@ -314,7 +314,7 @@ class TagServiceTests extends TestCase
     }
 
     /**
-     * Test renaming a tag.
+     * Test renaming a tag with a custom morph class key.
      */
     public function testRenamingTagWithCustomMorphClass(): void
     {
