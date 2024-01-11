@@ -334,7 +334,7 @@ class TagServiceTests extends TestCase
         $morphModel->tag('Banana');
         $morphModel->tag('Cherry');
 
-        // Rename the tags just for one model class
+        // Rename the tags the morphModel class should have exactly 1 update
         $count = $this->service->renameTags('Apple', 'Apricot', $morphModel);
         $this->assertEquals(1, $count);
     }
