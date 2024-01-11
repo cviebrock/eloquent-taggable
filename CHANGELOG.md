@@ -1,5 +1,10 @@
 # Changelog
 
+## 10.0.2 - 11-Jan-2024
+
+- more fixes for morph relations (#142, thanks @anaxamaxan)
+
+
 ## 10.0.1 - 06-Jan-2024
 
 - fixes for morph relations (#140, thanks @anaxamaxan)
