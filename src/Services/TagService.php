@@ -90,7 +90,7 @@ class TagService
             $array = preg_split(
                 '#[' . preg_quote(config('taggable.delimiters'), '#') . ']#',
                 $tags,
-                null,
+                -1,
                 PREG_SPLIT_NO_EMPTY
             );
         } else {

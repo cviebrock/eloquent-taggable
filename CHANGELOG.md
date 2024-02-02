@@ -1,5 +1,10 @@
 # Changelog
 
+## 10.0.3 - 02-Feb-2024
+
+- fix for deprecated `preg_split` parameter value (#144, thanks @XternalSoft)
+
+
 ## 10.0.2 - 11-Jan-2024
 
 - more fixes for morph relations (#142, thanks @anaxamaxan)
