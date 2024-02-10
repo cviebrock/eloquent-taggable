@@ -30,6 +30,7 @@ class ConnectionTests extends TestCase
         $app['config']->set('database.connections.test2', [
             'driver'   => 'sqlite',
             'database' => ':memory:',
+            'collation' => 'utf8mb4',
             'prefix'   => 'test2',
         ]);
 
