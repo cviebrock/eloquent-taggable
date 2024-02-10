@@ -14,15 +14,28 @@ Easily add the ability to tag your Eloquent models in Laravel.
 [![License](https://img.shields.io/packagist/l/cviebrock/eloquent-taggable)](LICENSE.md)
 
 
-* [Installation](#installation)
-* [Updating your Eloquent Models](#updating-your-eloquent-models)
-* [Usage](#usage)
-* [Query Scopes](#query-scopes)
-* [The Tag Model](#the-tag-model)
-* [The TagService Class](#the-tagservice-class)
-* [Configuration](#configuration)
-* [Bugs, Suggestions, Contributions and Support](#bugs-suggestions-contributions-and-support)
-* [Copyright and License](#copyright-and-license)
+- [Eloquent-Taggable](#eloquent-taggable)
+  - [Installation](#installation)
+  - [Updating your Eloquent Models](#updating-your-eloquent-models)
+  - [Usage](#usage)
+    - [Adding and Removing Tags from a Model](#adding-and-removing-tags-from-a-model)
+    - [Working with a Model's Tags](#working-with-a-models-tags)
+  - [Query Scopes](#query-scopes)
+  - [Events](#events)
+  - [Other Methods](#other-methods)
+  - [The Tag Model](#the-tag-model)
+  - [The TagService Class](#the-tagservice-class)
+  - [Configuration](#configuration)
+    - [delimiters](#delimiters)
+    - [glue](#glue)
+    - [normalizer](#normalizer)
+    - [connection](#connection)
+    - [throwEmptyExceptions](#throwemptyexceptions)
+    - [taggedModels](#taggedmodels)
+    - [model](#model)
+    - [tables](#tables)
+  - [Bugs, Suggestions, Contributions and Support](#bugs-suggestions-contributions-and-support)
+  - [Copyright and License](#copyright-and-license)
 
 
 ---
@@ -35,6 +48,7 @@ version should match the Laravel version.
 
 | Laravel Version | Package Version |
 |:---------------:|:---------------:|
+|     ^11.0       |     ^11.0       |
 |     ^10.0       |     ^10.0       |
 |       9.0       |      ^9.0       |
 |       8.0       |      ^8.0       |

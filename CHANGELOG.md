@@ -1,5 +1,11 @@
 # Changelog
 
+## 11.0.0 - xx-xxx-xxxx
+
+- Added Laravel 11 support
+- Changed the minimum PHP version to 8.2 to line up with Laravel 11
+
+
 ## 10.0.3 - 02-Feb-2024
 
 - fix for deprecated `preg_split` parameter value (#144, thanks @XternalSoft)
