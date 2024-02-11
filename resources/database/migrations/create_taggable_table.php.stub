@@ -25,6 +25,8 @@ class CreateTaggableTable extends Migration
                 $collation = null;
                 break;
             case 'sqlite':
+                $collation = 'binary';
+                break;
             case 'sqlsrv':
             default:
                 $collation = $charset .'_bin';
