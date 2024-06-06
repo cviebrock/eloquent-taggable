@@ -1,5 +1,10 @@
 # Changelog
 
+## 11.0.1 - 06-Jun-2024
+
+- make return of `allTags()` consistent (#146, thanks @y1n0)
+
+
 ## 11.0.0 - 12-Mar-2024
 
 - Added Laravel 11 support
