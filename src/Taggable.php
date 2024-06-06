@@ -466,7 +466,7 @@ trait Taggable
         /** @var \Illuminate\Database\Eloquent\Collection $tags */
         $tags = static::allTagModels();
 
-        return $tags->pluck('name')->sort()->all();
+        return $tags->pluck('name')->sort()->values()->all();
     }
 
     /**
