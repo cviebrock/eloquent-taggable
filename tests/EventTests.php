@@ -1,22 +1,25 @@
-<?php namespace Cviebrock\EloquentTaggable\Test;
+<?php
+
+namespace Cviebrock\EloquentTaggable\Test;
 
 use Cviebrock\EloquentTaggable\Events\ModelTagged;
 use Cviebrock\EloquentTaggable\Events\ModelUntagged;
 use Illuminate\Support\Facades\Event;
 
 /**
- * Class EventTests
+ * Class EventTests.
+ *
+ * @internal
  */
 class EventTests extends TestCase
 {
-
     /**
      * @var TestModel
      */
     protected $testModel;
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function setUp(): void
     {
@@ -45,5 +48,4 @@ class EventTests extends TestCase
 
         Event::assertDispatched(ModelUntagged::class);
     }
-
 }

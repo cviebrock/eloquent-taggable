@@ -1,17 +1,19 @@
-<?php namespace Cviebrock\EloquentTaggable\Test\Configuration;
+<?php
+
+namespace Cviebrock\EloquentTaggable\Test\Configuration;
 
 use Cviebrock\EloquentTaggable\Test\CustomTagClass;
 use Cviebrock\EloquentTaggable\Test\TestCase;
 
-
 /**
- * Class CustomTagModelTests
+ * Class CustomTagModelTests.
+ *
+ * @internal
  */
 class CustomTagModelTests extends TestCase
 {
-
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     protected function getEnvironmentSetUp($app)
     {

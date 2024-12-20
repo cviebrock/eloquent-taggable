@@ -1,14 +1,16 @@
-<?php namespace Cviebrock\EloquentTaggable\Test;
+<?php
+
+namespace Cviebrock\EloquentTaggable\Test;
 
 use Cviebrock\EloquentTaggable\Services\TagService;
 
-
 /**
- * Class StaticTests
+ * Class StaticTests.
+ *
+ * @internal
  */
 class StaticTests extends TestCase
 {
-
     /**
      * @var TestModel
      */
@@ -30,7 +32,7 @@ class StaticTests extends TestCase
     protected $testDummy;
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function setUp(): void
     {

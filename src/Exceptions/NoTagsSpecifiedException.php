@@ -1,9 +1,8 @@
-<?php namespace Cviebrock\EloquentTaggable\Exceptions;
+<?php
+
+namespace Cviebrock\EloquentTaggable\Exceptions;
 
 /**
- * Class NoTagsSpecifiedException
+ * Class NoTagsSpecifiedException.
  */
-class NoTagsSpecifiedException extends \Exception
-{
-
-}
+class NoTagsSpecifiedException extends \Exception {}

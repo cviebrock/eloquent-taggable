@@ -1,15 +1,17 @@
-<?php namespace Cviebrock\EloquentTaggable\Test;
+<?php
+
+namespace Cviebrock\EloquentTaggable\Test;
 
 use Cviebrock\EloquentTaggable\Models\Tag;
 use Cviebrock\EloquentTaggable\Services\TagService;
 
-
 /**
- * Class ConnectionTests
+ * Class ConnectionTests.
+ *
+ * @internal
  */
 class ConnectionTests extends TestCase
 {
-
     /** @var TestModel */
     protected $testModel;
 
@@ -20,7 +22,7 @@ class ConnectionTests extends TestCase
     private $service;
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     protected function getEnvironmentSetUp($app)
     {
@@ -37,7 +39,7 @@ class ConnectionTests extends TestCase
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function setUp(): void
     {
@@ -50,7 +52,7 @@ class ConnectionTests extends TestCase
         // migration for the second database connection
         $this->artisan('migrate', ['--database' => 'test2']);
 
-        $this->beforeApplicationDestroyed(function() {
+        $this->beforeApplicationDestroyed(function () {
             $this->artisan('migrate:rollback', ['--database' => 'test2']);
         });
 
@@ -63,7 +65,7 @@ class ConnectionTests extends TestCase
     }
 
     /**
-     * Test basic tagging still works
+     * Test basic tagging still works.
      */
     public function testTagging(): void
     {
@@ -91,7 +93,7 @@ class ConnectionTests extends TestCase
     }
 
     /**
-     * Test that the tag table prefix is used for getAllTags()
+     * Test that the tag table prefix is used for getAllTags().
      */
     public function testPrefixWhenGettingAllTags(): void
     {
@@ -100,7 +102,7 @@ class ConnectionTests extends TestCase
 
         self::assertCount(4, $allTags);
         self::assertArrayValuesAreEqual(
-            ['Apple','Banana','Cherry','Durian'],
+            ['Apple', 'Banana', 'Cherry', 'Durian'],
             $allTags
         );
 
@@ -120,7 +122,6 @@ class ConnectionTests extends TestCase
 
         /** @var Tag $unusedTag */
         $unusedTag = $unusedTags->first();
-        self::assertEquals('Durian',$unusedTag->name);
-
+        self::assertEquals('Durian', $unusedTag->name);
     }
 }

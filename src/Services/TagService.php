@@ -10,13 +10,11 @@ use Illuminate\Database\Eloquent\Relations\MorphToMany;
 use Illuminate\Database\Eloquent\Relations\Pivot;
 use Illuminate\Support\Collection as BaseCollection;
 
-
 /**
- * Class TagService
+ * Class TagService.
  */
 class TagService
 {
-
     /**
      * @var Tag
      */
@@ -30,8 +28,6 @@ class TagService
     /**
      * Find an existing tag by name.
      *
-     * @param string $tagName
-     *
      * @return Tag|null
      */
     public function find(string $tagName)
@@ -43,21 +39,16 @@ class TagService
      * Find existing tags by their IDs.
      *
      * @param int|int[] $ids
-     *
-     * @return \Illuminate\Database\Eloquent\Collection
      */
     public function findByIds($ids): Collection
     {
         $ids = (array) $ids;
+
         return $this->tagModel::find($ids);
     }
 
     /**
      * Find an existing tag (or create a new one) by name.
-     *
-     * @param string $tagName
-     *
-     * @return Tag
      */
     public function findOrCreate(string $tagName): Tag
     {
@@ -73,9 +64,8 @@ class TagService
     /**
      * Convert a delimited string into an array of tag strings.
      *
-     * @param string|array|\Cviebrock\EloquentTaggable\Models\Tag|\Illuminate\Support\Collection $tags
+     * @param array|BaseCollection|string|Tag $tags
      *
-     * @return array
      * @throws \ErrorException
      */
     public function buildTagArray($tags): array
@@ -94,7 +84,6 @@ class TagService
                 PREG_SPLIT_NO_EMPTY
             );
         } else {
-
             throw new \ErrorException(
                 __CLASS__ . '::' . __METHOD__ . ' expects parameter 1 to be string, array, Tag or Collection; ' .
                 gettype($tags) . ' given'
@@ -109,9 +98,8 @@ class TagService
     /**
      * Convert a delimited string into an array of normalized tag strings.
      *
-     * @param string|array|\Cviebrock\EloquentTaggable\Models\Tag|\Illuminate\Support\Collection $tags
+     * @param array|BaseCollection|string|Tag $tags
      *
-     * @return array
      * @throws \ErrorException
      */
     public function buildTagArrayNormalized($tags): array
@@ -122,11 +110,7 @@ class TagService
     }
 
     /**
-     * Return an array of tag models for the given normalized tags
-     *
-     * @param array $normalized
-     *
-     * @return array
+     * Return an array of tag models for the given normalized tags.
      */
     public function getTagModelKeys(array $normalized = []): array
     {
@@ -141,11 +125,6 @@ class TagService
 
     /**
      * Build a delimited string from a model's tags.
-     *
-     * @param \Illuminate\Database\Eloquent\Model $model
-     * @param string $field
-     *
-     * @return string
      */
     public function makeTagList(Model $model, string $field = 'name'): string
     {
@@ -156,10 +135,6 @@ class TagService
 
     /**
      * Join a list of strings together using glue.
-     *
-     * @param array $array
-     *
-     * @return string
      */
     public function joinList(array $array): string
     {
@@ -168,11 +143,6 @@ class TagService
 
     /**
      * Build a simple array of a model's tags.
-     *
-     * @param \Illuminate\Database\Eloquent\Model $model
-     * @param string $field
-     *
-     * @return array
      */
     public function makeTagArray(Model $model, string $field = 'name'): array
     {
@@ -184,10 +154,6 @@ class TagService
 
     /**
      * Normalize a string.
-     *
-     * @param string $string
-     *
-     * @return string
      */
     public function normalize(string $string): string
     {
@@ -197,7 +163,7 @@ class TagService
     /**
      * Get all Tags for the given class, or all classes.
      *
-     * @param \Illuminate\Database\Eloquent\Model|string|null $class
+     * @param Model|string|null $class
      *
      * @return Collection<Tag>
      */
@@ -225,9 +191,7 @@ class TagService
     /**
      * Get all tag names for the given class, or all classes.
      *
-     * @param \Illuminate\Database\Eloquent\Model|string|null $class
-     *
-     * @return array
+     * @param Model|string|null $class
      */
     public function getAllTagsArray($class = null): array
     {
@@ -239,9 +203,7 @@ class TagService
     /**
      * Get all normalized tag names for the given class, or all classes.
      *
-     * @param \Illuminate\Database\Eloquent\Model|string|null $class
-     *
-     * @return array
+     * @param Model|string|null $class
      */
     public function getAllTagsArrayNormalized($class = null): array
     {
@@ -253,7 +215,7 @@ class TagService
     /**
      * Get all Tags that are unused by any model.
      *
-     * @return \Illuminate\Database\Eloquent\Collection<Tag>
+     * @return Collection<Tag>
      */
     public function getAllUnusedTags(): Collection
     {
@@ -271,13 +233,9 @@ class TagService
     /**
      * Get the most popular tags, optionally limited and/or filtered by class.
      *
-     * @param int $limit
-     * @param \Illuminate\Database\Eloquent\Model|string|null $class
-     * @param int $minCount
-     *
-     * @return \Illuminate\Database\Eloquent\Collection<Tag>
+     * @return Collection<Tag>
      */
-    public function getPopularTags(?int $limit = null, Model|string|null $class = null, int $minCount = 1): Collection
+    public function getPopularTags(?int $limit = null, null|Model|string $class = null, int $minCount = 1): Collection
     {
         $tagTable = $this->getQualifiedTagTableName();
         $pivotTable = $this->getQualifiedPivotTableName();
@@ -312,14 +270,8 @@ class TagService
 
     /**
      * Rename tags, across all or only one model.
-     *
-     * @param string $oldName
-     * @param string $newName
-     * @param \Illuminate\Database\Eloquent\Model|string|null $class
-     *
-     * @return int
      */
-    public function renameTags(string $oldName, string $newName, Model|string|null $class = null): int
+    public function renameTags(string $oldName, string $newName, null|Model|string $class = null): int
     {
         // If no class is specified, we can do the rename with a simple SQL update
         if ($class === null) {
@@ -330,8 +282,8 @@ class TagService
                 ]);
         }
 
-        if (!($class instanceof Model)) {
-            $class = new $class;
+        if (!$class instanceof Model) {
+            $class = new $class();
         }
 
         // First find the old tag
@@ -362,13 +314,11 @@ class TagService
 
     /**
      * Get the qualified table name for the Tag model.
-     *
-     * @return string
      */
     private function getQualifiedTagTableName(): string
     {
         /** @var Tag $tag */
-        $tag = new $this->tagModel;
+        $tag = new $this->tagModel();
 
         return $tag->getConnection()->getTablePrefix() .
                 $tag->getTable();
@@ -376,19 +326,17 @@ class TagService
 
     /**
      * Get the qualified table name for the Tag model's pivot table.
-     *
-     * @param ?string $class
-     *
-     * @return string
      */
-    private function getQualifiedPivotTableName(?string $class=null): string
+    private function getQualifiedPivotTableName(?string $class = null): string
     {
-        /** @var \Cviebrock\EloquentTaggable\Taggable $instance */
+        /** @var Taggable $instance */
         $instance = $class
-            ? new $class
+            ? new $class()
             : new class extends Model {
                 use Taggable;
-                function getMorphClass() {
+
+                public function getMorphClass()
+                {
                     return Pivot::class;
                 }
             };
@@ -401,6 +349,6 @@ class TagService
     {
         return $class instanceof Model
             ? $class->getMorphClass()
-            : (new $class)->getMorphClass();
+            : (new $class())->getMorphClass();
     }
 }

@@ -1,34 +1,34 @@
-<?php namespace Cviebrock\EloquentTaggable\Test;
+<?php
+
+namespace Cviebrock\EloquentTaggable\Test;
 
 use Cviebrock\EloquentTaggable\Taggable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-
 /**
- * Class TestModel
+ * Class TestModel.
  *
- * @property int $id
+ * @property int    $id
  * @property string $title
  */
 class TestModel extends Model
 {
-
     use Taggable;
     use SoftDeletes;
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     protected $table = 'test_models';
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public $timestamps = false;
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     protected $fillable = ['title'];
 }

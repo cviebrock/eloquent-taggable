@@ -1,22 +1,24 @@
-<?php namespace Cviebrock\EloquentTaggable\Test\Configuration;
+<?php
+
+namespace Cviebrock\EloquentTaggable\Test\Configuration;
 
 use Cviebrock\EloquentTaggable\Test\TestCase;
 use Cviebrock\EloquentTaggable\Test\TestModel;
 
-
 /**
- * Class CustomGlueTests
+ * Class CustomGlueTests.
+ *
+ * @internal
  */
 class CustomGlueTests extends TestCase
 {
-
     /**
      * @var TestModel
      */
     protected $testModel;
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     protected function getEnvironmentSetUp($app)
     {
@@ -26,7 +28,7 @@ class CustomGlueTests extends TestCase
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function setUp(): void
     {

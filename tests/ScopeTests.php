@@ -1,14 +1,17 @@
-<?php namespace Cviebrock\EloquentTaggable\Test;
+<?php
+
+namespace Cviebrock\EloquentTaggable\Test;
 
 use Illuminate\Database\Eloquent\Collection;
-
+use Illuminate\Pagination\LengthAwarePaginator;
 
 /**
- * Class ScopeTests
+ * Class ScopeTests.
+ *
+ * @internal
  */
 class ScopeTests extends TestCase
 {
-
     /**
      * @var TestModel
      */
@@ -65,7 +68,7 @@ class ScopeTests extends TestCase
     protected $testDummy3;
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function setUp(): void
     {
@@ -333,7 +336,7 @@ class ScopeTests extends TestCase
 
         self::assertArrayValuesAreEqual(
             [
-                $this->testModel2->getKey()
+                $this->testModel2->getKey(),
             ],
             $keys
         );
@@ -350,10 +353,10 @@ class ScopeTests extends TestCase
 
         self::assertArrayValuesAreEqual(
             [
-                $this->testModel4->getKey(), //Apple, Banana, Cherry
-                $this->testModel6->getKey(), //Apple, Durian
-                $this->testModel7->getKey(), //Banana, Durian
-                $this->testModel8->getKey(), //Apple, Banana, Durian
+                $this->testModel4->getKey(), // Apple, Banana, Cherry
+                $this->testModel6->getKey(), // Apple, Durian
+                $this->testModel7->getKey(), // Banana, Durian
+                $this->testModel8->getKey(), // Apple, Banana, Durian
             ],
             $keys
         );
@@ -361,7 +364,7 @@ class ScopeTests extends TestCase
 
     public function testWithAllTagsPaginated(): void
     {
-        /** @var \Illuminate\Pagination\LengthAwarePaginator $models */
+        /** @var LengthAwarePaginator $models */
         $models = TestModel::withAllTags('Apple,Banana')->paginate(2);
 
         self::assertCount(2, $models->items());

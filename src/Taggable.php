@@ -1,4 +1,6 @@
-<?php namespace Cviebrock\EloquentTaggable;
+<?php
+
+namespace Cviebrock\EloquentTaggable;
 
 use Cviebrock\EloquentTaggable\Events\ModelTagged;
 use Cviebrock\EloquentTaggable\Events\ModelUntagged;
@@ -10,16 +12,13 @@ use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Relations\MorphToMany;
 use Illuminate\Database\Query\JoinClause;
 
-
 /**
- * Class Taggable
- *
- * @package Cviebrock\EloquentTaggable
+ * Class Taggable.
  */
 trait Taggable
 {
     /**
-     * Property to control sequence on alias
+     * Property to control sequence on alias.
      *
      * @var int
      */
@@ -41,13 +40,12 @@ trait Taggable
 
     /**
      * Get a collection of all tags the model has.
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\MorphToMany
      */
     public function tags(): MorphToMany
     {
         $model = config('taggable.model');
         $table = config('taggable.tables.taggable_taggables', 'taggable_taggables');
+
         return $this->morphToMany($model, 'taggable', $table, 'taggable_id', 'tag_id')
             ->withTimestamps();
     }
@@ -55,9 +53,7 @@ trait Taggable
     /**
      * Attach one or multiple tags to the model.
      *
-     * @param string|array $tags
-     *
-     * @return self
+     * @param array|string $tags
      */
     public function tag($tags): self
     {
@@ -92,9 +88,7 @@ trait Taggable
     /**
      * Detach one or multiple tags from the model.
      *
-     * @param string|array $tags
-     *
-     * @return self
+     * @param array|string $tags
      */
     public function untag($tags): self
     {
@@ -128,9 +122,7 @@ trait Taggable
     /**
      * Remove all tags from the model and assign the given ones.
      *
-     * @param string|array $tags
-     *
-     * @return self
+     * @param array|string $tags
      */
     public function retag($tags): self
     {
@@ -141,8 +133,6 @@ trait Taggable
      * Remove all tags from the model and assign the given ones by ID.
      *
      * @param int|int[] $ids
-     *
-     * @return self
      */
     public function retagById($ids): self
     {
@@ -151,8 +141,6 @@ trait Taggable
 
     /**
      * Remove all tags from the model.
-     *
-     * @return self
      */
     public function detag(): self
     {
@@ -163,8 +151,6 @@ trait Taggable
 
     /**
      * Add one tag to the model.
-     *
-     * @param string $tagName
      */
     protected function addOneTag(string $tagName): void
     {
@@ -178,9 +164,7 @@ trait Taggable
     }
 
     /**
-     * Remove one tag from the model
-     *
-     * @param string $tagName
+     * Remove one tag from the model.
      */
     protected function removeOneTag(string $tagName): void
     {
@@ -193,8 +177,6 @@ trait Taggable
 
     /**
      * Get all the tags of the model as a delimited string.
-     *
-     * @return string
      */
     public function getTagListAttribute(): string
     {
@@ -203,8 +185,6 @@ trait Taggable
 
     /**
      * Get all normalized tags of a model as a delimited string.
-     *
-     * @return string
      */
     public function getTagListNormalizedAttribute(): string
     {
@@ -213,8 +193,6 @@ trait Taggable
 
     /**
      * Get all tags of a model as an array.
-     *
-     * @return array
      */
     public function getTagArrayAttribute(): array
     {
@@ -223,8 +201,6 @@ trait Taggable
 
     /**
      * Get all normalized tags of a model as an array.
-     *
-     * @return array
      */
     public function getTagArrayNormalizedAttribute(): array
     {
@@ -234,9 +210,7 @@ trait Taggable
     /**
      * Determine if a given tag is attached to the model.
      *
-     * @param Tag|string $tag
-     *
-     * @return bool
+     * @param string|Tag $tag
      */
     public function hasTag($tag): bool
     {
@@ -252,11 +226,9 @@ trait Taggable
     /**
      * Query scope for models that have all of the given tags.
      *
-     * @param Builder $query
      * @param array|string $tags
      *
-     * @return Builder
-     * @throws \Cviebrock\EloquentTaggable\Exceptions\NoTagsSpecifiedException
+     * @throws NoTagsSpecifiedException
      * @throws \ErrorException
      */
     public function scopeWithAllTags(Builder $query, $tags): Builder
@@ -294,11 +266,9 @@ trait Taggable
     /**
      * Query scope for models that have any of the given tags.
      *
-     * @param Builder $query
      * @param array|string $tags
      *
-     * @return Builder
-     * @throws \Cviebrock\EloquentTaggable\Exceptions\NoTagsSpecifiedException
+     * @throws NoTagsSpecifiedException
      * @throws \ErrorException
      */
     public function scopeWithAnyTags(Builder $query, $tags): Builder
@@ -328,25 +298,19 @@ trait Taggable
 
     /**
      * Query scope for models that have any tag.
-     *
-     * @param Builder $query
-     *
-     * @return Builder
      */
     public function scopeIsTagged(Builder $query): Builder
     {
         $alias = $this->taggableCreateNewAlias(__FUNCTION__);
+
         return $this->prepareTableJoin($query, 'inner', $alias);
     }
 
     /**
      * Query scope for models that do not have all of the given tags.
      *
-     * @param Builder $query
-     * @param string|array $tags
-     * @param bool $includeUntagged
+     * @param array|string $tags
      *
-     * @return Builder
      * @throws \ErrorException
      */
     public function scopeWithoutAllTags(Builder $query, $tags, bool $includeUntagged = false): Builder
@@ -361,8 +325,10 @@ trait Taggable
         $morphTagKeyName = $this->getQualifiedRelatedPivotKeyNameWithAlias($alias);
 
         $query = $this->prepareTableJoin($query, 'left', $alias)
-            ->havingRaw("COUNT(DISTINCT CASE WHEN ({$morphTagKeyName} IN ({$tagKeyList})) THEN {$morphTagKeyName} ELSE NULL END) < ?",
-                [count($tagKeys)]);
+            ->havingRaw(
+                "COUNT(DISTINCT CASE WHEN ({$morphTagKeyName} IN ({$tagKeyList})) THEN {$morphTagKeyName} ELSE NULL END) < ?",
+                [count($tagKeys)]
+            );
 
         if (!$includeUntagged) {
             $query->havingRaw("COUNT(DISTINCT {$morphTagKeyName}) > 0");
@@ -374,11 +340,8 @@ trait Taggable
     /**
      * Query scope for models that do not have any of the given tags.
      *
-     * @param Builder $query
-     * @param string|array $tags
-     * @param bool $includeUntagged
+     * @param array|string $tags
      *
-     * @return Builder
      * @throws \ErrorException
      */
     public function scopeWithoutAnyTags(Builder $query, $tags, bool $includeUntagged = false): Builder
@@ -404,10 +367,6 @@ trait Taggable
 
     /**
      * Query scope for models that does not have have any tags.
-     *
-     * @param Builder $query
-     *
-     * @return Builder
      */
     public function scopeIsNotTagged(Builder $query): Builder
     {
@@ -418,38 +377,30 @@ trait Taggable
             ->havingRaw("COUNT(DISTINCT {$morphForeignKeyName}) = 0");
     }
 
-    /**
-     * @param Builder $query
-     * @param string $joinType
-     *
-     * @return Builder
-     */
     private function prepareTableJoin(Builder $query, string $joinType, string $alias): Builder
     {
         $morphTable = $this->tags()->getTable();
-        $morphTableAlias = $morphTable.'_'.$alias;
+        $morphTableAlias = $morphTable . '_' . $alias;
 
         $modelKeyName = $this->getQualifiedKeyName();
         $morphForeignKeyName = $this->getQualifiedForeignPivotKeyNameWithAlias($alias);
 
-        $morphTypeName = $morphTableAlias.'.'. $this->tags()->getMorphType();
+        $morphTypeName = $morphTableAlias . '.' . $this->tags()->getMorphType();
         $morphClass = $this->tags()->getMorphClass();
 
-        $closure = function(JoinClause $join) use ($modelKeyName, $morphForeignKeyName, $morphTypeName, $morphClass) {
+        $closure = function (JoinClause $join) use ($modelKeyName, $morphForeignKeyName, $morphTypeName, $morphClass) {
             $join->on($modelKeyName, $morphForeignKeyName)
                 ->where($morphTypeName, $morphClass);
         };
 
         return $query
             ->select($this->getTable() . '.*')
-            ->join($morphTable.' as '.$morphTableAlias, $closure, null, null, $joinType)
+            ->join($morphTable . ' as ' . $morphTableAlias, $closure, null, null, $joinType)
             ->groupBy($modelKeyName);
     }
 
     /**
      * Get a collection of all the tag models used for the called class.
-     *
-     * @return Collection
      */
     public static function allTagModels(): Collection
     {
@@ -458,12 +409,10 @@ trait Taggable
 
     /**
      * Get an array of all tags used for the called class.
-     *
-     * @return array
      */
     public static function allTags(): array
     {
-        /** @var \Illuminate\Database\Eloquent\Collection $tags */
+        /** @var Collection $tags */
         $tags = static::allTagModels();
 
         return $tags->pluck('name')->sort()->values()->all();
@@ -471,8 +420,6 @@ trait Taggable
 
     /**
      * Get all the tags used for the called class as a delimited string.
-     *
-     * @return string
      */
     public static function allTagsList(): string
     {
@@ -481,11 +428,6 @@ trait Taggable
 
     /**
      * Rename one the tags for the called class.
-     *
-     * @param string $oldTag
-     * @param string $newTag
-     *
-     * @return int
      */
     public static function renameTag(string $oldTag, string $newTag): int
     {
@@ -494,11 +436,6 @@ trait Taggable
 
     /**
      * Get the most popular tags for the called class.
-     *
-     * @param int $limit
-     * @param int $minCount
-     *
-     * @return array
      */
     public static function popularTags(?int $limit = null, int $minCount = 1): array
     {
@@ -510,11 +447,6 @@ trait Taggable
 
     /**
      * Get the most popular tags for the called class.
-     *
-     * @param int $limit
-     * @param int $minCount
-     *
-     * @return array
      */
     public static function popularTagsNormalized(?int $limit = null, int $minCount = 1): array
     {
@@ -526,10 +458,6 @@ trait Taggable
 
     /**
      * Returns the Related Pivot Key Name with the table alias.
-     *
-     * @param string $alias
-     *
-     * @return string
      */
     private function getQualifiedRelatedPivotKeyNameWithAlias(string $alias): string
     {
@@ -541,10 +469,6 @@ trait Taggable
 
     /**
      * Returns the Foreign Pivot Key Name with the table alias.
-     *
-     * @param string $alias
-     *
-     * @return string
      */
     private function getQualifiedForeignPivotKeyNameWithAlias(string $alias): string
     {
@@ -555,17 +479,12 @@ trait Taggable
     }
 
     /**
-     * Create a new alias to use on scopes to be able to combine many scopes
-     *
-     * @param string $scope
-     * 
-     * @return string
+     * Create a new alias to use on scopes to be able to combine many scopes.
      */
     private function taggableCreateNewAlias(string $scope): string
     {
         $this->taggableAliasSequence++;
-        $alias = strtolower($scope) . '_' . $this->taggableAliasSequence;
 
-        return $alias;
+        return strtolower($scope) . '_' . $this->taggableAliasSequence;
     }
 }

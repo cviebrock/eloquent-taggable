@@ -1,14 +1,16 @@
-<?php namespace Cviebrock\EloquentTaggable\Test;
+<?php
+
+namespace Cviebrock\EloquentTaggable\Test;
 
 use Cviebrock\EloquentTaggable\Services\TagService;
 
-
 /**
- * Class TaggingTests
+ * Class TaggingTests.
+ *
+ * @internal
  */
 class TaggingTests extends TestCase
 {
-
     /**
      * @var TestModel
      */
@@ -20,7 +22,7 @@ class TaggingTests extends TestCase
     protected $service;
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function setUp(): void
     {
@@ -164,7 +166,7 @@ class TaggingTests extends TestCase
     }
 
     /**
-     * Test casting Tag to a string works
+     * Test casting Tag to a string works.
      */
     public function testTagToString(): void
     {
@@ -179,7 +181,7 @@ class TaggingTests extends TestCase
 
     /**
      * Test that tagging a model with duplicate tags only
-     * tags the model once
+     * tags the model once.
      */
     public function testNonDuplicateTagging(): void
     {
@@ -197,7 +199,7 @@ class TaggingTests extends TestCase
     }
 
     /**
-     * Test that a deleted model removes relation with tags
+     * Test that a deleted model removes relation with tags.
      */
     public function testDeleteModel(): void
     {
@@ -216,7 +218,7 @@ class TaggingTests extends TestCase
     }
 
     /**
-     * Test the hasTags method
+     * Test the hasTags method.
      */
     public function testHasTags(): void
     {
@@ -229,7 +231,7 @@ class TaggingTests extends TestCase
     }
 
     /**
-     * Test tagging a model using Tag IDs
+     * Test tagging a model using Tag IDs.
      */
     public function testTagById(): void
     {
@@ -253,7 +255,7 @@ class TaggingTests extends TestCase
     }
 
     /**
-     * Test untagging a model using Tag IDs
+     * Test untagging a model using Tag IDs.
      */
     public function testUntagById(): void
     {
@@ -277,7 +279,7 @@ class TaggingTests extends TestCase
     }
 
     /**
-     * Test retagging a model using Tag IDs
+     * Test retagging a model using Tag IDs.
      */
     public function testRetagById(): void
     {

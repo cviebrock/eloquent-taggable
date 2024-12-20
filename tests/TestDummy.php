@@ -1,32 +1,32 @@
-<?php namespace Cviebrock\EloquentTaggable\Test;
+<?php
+
+namespace Cviebrock\EloquentTaggable\Test;
 
 use Cviebrock\EloquentTaggable\Taggable;
 use Illuminate\Database\Eloquent\Model;
 
-
 /**
- * Class TestDummy
+ * Class TestDummy.
  *
- * @property int $id
+ * @property int    $id
  * @property string $title
  */
 class TestDummy extends Model
 {
-
     use Taggable;
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     protected $table = 'test_dummies';
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public $timestamps = false;
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     protected $fillable = ['title'];
 }

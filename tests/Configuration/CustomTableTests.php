@@ -1,22 +1,25 @@
-<?php namespace Cviebrock\EloquentTaggable\Test\Configuration;
+<?php
+
+namespace Cviebrock\EloquentTaggable\Test\Configuration;
 
 use Cviebrock\EloquentTaggable\Models\Tag;
 use Cviebrock\EloquentTaggable\Test\TestCase;
-
+use Cviebrock\EloquentTaggable\Test\TestModel;
 
 /**
- * Class CustomTableTests
+ * Class CustomTableTests.
+ *
+ * @internal
  */
 class CustomTableTests extends TestCase
 {
-
     /**
-     * @var \Cviebrock\EloquentTaggable\Test\TestModel
+     * @var TestModel
      */
     protected $testModel;
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     protected function getEnvironmentSetUp($app)
     {
@@ -29,7 +32,7 @@ class CustomTableTests extends TestCase
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function setUp(): void
     {

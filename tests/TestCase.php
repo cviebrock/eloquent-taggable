@@ -1,17 +1,17 @@
-<?php namespace Cviebrock\EloquentTaggable\Test;
+<?php
+
+namespace Cviebrock\EloquentTaggable\Test;
 
 use Cviebrock\EloquentTaggable\ServiceProvider;
 use Orchestra\Testbench\TestCase as Orchestra;
 
-
 /**
- * Class TestCase
+ * Class TestCase.
  */
 abstract class TestCase extends Orchestra
 {
-
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function setUp(): void
     {
@@ -19,9 +19,9 @@ abstract class TestCase extends Orchestra
 
         $this->setUpDatabase();
 
-        $this->beforeApplicationDestroyed(static function() {
+        $this->beforeApplicationDestroyed(static function () {
             (new \CreateTestModelsTable())->down();
-            /** @phpstan-ignore-next-line class.notFound */
+            // @phpstan-ignore-next-line class.notFound
             (new \CreateTaggableTable())->down();
         });
     }
@@ -32,7 +32,7 @@ abstract class TestCase extends Orchestra
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     protected function getPackageProviders($app)
     {
@@ -45,9 +45,6 @@ abstract class TestCase extends Orchestra
     /**
      * Custom test to see if two arrays have the same values, regardless
      * of indices or order.
-     *
-     * @param array $expected
-     * @param array $actual
      */
     protected static function assertArrayValuesAreEqual(array $expected, array $actual): void
     {
@@ -56,11 +53,7 @@ abstract class TestCase extends Orchestra
     }
 
     /**
-     * Helper to generate a test model
-     *
-     * @param array $data
-     *
-     * @return \Cviebrock\EloquentTaggable\Test\TestModel
+     * Helper to generate a test model.
      */
     protected function newModel(array $data = ['title' => 'test']): TestModel
     {
@@ -68,11 +61,7 @@ abstract class TestCase extends Orchestra
     }
 
     /**
-     * Helper to generate a test dummy model
-     *
-     * @param array $data
-     *
-     * @return \Cviebrock\EloquentTaggable\Test\TestDummy
+     * Helper to generate a test dummy model.
      */
     protected function newDummy(array $data = ['title' => 'dummy']): TestDummy
     {
@@ -80,15 +69,15 @@ abstract class TestCase extends Orchestra
     }
 
     /**
-     * Set up the database
+     * Set up the database.
      */
     private function setUpDatabase(): void
     {
-        include_once __DIR__.'/../resources/database/migrations/create_taggable_table.php.stub';
-        /** @phpstan-ignore-next-line class.notFound */
+        include_once __DIR__ . '/../resources/database/migrations/create_taggable_table.php.stub';
+        // @phpstan-ignore-next-line class.notFound
         (new \CreateTaggableTable())->up();
 
-        include_once __DIR__.'/database/migrations/2013_11_04_163552_create_test_models_table.php';
+        include_once __DIR__ . '/database/migrations/2013_11_04_163552_create_test_models_table.php';
         (new \CreateTestModelsTable())->up();
     }
 }

@@ -1,16 +1,18 @@
-<?php namespace Cviebrock\EloquentTaggable\Test;
+<?php
+
+namespace Cviebrock\EloquentTaggable\Test;
 
 use Cviebrock\EloquentTaggable\Services\TagService;
 
-
 /**
- * Class TagServiceTests
+ * Class TagServiceTests.
+ *
+ * @internal
  */
 class TagServiceTests extends TestCase
 {
-
     /**
-     * @var \Cviebrock\EloquentTaggable\Services\TagService
+     * @var TagService
      */
     protected $service;
 
@@ -30,7 +32,7 @@ class TagServiceTests extends TestCase
     protected $testString;
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function setUp(): void
     {
@@ -54,7 +56,7 @@ class TagServiceTests extends TestCase
     }
 
     /**
-     * Test building a tag array from an array
+     * Test building a tag array from an array.
      */
     public function testBuildTagArrayFromArray(): void
     {
@@ -72,7 +74,7 @@ class TagServiceTests extends TestCase
      */
     public function testBuildTagArrayFromObject(): void
     {
-        $object = new \stdClass;
+        $object = new \stdClass();
 
         $this->expectException(\ErrorException::class);
 
@@ -80,7 +82,7 @@ class TagServiceTests extends TestCase
     }
 
     /**
-     * Test building a tag array from a Collection
+     * Test building a tag array from a Collection.
      */
     public function testBuildTagArrayFromCollection(): void
     {
@@ -93,7 +95,7 @@ class TagServiceTests extends TestCase
     }
 
     /**
-     * Test building a tag array from a string
+     * Test building a tag array from a string.
      */
     public function testBuildTagArrayFromString(): void
     {
@@ -106,7 +108,7 @@ class TagServiceTests extends TestCase
     }
 
     /**
-     * Test building a tag array from an array
+     * Test building a tag array from an array.
      */
     public function testBuildNormalizedTagArrayFromArray(): void
     {
@@ -119,7 +121,7 @@ class TagServiceTests extends TestCase
     }
 
     /**
-     * Test building a tag array from a Collection
+     * Test building a tag array from a Collection.
      */
     public function testBuildNormalizedTagArrayFromCollection(): void
     {
@@ -132,7 +134,7 @@ class TagServiceTests extends TestCase
     }
 
     /**
-     * Test building a tag array from a string
+     * Test building a tag array from a string.
      */
     public function testBuildNormalizedTagArrayFromString(): void
     {
@@ -321,8 +323,9 @@ class TagServiceTests extends TestCase
         // Create a model with a custom morph class key
         $morphModel = new class extends TestModel {
             protected $attributes = [
-                'title' => 'testing morph model'
+                'title' => 'testing morph model',
             ];
+
             public function getMorphClass()
             {
                 return 'test-morph-model'; // can any custom key that is different from the class name

@@ -2,17 +2,15 @@
 
 namespace Cviebrock\EloquentTaggable\Events;
 
-use Illuminate\Broadcasting\Channel;
-use Illuminate\Queue\SerializesModels;
-use Illuminate\Broadcasting\PrivateChannel;
-use Illuminate\Broadcasting\PresenceChannel;
-use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Broadcasting\InteractsWithSockets;
-use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
+use Illuminate\Foundation\Events\Dispatchable;
+use Illuminate\Queue\SerializesModels;
 
 class ModelUntagged
 {
-    use Dispatchable, InteractsWithSockets, SerializesModels;
+    use Dispatchable;
+    use InteractsWithSockets;
+    use SerializesModels;
 
     private $model;
     private $tags;
@@ -36,12 +34,12 @@ class ModelUntagged
     /**
      * Create a new event instance.
      *
-     * @return void
+     * @param mixed $model
+     * @param mixed $tags
      */
     public function __construct($model, $tags)
     {
         $this->model = $model;
         $this->tags = $tags;
     }
-
 }

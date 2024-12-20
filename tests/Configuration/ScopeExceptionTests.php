@@ -1,19 +1,20 @@
-<?php namespace Cviebrock\EloquentTaggable\Test\Configuration;
+<?php
+
+namespace Cviebrock\EloquentTaggable\Test\Configuration;
 
 use Cviebrock\EloquentTaggable\Exceptions\NoTagsSpecifiedException;
 use Cviebrock\EloquentTaggable\Test\TestCase;
 use Cviebrock\EloquentTaggable\Test\TestModel;
-use Illuminate\Database\Eloquent\Collection;
-
 
 /**
- * Class ScopeTests
+ * Class ScopeTests.
+ *
+ * @internal
  */
 class ScopeExceptionTests extends TestCase
 {
-
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     protected function getEnvironmentSetUp($app)
     {

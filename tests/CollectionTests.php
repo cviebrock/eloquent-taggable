@@ -1,21 +1,23 @@
-<?php namespace Cviebrock\EloquentTaggable\Test;
+<?php
+
+namespace Cviebrock\EloquentTaggable\Test;
 
 use Illuminate\Database\Eloquent\Collection;
 
-
 /**
- * Class CollectionTests
+ * Class CollectionTests.
+ *
+ * @internal
  */
 class CollectionTests extends TestCase
 {
-
     /**
      * @var TestModel
      */
     protected $testModel;
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function setUp(): void
     {

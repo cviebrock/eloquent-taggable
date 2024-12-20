@@ -1,14 +1,16 @@
-<?php namespace Cviebrock\EloquentTaggable\Test;
+<?php
+
+namespace Cviebrock\EloquentTaggable\Test;
 
 use Cviebrock\EloquentTaggable\Models\Tag;
 
-
 /**
- * Class InverseTests
+ * Class InverseTests.
+ *
+ * @internal
  */
 class InverseTests extends TestCase
 {
-
     /**
      * @var TestModel
      */
@@ -65,7 +67,7 @@ class InverseTests extends TestCase
     protected $testDummy3;
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     protected function getEnvironmentSetUp($app)
     {
@@ -79,7 +81,7 @@ class InverseTests extends TestCase
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function setUp(): void
     {

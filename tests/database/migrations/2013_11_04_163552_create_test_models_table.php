@@ -4,10 +4,8 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-
 class CreateTestModelsTable extends Migration
 {
-
     /**
      * Run the migrations.
      */
@@ -16,7 +14,7 @@ class CreateTestModelsTable extends Migration
         $connection = config('taggable.connection');
 
         if (!Schema::connection($connection)->hasTable('test_models')) {
-            Schema::create('test_models', function(Blueprint $table) {
+            Schema::create('test_models', function (Blueprint $table) {
                 $table->increments('id');
                 $table->string('title');
                 $table->softDeletes();
@@ -24,7 +22,7 @@ class CreateTestModelsTable extends Migration
         }
 
         if (!Schema::connection($connection)->hasTable('test_dummies')) {
-            Schema::create('test_dummies', function(Blueprint $table) {
+            Schema::create('test_dummies', function (Blueprint $table) {
                 $table->increments('id');
                 $table->string('title');
             });

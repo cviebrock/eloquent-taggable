@@ -1,14 +1,14 @@
-<?php namespace Cviebrock\EloquentTaggable\Test;
+<?php
+
+namespace Cviebrock\EloquentTaggable\Test;
 
 use Illuminate\Support\ServiceProvider as LaravelServiceProvider;
 
-
 /**
- * Class TestServiceProvider
+ * Class TestServiceProvider.
  */
 class TestServiceProvider extends LaravelServiceProvider
 {
-
     /**
      * Bootstrap the application events.
      */
