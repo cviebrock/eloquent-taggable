@@ -199,7 +199,7 @@ class TagService
      *
      * @param \Illuminate\Database\Eloquent\Model|string|null $class
      *
-     * @return Collection
+     * @return Collection<Tag>
      */
     public function getAllTags($class = null): Collection
     {
@@ -253,7 +253,7 @@ class TagService
     /**
      * Get all Tags that are unused by any model.
      *
-     * @return \Illuminate\Database\Eloquent\Collection
+     * @return \Illuminate\Database\Eloquent\Collection<Tag>
      */
     public function getAllUnusedTags(): Collection
     {
@@ -275,9 +275,9 @@ class TagService
      * @param \Illuminate\Database\Eloquent\Model|string|null $class
      * @param int $minCount
      *
-     * @return \Illuminate\Database\Eloquent\Collection
+     * @return \Illuminate\Database\Eloquent\Collection<Tag>
      */
-    public function getPopularTags(int $limit = null, $class = null, int $minCount = 1): Collection
+    public function getPopularTags(?int $limit = null, Model|string|null $class = null, int $minCount = 1): Collection
     {
         $tagTable = $this->getQualifiedTagTableName();
         $pivotTable = $this->getQualifiedPivotTableName();
@@ -319,7 +319,7 @@ class TagService
      *
      * @return int
      */
-    public function renameTags(string $oldName, string $newName, $class = null): int
+    public function renameTags(string $oldName, string $newName, Model|string|null $class = null): int
     {
         // If no class is specified, we can do the rename with a simple SQL update
         if ($class === null) {
@@ -377,11 +377,11 @@ class TagService
     /**
      * Get the qualified table name for the Tag model's pivot table.
      *
-     * @param string $class
+     * @param ?string $class
      *
      * @return string
      */
-    private function getQualifiedPivotTableName(string $class=null): string
+    private function getQualifiedPivotTableName(?string $class=null): string
     {
         /** @var \Cviebrock\EloquentTaggable\Taggable $instance */
         $instance = $class

@@ -7,6 +7,9 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 /**
  * Class TestModel
+ *
+ * @property int $id
+ * @property string $title
  */
 class TestModel extends Model
 {

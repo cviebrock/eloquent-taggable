@@ -21,6 +21,7 @@ abstract class TestCase extends Orchestra
 
         $this->beforeApplicationDestroyed(static function() {
             (new \CreateTestModelsTable())->down();
+            /** @phpstan-ignore-next-line class.notFound */
             (new \CreateTaggableTable())->down();
         });
     }
@@ -84,6 +85,7 @@ abstract class TestCase extends Orchestra
     private function setUpDatabase(): void
     {
         include_once __DIR__.'/../resources/database/migrations/create_taggable_table.php.stub';
+        /** @phpstan-ignore-next-line class.notFound */
         (new \CreateTaggableTable())->up();
 
         include_once __DIR__.'/database/migrations/2013_11_04_163552_create_test_models_table.php';

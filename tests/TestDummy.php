@@ -6,6 +6,9 @@ use Illuminate\Database\Eloquent\Model;
 
 /**
  * Class TestDummy
+ *
+ * @property int $id
+ * @property string $title
  */
 class TestDummy extends Model
 {

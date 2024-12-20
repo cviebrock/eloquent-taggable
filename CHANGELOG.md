@@ -1,5 +1,11 @@
 # Changelog
 
+## 11.0.2 - 20-Dec-2024
+
+- Support PHP 8.4 (#148, thanks @tectiv3)
+- various other code style and analysis fixes 
+
+
 ## 11.0.1 - 06-Jun-2024
 
 - make return of `allTags()` consistent (#146, thanks @y1n0)

@@ -3,54 +3,60 @@ name: tests
 on: [push, pull_request]
 
 jobs:
- tests:
-  runs-on: ubuntu-latest
+  tests:
+    runs-on: ubuntu-latest
 
-  services:
-    mysql:
-      image: mysql:8.0
-      env:
-        MYSQL_ALLOW_EMPTY_PASSWORD: yes
-        MYSQL_DATABASE: testing
-      ports:
-        - 3306
-      options: --health-cmd="mysqladmin ping" --health-interval=5s --health-timeout=2s --health-retries=3
+    services:
+      mysql:
+        image: mysql:8.0
+        env:
+          MYSQL_ALLOW_EMPTY_PASSWORD: yes
+          MYSQL_DATABASE: testing
+        ports:
+          - 3306
+        options: --health-cmd="mysqladmin ping" --health-interval=5s --health-timeout=2s --health-retries=3
 
-  strategy:
-    fail-fast: false
-    matrix:
-      php: [8.2, 8.3]
-      stability: [prefer-lowest, prefer-stable]
+    strategy:
+      fail-fast: false
+      matrix:
+        php:
+          - version: 8.2
+          - version: 8.3
+          - version: 8.4
+            env: PHP_CS_FIXER_IGNORE_ENV=1
+        stability: [prefer-lowest, prefer-stable]
 
-  name: PHP ${{ matrix.php }} - ${{ matrix.stability }}
+    name: PHP ${{ matrix.php.version }} - ${{ matrix.stability }}
 
-  steps:
-   - name: Checkout code
-     uses: actions/checkout@v3
-   - name: Setup PHP
-     uses: shivammathur/setup-php@v2
-     with:
-      php-version: ${{ matrix.php }}
-      tools: composer:v2, cs2pr
-      coverage: none
-   - name: Setup problem matchers for PHPUnit
-     run: echo "::add-matcher::${{ runner.tool_cache }}/phpunit.json"
-   - name: Get composer cache directory
-     id: composer-cache
-     run: echo "dir=$(composer config cache-files-dir)" >> "$GITHUB_OUTPUT"
-   - name: Cache dependencies
-     uses: actions/cache@v3
-     with:
-      path: ${{ steps.composer-cache.outputs.dir }}
-      key: dependencies-${{ matrix.php }}-${{ matrix.stability }}-composer-${{ hashFiles('**/composer.lock') }}
-      restore-keys: dependencies-${{ matrix.php }}-${{ matrix.stability }}-composer-
-   - name: Install dependencies
-     run: composer update --${{ matrix.stability }} --prefer-dist --no-interaction
-   #      - name: Check coding style
-   #        run: php-cs-fixer fix --dry-run --allow-risky=true --format=checkstyle | cs2pr
-   - name: Configure matchers for PHPUnit
-     uses: mheap/phpunit-matcher-action@v1
-   - name: Run PHP tests via PHPUnit
-     run: vendor/bin/pest --teamcity
-     env:
-       DB_PORT: ${{ job.services.mysql.ports[3306] }}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php.version }}
+          tools: composer:v2, cs2pr
+          coverage: none
+      - name: Setup problem matchers for PHPUnit
+        run: echo "::add-matcher::${{ runner.tool_cache }}/phpunit.json"
+      - name: Get composer cache directory
+        id: composer-cache
+        run: echo "dir=$(composer config cache-files-dir)" >> "$GITHUB_OUTPUT"
+      - name: Cache dependencies
+        uses: actions/cache@v4
+        with:
+          path: ${{ steps.composer-cache.outputs.dir }}
+          key: dependencies-${{ matrix.php.version }}-${{ matrix.stability }}-composer-${{ hashFiles('**/composer.lock') }}
+          restore-keys: dependencies-${{ matrix.php.version }}-${{ matrix.stability }}-composer-
+      - name: Install dependencies
+        run: composer update --${{ matrix.stability }} --prefer-dist --no-interaction
+      - name: Check coding style
+        run: ${{ matrix.php.env }} composer run style:check -- --format=checkstyle | cs2pr
+      - name: Check static analysis
+        run: composer run analyze -- --error-format=checkstyle | cs2pr
+      - name: Configure matchers for PHPUnit
+        uses: mheap/phpunit-matcher-action@v1
+      - name: Run PHP tests
+        run: composer run tests:ci
+        env:
+          DB_PORT: ${{ job.services.mysql.ports[3306] }}

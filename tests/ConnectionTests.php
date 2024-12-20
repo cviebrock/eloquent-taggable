@@ -108,6 +108,7 @@ class ConnectionTests extends TestCase
         $popularTags = $this->service->getPopularTags(1);
         self::assertCount(1, $popularTags);
 
+        /** @var Tag $popularTag */
         $popularTag = $popularTags->first();
         self::assertEquals('Banana', $popularTag->name);
         self::assertEquals(2, $popularTag->taggable_count);
@@ -117,6 +118,7 @@ class ConnectionTests extends TestCase
         $unusedTags = $this->service->getAllUnusedTags();
         self::assertCount(1, $unusedTags);
 
+        /** @var Tag $unusedTag */
         $unusedTag = $unusedTags->first();
         self::assertEquals('Durian',$unusedTag->name);
 

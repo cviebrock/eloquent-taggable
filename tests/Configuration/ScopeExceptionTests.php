@@ -29,7 +29,6 @@ class ScopeExceptionTests extends TestCase
     {
         $this->expectException(NoTagsSpecifiedException::class);
 
-        /** @var Collection $models */
         TestModel::withAllTags('')->get();
     }
 
@@ -40,7 +39,6 @@ class ScopeExceptionTests extends TestCase
     {
         $this->expectException(NoTagsSpecifiedException::class);
 
-        /** @var Collection $models */
         TestModel::withAnyTags('')->get();
     }
 }

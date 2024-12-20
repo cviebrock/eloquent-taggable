@@ -9,6 +9,10 @@ use Illuminate\Support\Arr;
 
 /**
  * Class Tag
+ *
+ * @property int $tag_id
+ * @property string $name
+ * @property string $normalized
  */
 class Tag extends Model
 {
@@ -93,6 +97,8 @@ class Tag extends Model
                 $this->setRelation($key, $results);
             });
         }
+
+        return false;
     }
 
     /**
