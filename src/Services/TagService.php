@@ -235,7 +235,7 @@ class TagService
      *
      * @return Collection<Tag>
      */
-    public function getPopularTags(?int $limit = null, null|Model|string $class = null, int $minCount = 1): Collection
+    public function getPopularTags(?int $limit = null, Model|string|null $class = null, int $minCount = 1): Collection
     {
         $tagTable = $this->getQualifiedTagTableName();
         $pivotTable = $this->getQualifiedPivotTableName();
@@ -271,7 +271,7 @@ class TagService
     /**
      * Rename tags, across all or only one model.
      */
-    public function renameTags(string $oldName, string $newName, null|Model|string $class = null): int
+    public function renameTags(string $oldName, string $newName, Model|string|null $class = null): int
     {
         // If no class is specified, we can do the rename with a simple SQL update
         if ($class === null) {
